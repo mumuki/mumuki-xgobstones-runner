@@ -1,0 +1,5 @@
+program {
+	VaciarTablero()
+	Poner(Rojo)
+	Poner(Rojo)
+}
