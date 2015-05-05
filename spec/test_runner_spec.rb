@@ -16,9 +16,25 @@ describe TestRunner do
       end
     end
 
-    describe 'should fail when the file is not sintactically ok' do
-      let(:results) { runner.run_test_file!(File.new('spec/data/syntax_error.gbs')) }  
-      it { expect(results[1]).to eq(:failed) }
-    end    
+    describe 'when the file is not sintactically ok,' do
+      let(:results) { runner.run_test_file!(File.new('spec/data/syntax_error.gbs')) }
+
+      it 'should output the error message' do
+        expect(results[0]).to eq(
+'cerca de un identificador con mayúscula "Error"
+       |
+       V
+ Poner(Error)
+--
+
+Error en el programa:
+
+    La constante "Error" no está definida')
+      end
+
+      it 'should fail the test' do
+        expect(results[1]).to eq(:failed)
+      end
+    end
   end
 end
