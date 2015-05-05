@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/uqbar-project/mumukit.git
-  revision: 0a4b2f0e4e644ab60d8c225e6a4490ce008ac8a7
-  tag: v0.1.0
+  revision: 972a0039a7d664e19bb29953f2193c6da6a1f4db
+  branch: master
   specs:
-    mumukit (0.1.0)
+    mumukit (0.1.1)
       sinatra (~> 1.4)
 
 GEM
