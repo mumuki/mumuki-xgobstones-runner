@@ -1,5 +1,27 @@
 require 'mumukit'
 
+class ErrorMessageParser
+  def parse(result)
+    remove_line_specification = lambda { |x| x.drop(3) }
+
+    remove_traceback = lambda { |x|
+      x.take_while { |str| not str.start_with? 'Traceback' }
+    }
+
+    remove_boom_line_specification = lambda { |x|
+      x.take_while { |str| not str.strip.start_with? 'En:' }
+    }
+
+    remove_boom_line_specification[
+        remove_traceback[
+            remove_line_specification[
+                result.lines
+            ]
+        ]
+    ].join.strip
+  end
+end
+
 class TestRunner
   def gobstones_path
     @config['gobstones_command']
@@ -14,7 +36,7 @@ class TestRunner
   end
 
   def get_error_message(result)
-    result.lines.drop(3).take_while { |str| not str.start_with? 'Traceback' }.join.strip
+    ErrorMessageParser.new.parse(result)
   end
 
   def run_test_command(file)
