@@ -1,3 +1,10 @@
 language: ruby
 rvm:
 - 2.1.0
+deploy:
+  provider: heroku
+  api_key:
+    secure: NWg+0au+RBDQFC8YGkdQg3kbIx+f2e2Wjprl911KJ16H1wDQDJYXGQEt9dvsB4e8xC3vhKLYwNSabbgIuzlTUD6f0utKRzPqO0Qxdr/PebSTNzQuEtNFJDVDY1fK7yk9jeVRH4ldpXQY1B76ett0B2brPpVa7xxPPlJ7PNhzC0o=
+  app: mumuki-gobstones-server
+  on:
+    repo: uqbar-project/mumuki-gobstones-server
