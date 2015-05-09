@@ -29,7 +29,12 @@ class TestRunner
 
   def post_process_file(file, result, status)
     begin
-      [status == :passed ? @output_file.read : get_error_message(result), status]
+      message = status == :passed ? '' : get_error_message(result)
+      output = [message, status]
+
+      output[2] = @output_file.read if status == :passed
+
+      output
     ensure
       @output_file.close(true)
     end
