@@ -14,8 +14,12 @@ describe TestRunner do
           expect(results[1]).to eq(:passed)
         end
         
-        it 'should return an html representation of the board as feedback' do
-          expect(results[2]).to include(File.new('spec/data/red_ball_at_origin.html').read)
+        context 'should return an html representation of the board as feedback' do
+          let(:html) { results[2] }
+
+          it { expect(html).to include(File.new('spec/data/red_ball_at_origin.html').read) }
+          it { expect(html).to start_with("<div>") }
+          it { expect(html).to end_with("</div>") }
         end
       end
 
