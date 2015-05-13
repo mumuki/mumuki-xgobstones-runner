@@ -1,16 +1,16 @@
 GIT
   remote: git://github.com/uqbar-project/mumukit.git
-  revision: 972a0039a7d664e19bb29953f2193c6da6a1f4db
+  revision: 02a3d5ef1281758b64515aa8ffd163af04786f9a
   branch: master
   specs:
-    mumukit (0.1.1)
+    mumukit (0.2.1)
       sinatra (~> 1.4)
 
 GEM
   remote: https://rubygems.org/
   specs:
     diff-lcs (1.2.5)
-    rack (1.6.0)
+    rack (1.6.1)
     rack-protection (1.5.3)
       rack
     rake (10.4.2)
