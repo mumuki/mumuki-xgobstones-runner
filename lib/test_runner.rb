@@ -32,7 +32,7 @@ class TestRunner
       message = status == :passed ? '' : get_error_message(result)
       output = [message, status]
 
-      output[2] = @output_file.read if status == :passed
+      output[2] = "<div>#{@output_file.read}</div>" if status == :passed
 
       output
     ensure
