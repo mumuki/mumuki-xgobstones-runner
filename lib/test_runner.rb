@@ -1,4 +1,5 @@
 require 'mumukit'
+require 'yaml'
 
 class ErrorMessageParser
   def parse(result)
@@ -45,7 +46,18 @@ class TestRunner
   end
 
   def run_test_command(file)
-    @output_file = Tempfile.new(%w(gobstones .html))
-    "#{gobstones_path} #{file.path} --size 4 4 --to #{@output_file.path} 2>&1"
+    @output_file = Tempfile.new %w(gobstones.output .html)
+
+    run = YAML::load_file file.path
+
+    source_file = Tempfile.new 'gobstones.code'
+    source_file.write run['source']
+    source_file.close
+
+    initial_board_file = Tempfile.new %w(gobstones.board .gbb)
+    initial_board_file.write run['initial_board']
+    initial_board_file.close
+
+    "#{gobstones_path} #{source_file.path} --from #{initial_board_file.path} --to #{@output_file.path} 2>&1"
   end
 end
