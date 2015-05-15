@@ -1,10 +1,11 @@
 require 'mumukit'
+require 'yaml'
 
 class TestCompiler
   def compile(test_src, extra_src, content_src)
-    <<EOF
-#{content_src}
-#{extra_src}
-EOF
+    {
+      :source => "#{content_src}\n#{extra_src}",
+      :initial_board => test_src
+    }.to_yaml
   end
 end
