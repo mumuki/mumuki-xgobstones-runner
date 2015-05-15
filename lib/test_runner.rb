@@ -48,16 +48,20 @@ class TestRunner
   def run_test_command(file)
     @output_file = Tempfile.new %w(gobstones.output .html)
 
-    run = YAML::load_file file.path
+    test_definition = YAML::load_file file.path
 
-    source_file = Tempfile.new 'gobstones.code'
-    source_file.write run['source']
-    source_file.close
-
-    initial_board_file = Tempfile.new %w(gobstones.board .gbb)
-    initial_board_file.write run['initial_board']
-    initial_board_file.close
+    source_file = create_temp_file test_definition, 'source', 'gbs'
+    initial_board_file = create_temp_file test_definition, 'initial_board', 'gbb'
 
     "#{gobstones_path} #{source_file.path} --from #{initial_board_file.path} --to #{@output_file.path} 2>&1"
+  end
+
+  private
+
+  def create_temp_file(run, attribute, extension)
+    source_file = Tempfile.new %W(gobstones.#{attribute} .#{extension})
+    source_file.write run[attribute]
+    source_file.close
+    source_file
   end
 end
