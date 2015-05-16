@@ -51,17 +51,17 @@ class TestRunner
 
     test_definition = YAML::load_file file.path
 
-    @source_file = create_temp_file test_definition, 'source', 'gbs'
-    @initial_board_file = create_temp_file test_definition, 'initial_board', 'gbb'
+    @source_file = create_temp_file test_definition, :source, 'gbs'
+    @initial_board_file = create_temp_file test_definition, :initial_board, 'gbb'
 
     "#{gobstones_path} #{@source_file.path} --from #{@initial_board_file.path} --to #{@output_file.path} 2>&1"
   end
 
   private
 
-  def create_temp_file(run, attribute, extension)
+  def create_temp_file(test_definition, attribute, extension)
     file = Tempfile.new %W(gobstones.#{attribute} .#{extension})
-    file.write run[attribute]
+    file.write test_definition[attribute]
     file.close
     file
   end
