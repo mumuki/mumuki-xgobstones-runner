@@ -1,4 +1,4 @@
-require 'rspec'
+require 'spec_helper'
 require 'yaml'
 
 require_relative '../lib/test_compiler'
