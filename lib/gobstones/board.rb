@@ -17,18 +17,20 @@ class Board
   end
 
   def cell_at(position)
-    raise OutOfBoundsError unless contains(position)
+    raise OutOfBoundsError unless is_within_bounds(position)
     @cells[position]
-  end
-
-  def contains(position)
-    @size[0] > position.x && @size[1] > position.y
   end
 
   def ==(other)
     self.class === other and
         other.size == @size and
         all_cells_equal(other)
+  end
+
+  private
+
+  def is_within_bounds(position)
+    @size[0] > position.x && @size[1] > position.y
   end
 
   def all_cells_equal(other)
