@@ -7,8 +7,8 @@ class Position
   end
 
   def ==(other)
-    self.class === other and
-        other.x == @x and
+    self.class === other &&
+        other.x == @x &&
         other.y == @y
   end
 

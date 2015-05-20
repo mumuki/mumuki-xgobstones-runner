@@ -27,8 +27,8 @@ class Gobstones::Board
   end
 
   def ==(other)
-    self.class === other and
-        other.size == @size and
+    self.class === other &&
+        other.size == @size &&
         all_cells_equal?(other)
   end
 
@@ -43,7 +43,7 @@ class Gobstones::Board
   end
 
   def all_cells_equal?(other)
-    @cells.all? { |position, cell| other.cell_at(position) == cell } and
+    @cells.all? { |position, cell| other.cell_at(position) == cell } &&
         other.cells.all? { |position, cell| cell_at(position) == cell }
   end
 end
