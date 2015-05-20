@@ -1,10 +1,7 @@
-require_relative 'cell'
-require_relative 'position'
-
-class OutOfBoardError < RuntimeError
+class Gobstones::OutOfBoardError < RuntimeError
 end
 
-class Board
+class Gobstones::Board
   attr_reader :size, :cells, :head_position
 
   def initialize(x, y)

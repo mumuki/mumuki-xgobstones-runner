@@ -1,6 +1,3 @@
-require_relative 'board'
-require_relative 'cell'
-
 require_relative '../extensions/array.rb'
 
 class MatchData
@@ -9,7 +6,7 @@ class MatchData
   end
 end
 
-class GbbParser
+class Gobstones::GbbParser
   COLORS = { 'Azul' => :blue, 'Negro' => :black, 'Rojo' => :red, 'Verde' => :green }
 
   def from_string(gbb_string)

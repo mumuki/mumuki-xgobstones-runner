@@ -1,8 +1,7 @@
 require 'rspec'
+require_relative '../../lib/gobstones'
 
-require_relative '../../lib/gobstones/board'
-require_relative '../../lib/gobstones/position'
-require_relative '../../lib/gobstones/cell'
+include Gobstones
 
 describe Board do
   context 'should store cells' do

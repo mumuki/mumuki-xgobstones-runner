@@ -1,6 +1,7 @@
 require 'rspec'
+require_relative '../../lib/gobstones'
 
-require_relative '../../lib/gobstones/gbb_parser'
+include Gobstones
 
 describe GbbParser do
   let (:parser) { GbbParser.new }

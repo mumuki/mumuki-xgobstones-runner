@@ -1,4 +1,4 @@
-class Cell
+class Gobstones::Cell
   attr_accessor :red, :green, :blue, :black
 
   def initialize(red: 0, green: 0, blue: 0, black: 0)

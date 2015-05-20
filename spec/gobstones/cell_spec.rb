@@ -1,4 +1,7 @@
 require 'rspec'
+require_relative '../../lib/gobstones'
+
+include Gobstones
 
 describe Cell do
   context 'the stones can be set by color name' do
