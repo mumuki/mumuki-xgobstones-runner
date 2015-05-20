@@ -12,7 +12,8 @@ size 4 4
 cell 0 0 Rojo 1 Verde 2 Azul 5
 cell 0 1 Negro 3
 cell 1 0 Negro 3 Rojo 0 Verde 0 Azul 0
-head 3 3'
+head 3 3
+%%'
   }
 
   let (:board) { parser.from_string gbb }
