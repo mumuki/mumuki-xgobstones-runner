@@ -30,14 +30,10 @@ class TestRunner
 
   def post_process_file(file, result, status)
     begin
-      message = status == :passed ? '' : get_error_message(result)
-      output = [message, status]
-
-      output[2] = "<div>#{@output_file.read}</div>" if status == :passed
-      @output_file.close
-
-      output
+      message = status == :passed ? "<div>#{@output_file.read}</div>" : get_error_message(result)
+      [message, status]
     ensure
+      @output_file.close
       [@output_file, @source_file, @initial_board_file].each { |it| it.unlink }
     end
   end
