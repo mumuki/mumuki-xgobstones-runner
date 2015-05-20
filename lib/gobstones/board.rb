@@ -32,20 +32,20 @@ class Board
   def ==(other)
     self.class === other and
         other.size == @size and
-        all_cells_equal(other)
+        all_cells_equal?(other)
   end
 
   private
 
-  def is_within_bounds(position)
+  def within_bounds?(position)
     @size[0] > position.x && @size[1] > position.y
   end
 
   def check_is_within_bounds(position)
-    raise OutOfBoardError unless is_within_bounds(position)
+    raise OutOfBoardError unless within_bounds?(position)
   end
 
-  def all_cells_equal(other)
+  def all_cells_equal?(other)
     @cells.all? { |position, cell| other.cell_at(position) == cell } and
         other.cells.all? { |position, cell| cell_at(position) == cell }
   end
