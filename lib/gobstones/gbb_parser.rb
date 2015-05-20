@@ -1,15 +1,11 @@
 require_relative 'board'
 require_relative 'cell'
 
+require_relative '../extensions/array.rb'
+
 class MatchData
   def to_position
     Position.new self[1].to_i, self[2].to_i
-  end
-end
-
-class Array
-  def init(n=1)
-    take size - n
   end
 end
 
