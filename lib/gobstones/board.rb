@@ -1,14 +1,16 @@
 require_relative 'cell'
+require_relative 'position'
 
-class OutOfBoundsError < RuntimeError
+class OutOfBoardError < RuntimeError
 end
 
 class Board
-  attr_reader :size, :cells
+  attr_reader :size, :cells, :head_position
 
   def initialize(x, y)
     @size = [x, y]
     @cells = Hash.new(Cell.new)
+    @head_position = Position.new(0, 0)
   end
 
   def add_cell(position, cell)
@@ -16,8 +18,14 @@ class Board
     self
   end
 
+  def move_head_to(position)
+    check_is_within_bounds position
+    @head_position = position
+    self
+  end
+
   def cell_at(position)
-    raise OutOfBoundsError unless is_within_bounds(position)
+    check_is_within_bounds position
     @cells[position]
   end
 
@@ -31,6 +39,10 @@ class Board
 
   def is_within_bounds(position)
     @size[0] > position.x && @size[1] > position.y
+  end
+
+  def check_is_within_bounds(position)
+    raise OutOfBoardError unless is_within_bounds(position)
   end
 
   def all_cells_equal(other)
