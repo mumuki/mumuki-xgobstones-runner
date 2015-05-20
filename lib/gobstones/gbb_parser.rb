@@ -1,5 +1,7 @@
 require_relative '../extensions/array.rb'
 
+include Gobstones
+
 class MatchData
   def to_position
     Position.new self[1].to_i, self[2].to_i
@@ -12,12 +14,12 @@ class Gobstones::GbbParser
   def from_string(gbb_string)
     board = nil
 
-    lines = gbb_string.lines
+    lines = gbb_string.lines.reject { |it| it.start_with? 'GBB', '%%' }
 
-    /size (\d+) (\d+)/.match(lines[1]) { |match| board = Board.new(match[1].to_i, match[2].to_i) }
+    /size (\d+) (\d+)/.match(lines[0]) { |match| board = Board.new(match[1].to_i, match[2].to_i) }
     /head (\d+) (\d+)/.match(lines.last) { |match| board.move_head_to match.to_position }
 
-    lines.drop(2).init.each do |cell_line|
+    lines.drop(1).init.each do |cell_line|
       position = get_position_from cell_line
       cell = create_cell_from cell_line
 

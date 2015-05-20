@@ -1,3 +1,5 @@
+include Gobstones
+
 class Gobstones::OutOfBoardError < RuntimeError
 end
 
