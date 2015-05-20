@@ -10,6 +10,8 @@ class MatchData
 end
 
 class GbbParser
+  COLORS = { 'Azul' => :blue, 'Negro' => :black, 'Rojo' => :red, 'Verde' => :green }
+
   def from_string(gbb_string)
     board = nil
 
@@ -45,15 +47,6 @@ class GbbParser
   end
 
   def to_color(gbb_color_string)
-    case gbb_color_string
-      when 'Azul'
-        :blue
-      when 'Negro'
-        :black
-      when 'Rojo'
-        :red
-      when 'Verde'
-        :green
-    end
+    COLORS[gbb_color_string]
   end
 end
