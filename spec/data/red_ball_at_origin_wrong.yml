@@ -7,7 +7,7 @@
   program {
     VaciarTablero()
     IrAlOrigen()
-    Poner(Rojo)
+    Poner(Verde)
   }
 
 :initial_board: |
