@@ -10,7 +10,14 @@ describe Board do
 
     it { expect(board.cell_at(Position.new(0, 0))).to eq(Cell.new(blue=3)) }
     it { expect(board.cell_at(Position.new(0, 1))).to eq(Cell.new) }
-    it { lambda { board.cell_at(Position.new(4, 4)) }.should raise_error(OutOfBoundsError) }
+    it { lambda { board.cell_at(Position.new(4, 4)) }.should raise_error(OutOfBoardError) }
+  end
+
+  context 'should validate head movements' do
+    let(:board) { Board.new(4, 4) }
+
+    it { expect(board.move_head_to(Position.new(0, 3)).head_position).to eq(Position.new(0, 3)) }
+    it { lambda { board.move_head_to(Position.new(4, 4)) }.should raise_error(OutOfBoardError) }
   end
 
   context 'should be able to compare itself with another board' do
