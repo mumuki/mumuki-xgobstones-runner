@@ -1,6 +1,8 @@
 require 'mumukit'
 require 'yaml'
 
+require_relative 'gobstones'
+
 class ErrorMessageParser
   def parse(result)
     remove_line_specification = lambda { |x| x.drop(3) }
@@ -30,27 +32,29 @@ class TestRunner
 
   def post_process_file(file, result, status)
     begin
-      message = status == :passed ? "<div>#{@output_file.read}</div>" : get_error_message(result)
-      [message, status]
+      if status == :passed
+        ["<div>#{@html_output_file.read}</div>", compute_test_status]
+      else
+        [get_error_message(result), status]
+      end
     ensure
-      @output_file.close
-      [@output_file, @source_file, @initial_board_file].each { |it| it.unlink }
+      [@html_output_file, @actual_final_board_file].each { |it| it.close }
+      [@html_output_file, @actual_final_board_file, @source_file, @initial_board_file].each { |it| it.unlink }
     end
   end
 
-  def get_error_message(result)
-    ErrorMessageParser.new.parse(result)
-  end
-
   def run_test_command(file)
-    @output_file = Tempfile.new %w(gobstones.output .html)
-
     test_definition = YAML::load_file file.path
 
+    @expected_final_board = Gobstones::GbbParser.new.from_string test_definition[:final_board]
+
+    @html_output_file = Tempfile.new %w(gobstones.output .html)
+    @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
     @source_file = create_temp_file test_definition, :source, 'gbs'
     @initial_board_file = create_temp_file test_definition, :initial_board, 'gbb'
 
-    "#{gobstones_path} #{@source_file.path} --from #{@initial_board_file.path} --to #{@output_file.path} 2>&1"
+    "#{gobstones_path} #{@source_file.path} --from #{@initial_board_file.path} --to #{@actual_final_board_file.path} 2>&1 &&" +
+        "#{gobstones_path} #{@source_file.path} --from #{@initial_board_file.path} --to #{@html_output_file.path}"
   end
 
   private
@@ -60,5 +64,14 @@ class TestRunner
     file.write test_definition[attribute]
     file.close
     file
+  end
+
+  def compute_test_status
+    actual = Gobstones::GbbParser.new.from_string(@actual_final_board_file.read)
+    actual == @expected_final_board ? :passed : :failed
+  end
+
+  def get_error_message(result)
+    ErrorMessageParser.new.parse(result)
   end
 end
