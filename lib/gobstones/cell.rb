@@ -13,10 +13,10 @@ class Gobstones::Cell
   end
 
   def ==(other)
-    self.class === other and
-        other.red == @red and
-        other.green == @green and
-        other.blue == @blue and
+    self.class === other &&
+        other.red == @red &&
+        other.green == @green &&
+        other.blue == @blue &&
         other.black == @black
   end
 
