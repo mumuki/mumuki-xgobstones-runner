@@ -45,8 +45,11 @@ module Gobstones
     end
 
     def all_cells_equal?(other)
-      @cells.all? { |position, cell| other.cell_at(position) == cell } &&
-          other.cells.all? { |position, cell| cell_at(position) == cell }
+      self.class.includes_cells?(self, other) && self.class.includes_cells?(other, self)
+    end
+
+    def self.includes_cells?(this, that)
+      this.cells.all? { |position, cell| that.cell_at(position) == cell }
     end
   end
 end
