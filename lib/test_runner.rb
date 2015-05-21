@@ -33,7 +33,7 @@ class TestRunner
   def post_process_file(file, result, status)
     begin
       if status == :passed
-        ["<div>#{@html_output_file.read}</div>", compute_test_status]
+        compute_test_status
       else
         [get_error_message(result), status]
       end
@@ -72,7 +72,12 @@ class TestRunner
 
   def compute_test_status
     actual = Gobstones::GbbParser.new.from_string(@actual_final_board_file.read)
-    actual == @expected_final_board ? :passed : :failed
+
+    if actual == @expected_final_board
+      ["<div>#{@html_output_file.read}</div>", :passed]
+    else
+      ["<div>#{@html_output_file.read}</div>", :failed]
+    end
   end
 
   def get_error_message(result)
