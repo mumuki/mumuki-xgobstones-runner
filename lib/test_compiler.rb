@@ -6,9 +6,9 @@ class TestCompiler
     test = YAML::load(test_src)
 
     {
-      :source => "#{content_src}\n#{extra_src}",
-      :initial_board => test['initial_board'],
-      :final_board => test['final_board'],
+      source: "#{content_src}\n#{extra_src}",
+      initial_board: test['initial_board'],
+      final_board: test['final_board'],
     }
   end
 end
