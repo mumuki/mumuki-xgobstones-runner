@@ -24,14 +24,14 @@ module Gobstones::Spec
       @gobstones_path = gobstones_path
     end
 
-    def start!(test_definition)
-      @expected_final_board_gbb = test_definition[:final_board]
-      @expected_final_board = Gobstones::GbbParser.new.from_string test_definition[:final_board]
+    def start!(source, initial_board, final_board)
+      @expected_final_board_gbb = final_board
+      @expected_final_board = Gobstones::GbbParser.new.from_string final_board
 
       @html_output_file = Tempfile.new %w(gobstones.output .html)
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
-      @source_file = create_temp_file test_definition, :source, 'gbs'
-      @initial_board_file = create_temp_file test_definition, :initial_board, 'gbb'
+      @source_file = create_temp_file source, 'gbs'
+      @initial_board_file = create_temp_file initial_board, 'gbb'
 
       "#{run_on_gobstones @source_file, @initial_board_file, @actual_final_board_file} 2>&1 &&" +
           "#{run_on_gobstones @source_file, @initial_board_file, @html_output_file}"
@@ -74,9 +74,9 @@ module Gobstones::Spec
       "#{gobstones_path} #{source_file.path} --from #{initial_board_file.path} --to #{final_board_file.path}"
     end
 
-    def create_temp_file(test_definition, attribute, extension)
-      file = Tempfile.new %W(gobstones.#{attribute} .#{extension})
-      file.write test_definition[attribute]
+    def create_temp_file(content,  extension)
+      file = Tempfile.new %W(gobstones. .#{extension})
+      file.write content
       file.close
       file
     end
