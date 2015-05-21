@@ -6,7 +6,7 @@ describe TestRunner do
 
   context 'when the file is sintactically ok' do
     context 'when the final board matches' do
-      let(:results) { runner.run_test_file!(File.new('spec/data/red_ball_at_origin.yml')) }
+      let(:results) { runner.run_test_file!(YAML.load_file 'spec/data/red_ball_at_origin.yml') }
 
       it { expect(results[1]).to eq(:passed) }
 
@@ -20,7 +20,7 @@ describe TestRunner do
     end
 
     context 'when the final board doesnt match' do
-      let(:results) { runner.run_test_file!(File.new('spec/data/red_ball_at_origin_wrong.yml')) }
+      let(:results) { runner.run_test_file!(YAML.load_file 'spec/data/red_ball_at_origin_wrong.yml') }
       it { expect(results[1]).to eq(:failed) }
 
       context 'should return an html representation of the initial, expected and actual boards as result' do
@@ -35,7 +35,7 @@ describe TestRunner do
     end
 
     context 'when produces BOOM' do
-      let(:results) { runner.run_test_file!(File.new('spec/data/runtime_error.yml')) }
+      let(:results) { runner.run_test_file!(YAML.load_file 'spec/data/runtime_error.yml') }
       it { expect(results[1]).to eq(:failed) }
       it do
         expect(results[0]).to eq(
@@ -55,7 +55,7 @@ Error en tiempo de ejecución:
   end
 
   context 'when the file is not sintactically ok,' do
-    let(:results) { runner.run_test_file!(File.new('spec/data/syntax_error.yml')) }
+    let(:results) { runner.run_test_file!(YAML.load_file 'spec/data/syntax_error.yml') }
     it { expect(results[1]).to eq(:failed) }
     it do
       expect(results[0]).to eq(

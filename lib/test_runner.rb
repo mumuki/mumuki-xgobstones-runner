@@ -38,9 +38,7 @@ class TestRunner
     [@html_output_file, @actual_final_board_file, @source_file, @initial_board_file].each { |it| it.unlink }
   end
 
-  def run_test_command(file)
-    test_definition = YAML.load_file file.path
-
+  def run_test_command(test_definition)
     @expected_final_board_gbb = test_definition[:final_board]
     @expected_final_board = Gobstones::GbbParser.new.from_string test_definition[:final_board]
 

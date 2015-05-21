@@ -13,7 +13,7 @@ describe TestCompiler do
 final_board:
   final'
     }
-    let(:output) { YAML::load compiler.compile(test_file, 'extra', 'content') }
+    let(:output) { compiler.create_compilation_file!(test_file, 'extra', 'content') }
     it { expect(output).to eq({ :source => "content\nextra", :initial_board => 'initial', :final_board => 'final' }) }
   end
 end
