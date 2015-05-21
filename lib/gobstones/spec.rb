@@ -4,3 +4,4 @@ module Gobstones
 end
 
 require_relative './spec/example'
+require_relative './spec/runner'
