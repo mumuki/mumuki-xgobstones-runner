@@ -28,20 +28,18 @@ class TestRunner
   end
 
   def post_process_file(file, result, status)
-    begin
-      if status == :passed
-        compute_test_status
-      else
-        [get_error_message(result), status]
-      end
-    ensure
-      [@html_output_file, @actual_final_board_file].each { |it| it.close }
-      [@html_output_file, @actual_final_board_file, @source_file, @initial_board_file].each { |it| it.unlink }
+    if status == :passed
+      compute_test_status
+    else
+      [get_error_message(result), status]
     end
+  ensure
+    [@html_output_file, @actual_final_board_file].each { |it| it.close }
+    [@html_output_file, @actual_final_board_file, @source_file, @initial_board_file].each { |it| it.unlink }
   end
 
   def run_test_command(file)
-    test_definition = YAML::load_file file.path
+    test_definition = YAML.load_file file.path
 
     @expected_final_board_gbb = test_definition[:final_board]
     @expected_final_board = Gobstones::GbbParser.new.from_string test_definition[:final_board]
