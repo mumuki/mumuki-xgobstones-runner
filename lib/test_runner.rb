@@ -46,6 +46,7 @@ class TestRunner
   def run_test_command(file)
     test_definition = YAML::load_file file.path
 
+    @expected_final_board_gbb = test_definition[:final_board]
     @expected_final_board = Gobstones::GbbParser.new.from_string test_definition[:final_board]
 
     @html_output_file = Tempfile.new %w(gobstones.output .html)
@@ -76,8 +77,25 @@ class TestRunner
     if actual == @expected_final_board
       ["<div>#{@html_output_file.read}</div>", :passed]
     else
-      ["<div>#{@html_output_file.read}</div>", :failed]
+      expected_board = get_html_board @expected_final_board_gbb
+      ["<div> #{expected_board} #{@html_output_file.read}</div>", :failed]
     end
+  end
+
+  def get_html_board(gbb_representation)
+    identity = Tempfile.new %w(gobstones.identity .gbs)
+    identity.write 'program {}'
+    identity.close
+
+    board = Tempfile.new %w(gobstones.board .gbb)
+    board.write gbb_representation
+    board.close
+
+    board_html = Tempfile.new %w(gobstones.board .html)
+
+    %x"#{run_on_gobstones(identity, board, board_html)}"
+
+    board_html.read
   end
 
   def get_error_message(result)
