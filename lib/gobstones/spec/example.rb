@@ -37,7 +37,7 @@ module Gobstones::Spec
           "#{run_on_gobstones @source_file, @initial_board_file, @html_output_file}"
     end
 
-    def compute_test_status
+    def result
       actual = Gobstones::GbbParser.new.from_string(@actual_final_board_file.read)
 
       if actual == @expected_final_board
@@ -58,7 +58,7 @@ module Gobstones::Spec
     end
 
 
-    def get_error_message(result)
+    def parse_error_message(result)
       ErrorMessageParser.new.parse(result)
     end
 
