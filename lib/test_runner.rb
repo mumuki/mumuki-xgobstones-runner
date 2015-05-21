@@ -53,11 +53,15 @@ class TestRunner
     @source_file = create_temp_file test_definition, :source, 'gbs'
     @initial_board_file = create_temp_file test_definition, :initial_board, 'gbb'
 
-    "#{gobstones_path} #{@source_file.path} --from #{@initial_board_file.path} --to #{@actual_final_board_file.path} 2>&1 &&" +
-        "#{gobstones_path} #{@source_file.path} --from #{@initial_board_file.path} --to #{@html_output_file.path}"
+    "#{run_on_gobstones @source_file, @initial_board_file, @actual_final_board_file} 2>&1 &&" +
+        "#{run_on_gobstones @source_file, @initial_board_file, @html_output_file}"
   end
 
   private
+
+  def run_on_gobstones(source_file, initial_board_file, final_board_file)
+    "#{gobstones_path} #{source_file.path} --from #{initial_board_file.path} --to #{final_board_file.path}"
+  end
 
   def create_temp_file(test_definition, attribute, extension)
     file = Tempfile.new %W(gobstones.#{attribute} .#{extension})
