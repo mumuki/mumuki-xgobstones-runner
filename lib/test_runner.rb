@@ -22,23 +22,14 @@ class ErrorMessageParser
   end
 end
 
-class TestRunner
-  def gobstones_path
-    @config['gobstones_command']
+class GobstonesSpec
+  attr_reader :gobstones_path
+
+  def initialize(gobstones_path)
+    @gobstones_path = gobstones_path
   end
 
-  def post_process_file(file, result, status)
-    if status == :passed
-      compute_test_status
-    else
-      [get_error_message(result), status]
-    end
-  ensure
-    [@html_output_file, @actual_final_board_file].each { |it| it.close }
-    [@html_output_file, @actual_final_board_file, @source_file, @initial_board_file].each { |it| it.unlink }
-  end
-
-  def run_test_command(test_definition)
+  def start!(test_definition)
     @expected_final_board_gbb = test_definition[:final_board]
     @expected_final_board = Gobstones::GbbParser.new.from_string test_definition[:final_board]
 
@@ -49,19 +40,6 @@ class TestRunner
 
     "#{run_on_gobstones @source_file, @initial_board_file, @actual_final_board_file} 2>&1 &&" +
         "#{run_on_gobstones @source_file, @initial_board_file, @html_output_file}"
-  end
-
-  private
-
-  def run_on_gobstones(source_file, initial_board_file, final_board_file)
-    "#{gobstones_path} #{source_file.path} --from #{initial_board_file.path} --to #{final_board_file.path}"
-  end
-
-  def create_temp_file(test_definition, attribute, extension)
-    file = Tempfile.new %W(gobstones.#{attribute} .#{extension})
-    file.write test_definition[attribute]
-    file.close
-    file
   end
 
   def compute_test_status
@@ -84,6 +62,30 @@ class TestRunner
     end
   end
 
+
+  def get_error_message(result)
+    ErrorMessageParser.new.parse(result)
+  end
+
+  def stop!
+    [@html_output_file, @actual_final_board_file].each { |it| it.close }
+    [@html_output_file, @actual_final_board_file, @source_file, @initial_board_file].each { |it| it.unlink }
+  end
+
+  private
+
+
+  def run_on_gobstones(source_file, initial_board_file, final_board_file)
+    "#{gobstones_path} #{source_file.path} --from #{initial_board_file.path} --to #{final_board_file.path}"
+  end
+
+  def create_temp_file(test_definition, attribute, extension)
+    file = Tempfile.new %W(gobstones.#{attribute} .#{extension})
+    file.write test_definition[attribute]
+    file.close
+    file
+  end
+
   def get_html_board(gbb_representation)
     identity = Tempfile.new %w(gobstones.identity .gbs)
     identity.write 'program {}'
@@ -99,8 +101,25 @@ class TestRunner
 
     board_html.read
   end
+end
 
-  def get_error_message(result)
-    ErrorMessageParser.new.parse(result)
+class TestRunner
+  def gobstones_path
+    @config['gobstones_command']
+  end
+
+  def post_process_file(file, result, status)
+    if status == :passed
+      @spec_runner.compute_test_status
+    else
+      [@spec_runner.get_error_message(result), status]
+    end
+  ensure
+    @spec_runner.stop!
+  end
+
+  def run_test_command(test_definition)
+    @spec_runner = GobstonesSpec.new(gobstones_path)
+    @spec_runner.start!(test_definition)
   end
 end
