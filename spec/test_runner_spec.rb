@@ -23,9 +23,10 @@ describe TestRunner do
       let(:results) { runner.run_test_file!(File.new('spec/data/red_ball_at_origin_wrong.yml')) }
       it { expect(results[1]).to eq(:failed) }
 
-      context 'should return an html representation of the expected and actual board as result' do
+      context 'should return an html representation of the initial, expected and actual boards as result' do
         let(:html) { results[0] }
 
+        it { expect(html).to include(File.new('spec/data/red_ball_at_origin_initial.html').read) }
         it { expect(html).to include(File.new('spec/data/red_ball_at_origin_wrong.html').read) }
         it { expect(html).to include(File.new('spec/data/red_ball_at_origin.html').read) }
         it { expect(html).to start_with("<div>") }
