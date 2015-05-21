@@ -1,8 +1,8 @@
 require 'mumukit'
 require 'yaml'
 
-class TestCompiler
-  def create_compilation_file!(test_src, extra_src, content_src)
+class TestCompiler < Mumukit::Stub
+  def create_compilation!(test_src, extra_src, content_src)
     test = YAML::load(test_src)
 
     {
