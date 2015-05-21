@@ -77,8 +77,9 @@ class TestRunner
     if actual == @expected_final_board
       ["<div>#{@html_output_file.read}</div>", :passed]
     else
+      initial_board = get_html_board @initial_board_file.open.read
       expected_board = get_html_board @expected_final_board_gbb
-      ["<div> #{expected_board} #{@html_output_file.read}</div>", :failed]
+      ["<div>#{initial_board} #{expected_board} #{@html_output_file.read}</div>", :failed]
     end
   end
 
