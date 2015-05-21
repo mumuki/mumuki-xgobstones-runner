@@ -10,9 +10,9 @@ class TestRunner
 
   def post_process_file(file, result, status)
     if status == :passed
-      @spec_runner.compute_test_status
+      @spec_runner.result
     else
-      [@spec_runner.get_error_message(result), status]
+      [@spec_runner.parse_error_message(result), status]
     end
   ensure
     @spec_runner.stop!
