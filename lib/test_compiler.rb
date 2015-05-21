@@ -7,8 +7,8 @@ class TestCompiler
 
     {
       source: "#{content_src}\n#{extra_src}",
-      initial_board: test['initial_board'],
-      final_board: test['final_board'],
+      examples: {initial_board: test['initial_board'],
+                 final_board: test['final_board']}
     }
   end
 end

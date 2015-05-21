@@ -20,6 +20,8 @@ class TestRunner
 
   def run_test_command(test_definition)
     @spec_runner = Gobstones::Spec::Example.new(gobstones_path)
-    @spec_runner.start!(test_definition)
+    @spec_runner.start!(test_definition[:source],
+                        test_definition[:examples][:initial_board],
+                        test_definition[:examples][:final_board])
   end
 end

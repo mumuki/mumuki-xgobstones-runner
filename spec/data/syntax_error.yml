@@ -3,12 +3,13 @@
     Poner(Error)
   }
 
-:initial_board: |
-  GBB/1.0
-  size 4 4
-  head 0 0
+:examples:
+  :initial_board: |
+    GBB/1.0
+    size 4 4
+    head 0 0
 
-:final_board: |
-  GBB/1.0
-  size 4 4
-  head 0 0
+  :final_board: |
+    GBB/1.0
+    size 4 4
+    head 0 0
