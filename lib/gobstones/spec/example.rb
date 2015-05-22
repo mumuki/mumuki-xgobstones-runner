@@ -1,22 +1,4 @@
 module Gobstones::Spec
-  class ErrorMessageParser
-    def remove_traceback (x)
-      x.take_while { |str| not str.start_with? 'Traceback' }
-    end
-
-    def remove_line_specification(x)
-      x.drop(3)
-    end
-
-    def remove_boom_line_specification(x)
-      x.take_while { |str| not str.strip.start_with? 'En:' }
-    end
-
-    def parse(result)
-      remove_boom_line_specification(remove_traceback(remove_line_specification(result.lines))).join.strip
-    end
-  end
-
   class Example
     attr_reader :gobstones_path
 
@@ -68,7 +50,6 @@ module Gobstones::Spec
     end
 
     private
-
 
     def run_on_gobstones(source_file, initial_board_file, final_board_file)
       "#{gobstones_path} #{source_file.path} --from #{initial_board_file.path} --to #{final_board_file.path}"
