@@ -3,6 +3,7 @@ require 'mumukit'
 module Gobstones::Spec
   class Runner
     include Mumukit::WithCommandLine
+    include Gobstones::WithTempfile
 
     attr_reader :gobstones_path
 
@@ -11,14 +12,17 @@ module Gobstones::Spec
     end
 
     def run!(test_definition)
+      source_file = write_tempfile test_definition[:source], 'gbs'
       results = [test_definition[:examples]].map do |example_definition|
-        command = start_example(test_definition[:source],
+        command = start_example(source_file,
                                 example_definition[:initial_board],
                                 example_definition[:final_board])
         result, status = run_command command
         post_process result, status
       end
       [results.map { |it| it[0] }.join("\n"), results.all? { |it| it[1] == :passed } ? :passed : :failed]
+    ensure
+      source_file.unlink
     end
 
     def post_process(result, status)

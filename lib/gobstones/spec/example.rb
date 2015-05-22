@@ -8,13 +8,13 @@ module Gobstones::Spec
       @gobstones_path = gobstones_path
     end
 
-    def start!(source, initial_board, final_board)
+    def start!(source_file, initial_board, final_board)
+      @source_file = source_file
       @expected_final_board_gbb = final_board
       @expected_final_board = Gobstones::GbbParser.new.from_string final_board
 
       @html_output_file = Tempfile.new %w(gobstones.output .html)
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
-      @source_file = write_tempfile source, 'gbs'
       @initial_board_file = write_tempfile initial_board, 'gbb'
 
       "#{run_on_gobstones @source_file, @initial_board_file, @actual_final_board_file} 2>&1 &&" +
@@ -47,7 +47,7 @@ module Gobstones::Spec
     end
 
     def stop!
-      [@html_output_file, @actual_final_board_file, @source_file, @initial_board_file].each { |it| it.unlink }
+      [@html_output_file, @actual_final_board_file, @initial_board_file].each { |it| it.unlink }
     end
 
     private
