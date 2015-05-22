@@ -1,14 +1,12 @@
 require 'mumukit'
 require 'yaml'
 
-class TestCompiler
-  def create_compilation_file!(test_src, extra_src, content_src)
+class TestCompiler < Mumukit::Stub
+  def create_compilation!(test_src, extra_src, content_src)
     test = YAML::load(test_src)
-
     {
-      :source => "#{content_src}\n#{extra_src}",
-      :initial_board => test['initial_board'],
-      :final_board => test['final_board'],
+      source: "#{content_src}\n#{extra_src}",
+      examples: test['examples'].map { |it| {initial_board: it['initial_board'], final_board: it['final_board']} }
     }
   end
 end
