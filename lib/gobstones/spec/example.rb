@@ -27,20 +27,19 @@ module Gobstones::Spec
       if actual == @expected_final_board
         ["<div>#{@html_output_file.read}</div>", :passed]
       else
-        initial_board = get_html_board @initial_board_file.open.read
-        expected_board = get_html_board @expected_final_board_gbb
+        initial_board_html = get_html_board @initial_board_file.open.read
+        expected_board_html = get_html_board @expected_final_board_gbb
 
         output =
 "<div>
-  <b>Tablero inicial</b> #{initial_board}
-  <b>Tablero final obtenido</b> #{@html_output_file.read}
-  <b>Tablero final esperado</b> #{expected_board}
+  #{add_caption initial_board_html, 'Tablero inicial'}
+  #{add_caption @html_output_file.read, 'Tablero final obtenido'}
+  #{add_caption expected_board_html, 'Tablero final esperado'}
 </div>"
 
         [output, :failed]
       end
     end
-
 
     def parse_error_message(result)
       ErrorMessageParser.new.parse(result)
@@ -69,6 +68,9 @@ module Gobstones::Spec
       board_html.unlink
       result
     end
-  end
 
+    def add_caption(board_html, caption)
+      board_html.sub '<table class="gbs_board">', "<table class=\"gbs_board\">\n<caption>#{caption}</caption>"
+    end
+  end
 end
