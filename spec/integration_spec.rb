@@ -36,7 +36,8 @@ examples:
     cell 0 0 Rojo 1
     head 0 0
 ')
-      expect(response[:status]).to eq('passed')
+      expect(response[:result]).to include '<div>'
+      expect(response[:status]).to eq 'passed'
     end
   end
 end
