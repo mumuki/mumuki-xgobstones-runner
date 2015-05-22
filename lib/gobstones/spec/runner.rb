@@ -11,9 +11,14 @@ module Gobstones::Spec
     end
 
     def run!(test_definition)
-      command = create_example_and_get_test_command(test_definition)
-      result, status = run_command command
-      post_process result, status
+      results = [test_definition[:examples]].map do |example_definition|
+        command = start_example(test_definition[:source],
+                                example_definition[:initial_board],
+                                example_definition[:final_board])
+        result, status = run_command command
+        post_process result, status
+      end
+      [results.map { |it| it[0] }.join("\n"), results.all? { |it| it[1] == :passed } ? :passed : :failed]
     end
 
     def post_process(result, status)
@@ -26,11 +31,9 @@ module Gobstones::Spec
       @example.stop!
     end
 
-    def create_example_and_get_test_command(test_definition)
+    def start_example(source, initial, final)
       @example = Gobstones::Spec::Example.new(gobstones_path)
-      @example.start!(test_definition[:source],
-                      test_definition[:examples][:initial_board],
-                      test_definition[:examples][:final_board])
+      @example.start!(source, initial, final)
     end
   end
 end
