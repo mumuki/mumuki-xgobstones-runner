@@ -32,7 +32,7 @@ module Gobstones::Spec
     end
 
     def aggregate_results(results)
-      [results.map { |it| it[0] }.join("\n"), results.all? { |it| it[1] == :passed } ? :passed : :failed]
+      [results.map { |it| it[0] }.join("\n<hr>\n"), results.all? { |it| it[1] == :passed } ? :passed : :failed]
     end
 
     def post_process(result, status)
