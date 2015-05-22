@@ -1,5 +1,7 @@
 module Gobstones::Spec
   class Example
+    include Gobstones::WithTempfile
+
     attr_reader :gobstones_path
 
     def initialize(gobstones_path)
@@ -12,8 +14,8 @@ module Gobstones::Spec
 
       @html_output_file = Tempfile.new %w(gobstones.output .html)
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
-      @source_file = create_temp_file source, 'gbs'
-      @initial_board_file = create_temp_file initial_board, 'gbb'
+      @source_file = write_tempfile source, 'gbs'
+      @initial_board_file = write_tempfile initial_board, 'gbb'
 
       "#{run_on_gobstones @source_file, @initial_board_file, @actual_final_board_file} 2>&1 &&" +
           "#{run_on_gobstones @source_file, @initial_board_file, @html_output_file}"
@@ -45,7 +47,6 @@ module Gobstones::Spec
     end
 
     def stop!
-      [@html_output_file, @actual_final_board_file].each { |it| it.close }
       [@html_output_file, @actual_final_board_file, @source_file, @initial_board_file].each { |it| it.unlink }
     end
 
@@ -55,27 +56,18 @@ module Gobstones::Spec
       "#{gobstones_path} #{source_file.path} --from #{initial_board_file.path} --to #{final_board_file.path}"
     end
 
-    def create_temp_file(content,  extension)
-      file = Tempfile.new %W(gobstones. .#{extension})
-      file.write content
-      file.close
-      file
-    end
-
     def get_html_board(gbb_representation)
-      identity = Tempfile.new %w(gobstones.identity .gbs)
-      identity.write 'program {}'
-      identity.close
+      identity = write_tempfile 'program {}', '.gbs'
 
-      board = Tempfile.new %w(gobstones.board .gbb)
-      board.write gbb_representation
-      board.close
+      board = write_tempfile gbb_representation, '.gbb'
 
       board_html = Tempfile.new %w(gobstones.board .html)
 
       %x"#{run_on_gobstones(identity, board, board_html)}"
 
-      board_html.read
+      result = board_html.read
+      board_html.unlink
+      result
     end
   end
 
