@@ -16,8 +16,8 @@ describe Runner do
         let(:html) { results[0] }
 
         it { expect(html).to include(File.new('spec/data/red_ball_at_origin.html').read) }
-        it { expect(html).to start_with("<div>") }
-        it { expect(html).to end_with("</div>") }
+        it { expect(html).to start_with('<div>') }
+        it { expect(html).to end_with('</div>') }
       end
     end
 
@@ -28,7 +28,7 @@ describe Runner do
       context 'should return an html representation of the initial, expected and actual boards as result' do
         let(:html) { results[0] }
 
-        it { expect(html).to include(File.new('spec/data/red_ball_at_origin_initial.html').read) }
+        it { puts html ; expect(html).to include(File.new('spec/data/red_ball_at_origin_initial.html').read) }
         it { expect(html).to include(File.new('spec/data/red_ball_at_origin_wrong.html').read) }
         it { expect(html).to include(File.new('spec/data/red_ball_at_origin.html').read) }
         it { expect(html).to start_with("<div>") }
