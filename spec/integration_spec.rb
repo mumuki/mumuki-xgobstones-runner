@@ -24,16 +24,17 @@ program {
   Poner(Rojo)
 }
 ', extra: '', test: '
-initial_board: |
- GBB/1.0
- size 4 4
- head 3 0
+examples:
+ - initial_board: |
+    GBB/1.0
+    size 4 4
+    head 3 0
 
-final_board: |
- GBB/1.0
- size 4 4
- cell 0 0 Rojo 1
- head 0 0
+   final_board: |
+    GBB/1.0
+    size 4 4
+    cell 0 0 Rojo 1
+    head 0 0
 ')
       expect(response[:status]).to eq('passed')
     end
