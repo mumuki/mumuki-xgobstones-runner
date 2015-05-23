@@ -6,8 +6,8 @@ require 'gobstones/version'
 Gem::Specification.new do |spec|
   spec.name          = 'gobstones-spec'
   spec.version       = Gobstones::VERSION
-  spec.authors       = ['Federico Aloi']
-  spec.email         = ['federico.aloi@gmail.com']
+  spec.authors       = ['Federico Aloi', 'Franco Bulgarelli']
+  spec.email         = ['federico.aloi@gmail.com', 'flbulgarelli@yahoo.com.ar']
   spec.summary       = 'Minimal test framework for the Gobstones language'
   spec.description   = 'Write Gobstones specs within Ruby'
   spec.homepage      = 'https://github.com/uqbar-project/gobstones-spec'
