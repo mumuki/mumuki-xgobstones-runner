@@ -1,8 +1,6 @@
-require 'mumukit'
-
 module Gobstones::Spec
   class Runner
-    include Mumukit::WithCommandLine
+    include Gobstones::WithCommandLine
     include Gobstones::WithTempfile
 
     attr_reader :gobstones_path
@@ -32,7 +30,7 @@ module Gobstones::Spec
     end
 
     def aggregate_results(results)
-      [results.map { |it| it[0] }.join("\n"), results.all? { |it| it[1] == :passed } ? :passed : :failed]
+      [results.map { |it| it[0] }.join("\n<hr>\n"), results.all? { |it| it[1] == :passed } ? :passed : :failed]
     end
 
     def post_process(result, status)

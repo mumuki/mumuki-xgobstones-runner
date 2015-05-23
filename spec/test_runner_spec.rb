@@ -1,12 +1,16 @@
 require 'spec_helper'
-require_relative '../lib/test_runner'
+require 'yaml'
 
-describe TestRunner do
-  let(:runner) { TestRunner.new('gobstones_command' => 'python .heroku/vendor/pygobstones/language/vgbs/gbs.py') }
+require_relative '../lib/gobstones'
+
+include Gobstones::Spec
+
+describe Runner do
+  let(:runner) { Runner.new('python .heroku/vendor/pygobstones/language/vgbs/gbs.py') }
 
   context 'when the file is sintactically ok' do
     context 'when the final board matches' do
-      let(:results) { runner.run_compilation!(YAML.load_file 'spec/data/red_ball_at_origin.yml') }
+      let(:results) { runner.run!(YAML.load_file 'spec/data/red_ball_at_origin.yml') }
 
       it { expect(results[1]).to eq(:passed) }
 
@@ -14,13 +18,13 @@ describe TestRunner do
         let(:html) { results[0] }
 
         it { expect(html).to include(File.new('spec/data/red_ball_at_origin.html').read) }
-        it { expect(html).to start_with("<div>") }
-        it { expect(html).to end_with("</div>") }
+        it { expect(html).to start_with('<div>') }
+        it { expect(html).to end_with('</div>') }
       end
     end
 
     context 'when the final board doesnt match' do
-      let(:results) { runner.run_compilation!(YAML.load_file 'spec/data/red_ball_at_origin_wrong.yml') }
+      let(:results) { runner.run!(YAML.load_file 'spec/data/red_ball_at_origin_wrong.yml') }
       it { expect(results[1]).to eq(:failed) }
 
       context 'should return an html representation of the initial, expected and actual boards as result' do
@@ -28,14 +32,14 @@ describe TestRunner do
 
         it { expect(html).to include(File.new('spec/data/red_ball_at_origin_initial.html').read) }
         it { expect(html).to include(File.new('spec/data/red_ball_at_origin_wrong.html').read) }
-        it { expect(html).to include(File.new('spec/data/red_ball_at_origin.html').read) }
-        it { expect(html).to start_with("<div>") }
-        it { expect(html).to end_with("</div>") }
+        it { expect(html).to include(File.new('spec/data/red_ball_at_origin_expected.html').read) }
+        it { expect(html).to start_with('<div>') }
+        it { expect(html).to end_with('</div>') }
       end
     end
 
     context 'when produces BOOM' do
-      let(:results) { runner.run_compilation!(YAML.load_file 'spec/data/runtime_error.yml') }
+      let(:results) { runner.run!(YAML.load_file 'spec/data/runtime_error.yml') }
       it { expect(results[1]).to eq(:failed) }
       it do
         expect(results[0]).to eq(
@@ -55,7 +59,7 @@ Error en tiempo de ejecución:
   end
 
   context 'when the file is not sintactically ok,' do
-    let(:results) { runner.run_compilation!(YAML.load_file 'spec/data/syntax_error.yml') }
+    let(:results) { runner.run!(YAML.load_file 'spec/data/syntax_error.yml') }
     it { expect(results[1]).to eq(:failed) }
     it do
       expect(results[0]).to eq(
