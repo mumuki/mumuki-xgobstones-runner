@@ -1,8 +1,6 @@
-require 'mumukit'
-
 module Gobstones::Spec
   class Runner
-    include Mumukit::WithCommandLine
+    include Gobstones::WithCommandLine
     include Gobstones::WithTempfile
 
     attr_reader :gobstones_path

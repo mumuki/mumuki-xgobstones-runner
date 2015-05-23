@@ -1,4 +1,6 @@
 require 'spec_helper'
+require 'yaml'
+
 require_relative '../lib/gobstones'
 
 include Gobstones::Spec
