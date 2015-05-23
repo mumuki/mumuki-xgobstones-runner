@@ -1,7 +1,6 @@
 require 'mumukit'
 require 'yaml'
-
-require_relative 'gobstones'
+require 'gobstones'
 
 class TestRunner < Mumukit::Stub
   def gobstones_path
