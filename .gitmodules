@@ -1,0 +1,3 @@
+[submodule ".heroku/vendor/pygobstones"]
+	path = .heroku/vendor/pygobstones
+	url = git@github.com:faloi/pygobstones.git
