@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rake'
 gem 'mumukit', github: 'mumuki/mumukit', tag: 'v0.3.0'
-gem 'gobstones-spec', github: 'uqbar-project/gobstones-spec', tag: 'v0.1.0'
+gem 'gobstones-spec', github: 'uqbar-project/gobstones-spec', tag: 'v0.2.0'
 
 group :test do
   gem 'rspec', '2.13'
