@@ -4,8 +4,9 @@ module Gobstones::Spec
 
     attr_reader :gobstones_path
 
-    def initialize(gobstones_path)
+    def initialize(gobstones_path, check_head_position)
       @gobstones_path = gobstones_path
+      @check_head_position = check_head_position
     end
 
     def start!(source_file, initial_board, final_board)
@@ -24,7 +25,7 @@ module Gobstones::Spec
     def result
       actual = Gobstones::GbbParser.new.from_string(@actual_final_board_file.read)
 
-      if actual == @expected_final_board
+      if matches_with_expected_board? actual
         ["<div>#{@html_output_file.read}</div>", :passed]
       else
         initial_board_html = get_html_board @initial_board_file.open.read
@@ -50,6 +51,10 @@ module Gobstones::Spec
     end
 
     private
+
+    def matches_with_expected_board?(actual_board)
+      actual_board == @expected_final_board && (!@check_head_position || actual_board.head_position == @expected_final_board.head_position)
+    end
 
     def run_on_gobstones(source_file, initial_board_file, final_board_file)
       "#{gobstones_path} #{source_file.path} --from #{initial_board_file.path} --to #{final_board_file.path}"

@@ -12,6 +12,7 @@ module Gobstones::Spec
     def run!(test_definition)
       source_file = write_tempfile test_definition[:source], 'gbs'
       results = test_definition[:examples].map do |example_definition|
+        example_definition[:check_head_position] = test_definition[:check_head_position]
         run_example!(example_definition, source_file)
       end
       aggregate_results(results)
@@ -22,9 +23,7 @@ module Gobstones::Spec
     private
 
     def run_example!(example_definition, source_file)
-      command = start_example(source_file,
-                              example_definition[:initial_board],
-                              example_definition[:final_board])
+      command = start_example(source_file, example_definition)
       result, status = run_command command
       post_process result, status
     end
@@ -43,9 +42,9 @@ module Gobstones::Spec
       @example.stop!
     end
 
-    def start_example(source, initial, final)
-      @example = Gobstones::Spec::Example.new(gobstones_path)
-      @example.start!(source, initial, final)
+    def start_example(source, example_definition)
+      @example = Gobstones::Spec::Example.new(gobstones_path, example_definition[:check_head_position])
+      @example.start!(source, example_definition[:initial_board], example_definition[:final_board])
     end
   end
 end

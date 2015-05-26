@@ -8,6 +8,18 @@ include Gobstones::Spec
 describe Runner do
   let(:runner) { Runner.new('python .heroku/vendor/pygobstones/language/vgbs/gbs.py') }
 
+  context 'can check head position' do
+    context 'when its wrong' do
+      let(:results) { runner.run!(YAML.load_file 'spec/data/head_position_wrong.yml') }
+      it { expect(results[1]).to eq(:failed) }
+    end
+
+    context 'when its ok' do
+      let(:results) { runner.run!(YAML.load_file 'spec/data/head_position_ok.yml') }
+      it { expect(results[1]).to eq(:passed) }
+    end
+  end
+
   context 'when the file is sintactically ok' do
     context 'when the final board matches' do
       let(:results) { runner.run!(YAML.load_file 'spec/data/red_ball_at_origin.yml') }
