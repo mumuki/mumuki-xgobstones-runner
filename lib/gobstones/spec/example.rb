@@ -26,19 +26,9 @@ module Gobstones::Spec
       actual_final_board_html = get_html_board(actual_final_board_gbb)
 
       if matches_with_expected_board? actual_final_board
-        ["<div>#{actual_final_board_html}</div>", :passed]
+        passed_result(actual_final_board_html)
       else
-        initial_board_html = get_html_board @initial_board_file.open.read
-        expected_board_html = get_html_board @expected_final_board_gbb
-
-        output =
-"<div>
-  #{add_caption initial_board_html, 'Tablero inicial'}
-  #{add_caption actual_final_board_html, 'Tablero final obtenido'}
-  #{add_caption expected_board_html, 'Tablero final esperado'}
-</div>"
-
-        [output, :failed]
+        failed_result(actual_final_board_html)
       end
     end
 
@@ -51,6 +41,23 @@ module Gobstones::Spec
     end
 
     private
+
+    def failed_result(actual_final_board_html)
+      initial_board_html = get_html_board @initial_board_file.open.read
+      expected_board_html = get_html_board @expected_final_board_gbb
+      output =
+"<div>
+  #{add_caption initial_board_html, 'Tablero inicial'}
+  #{add_caption actual_final_board_html, 'Tablero final obtenido'}
+  #{add_caption expected_board_html, 'Tablero final esperado'}
+</div>"
+      [output, :failed]
+    end
+
+    def passed_result(actual_final_board_html)
+      ["<div>#{actual_final_board_html}</div>", :passed]
+    end
+
 
     def matches_with_expected_board?(actual_board)
       actual_board == @expected_final_board && (!@check_head_position || actual_board.head_position == @expected_final_board.head_position)
