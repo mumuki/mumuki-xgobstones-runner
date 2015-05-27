@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     gobstones-spec (0.2.0)
-      gobgems (= 0.0.2)
+      gobgems (= 0.0.3)
 
 GEM
   remote: https://rubygems.org/
@@ -11,7 +11,7 @@ GEM
       simplecov (>= 0.7.1, < 1.0.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
-    gobgems (0.0.2)
+    gobgems (0.0.3)
     json (1.8.2)
     rake (10.4.2)
     rspec (2.13.0)
