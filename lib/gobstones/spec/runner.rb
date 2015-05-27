@@ -1,6 +1,5 @@
 module Gobstones::Spec
   class Runner
-    include Gobstones::WithCommandLine
     include Gobstones::WithTempfile
 
     attr_reader :language
@@ -23,8 +22,7 @@ module Gobstones::Spec
     private
 
     def run_example!(example_definition, source_file)
-      command = start_example(source_file, example_definition)
-      result, status = run_command command
+      result, status = start_example(source_file, example_definition)
       post_process result, status
     end
 

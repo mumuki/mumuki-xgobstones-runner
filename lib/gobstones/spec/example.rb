@@ -1,6 +1,7 @@
 module Gobstones::Spec
   class Example
     include Gobstones::WithTempfile
+    include Gobstones::WithCommandLine
 
     attr_reader :language
 
@@ -20,7 +21,7 @@ module Gobstones::Spec
 
       id_program = write_tempfile 'program {}', 'gbs'
 
-      "#{language.run @source_file, @initial_board_file, @actual_final_board_file} 2>&1 &&" +
+      run_command  "#{language.run @source_file, @initial_board_file, @actual_final_board_file} 2>&1 &&" +
           "#{Language::Gobstones.run id_program, @actual_final_board_file, @html_output_file}"
     end
 
