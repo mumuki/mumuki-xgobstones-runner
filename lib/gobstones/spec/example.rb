@@ -63,16 +63,14 @@ module Gobstones::Spec
 
     def get_html_board(gbb_representation)
       identity = write_tempfile 'program {}', '.gbs'
-
       board = write_tempfile gbb_representation, '.gbb'
-
       board_html = Tempfile.new %w(gobstones.board .html)
 
       %x"#{Language::Gobstones.run(identity, board, board_html)}" #FIXME seems duplicated
 
-      result = board_html.read
-      board_html.unlink
-      result
+      board_html.read
+    ensure
+      [identity, board, board_html].compact.each(&:unlink)
     end
 
     def add_caption(board_html, caption)
