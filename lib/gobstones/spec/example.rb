@@ -2,11 +2,11 @@ module Gobstones::Spec
   class Example
     include Gobstones::WithTempfile
 
-    attr_reader :gobstones_path
+    attr_reader :language
 
-    def initialize(gobstones_path, check_head_position)
-      @gobstones_path = gobstones_path
+    def initialize(check_head_position, language)
       @check_head_position = check_head_position
+      @language = language
     end
 
     def start!(source_file, initial_board, final_board)
@@ -18,8 +18,10 @@ module Gobstones::Spec
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
       @initial_board_file = write_tempfile initial_board, 'gbb'
 
-      "#{run_on_gobstones @source_file, @initial_board_file, @actual_final_board_file} 2>&1 &&" +
-          "#{run_on_gobstones @source_file, @initial_board_file, @html_output_file}"
+      id_program = write_tempfile 'program {}', 'gbs'
+
+      "#{language.run @source_file, @initial_board_file, @actual_final_board_file} 2>&1 &&" +
+          "#{Language::Gobstones.run id_program, @actual_final_board_file, @html_output_file}"
     end
 
     def result
@@ -56,10 +58,6 @@ module Gobstones::Spec
       actual_board == @expected_final_board && (!@check_head_position || actual_board.head_position == @expected_final_board.head_position)
     end
 
-    def run_on_gobstones(source_file, initial_board_file, final_board_file)
-      "#{gobstones_path} #{source_file.path} --from #{initial_board_file.path} --to #{final_board_file.path}"
-    end
-
     def get_html_board(gbb_representation)
       identity = write_tempfile 'program {}', '.gbs'
 
@@ -67,7 +65,7 @@ module Gobstones::Spec
 
       board_html = Tempfile.new %w(gobstones.board .html)
 
-      %x"#{run_on_gobstones(identity, board, board_html)}"
+      %x"#{Language::Gobstones.run(identity, board, board_html)}" #FIXME seems duplicated
 
       result = board_html.read
       board_html.unlink

@@ -8,7 +8,8 @@ require_relative '../lib/gobstones'
 include Gobstones::Spec
 
 describe Runner do
-  let(:runner) { Runner.new('python .heroku/vendor/pygobstones/language/vgbs/gbs.py') }
+  let(:lang) { Language::Gobstones }
+  let(:runner) { Runner.new(lang) }
 
   context 'can check head position' do
     context 'when its wrong' do

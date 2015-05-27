@@ -3,14 +3,14 @@ module Gobstones::Spec
     include Gobstones::WithCommandLine
     include Gobstones::WithTempfile
 
-    attr_reader :gobstones_path
+    attr_reader :language
 
-    def initialize(gobstones_path)
-      @gobstones_path = gobstones_path
+    def initialize(language)
+      @language = language
     end
 
     def run!(test_definition)
-      source_file = write_tempfile test_definition[:source], 'gbs'
+      source_file = write_tempfile test_definition[:source], language.source_code_extension
       results = test_definition[:examples].map do |example_definition|
         example_definition[:check_head_position] = test_definition[:check_head_position]
         run_example!(example_definition, source_file)
@@ -43,7 +43,7 @@ module Gobstones::Spec
     end
 
     def start_example(source, example_definition)
-      @example = Gobstones::Spec::Example.new(gobstones_path, example_definition[:check_head_position])
+      @example = Gobstones::Spec::Example.new(example_definition[:check_head_position], language)
       @example.start!(source, example_definition[:initial_board], example_definition[:final_board])
     end
   end
