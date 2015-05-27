@@ -21,15 +21,12 @@ module Gobstones::Spec
     end
 
     def result
-      html_output_file = Tempfile.new %w(gobstones.output .html)
+      actual_final_board_gbb = @actual_final_board_file.read
+      actual_final_board = Gobgems::Gbb.read(actual_final_board_gbb)
+      actual_final_board_html = get_html_board(actual_final_board_gbb)
 
-      actual = Gobgems::Gbb.read(@actual_final_board_file.read)
-
-      id_program = write_tempfile 'program {}', 'gbs'
-      run_command "#{Language::Gobstones.run id_program, @actual_final_board_file, html_output_file}"
-
-      if matches_with_expected_board? actual
-        ["<div>#{html_output_file.read}</div>", :passed]
+      if matches_with_expected_board? actual_final_board
+        ["<div>#{actual_final_board_html}</div>", :passed]
       else
         initial_board_html = get_html_board @initial_board_file.open.read
         expected_board_html = get_html_board @expected_final_board_gbb
@@ -37,14 +34,12 @@ module Gobstones::Spec
         output =
 "<div>
   #{add_caption initial_board_html, 'Tablero inicial'}
-  #{add_caption html_output_file.read, 'Tablero final obtenido'}
+  #{add_caption actual_final_board_html, 'Tablero final obtenido'}
   #{add_caption expected_board_html, 'Tablero final esperado'}
 </div>"
 
         [output, :failed]
       end
-    ensure
-      html_output_file.unlink
     end
 
     def parse_error_message(result)
@@ -66,7 +61,7 @@ module Gobstones::Spec
       board = write_tempfile gbb_representation, '.gbb'
       board_html = Tempfile.new %w(gobstones.board .html)
 
-      %x"#{Language::Gobstones.run(identity, board, board_html)}" #FIXME seems duplicated
+      %x"#{Language::Gobstones.run(identity, board, board_html)}"
 
       board_html.read
     ensure
