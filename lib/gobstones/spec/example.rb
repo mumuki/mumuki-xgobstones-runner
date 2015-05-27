@@ -15,21 +15,21 @@ module Gobstones::Spec
       @expected_final_board_gbb = final_board
       @expected_final_board = Gobgems::Gbb.read final_board
 
-      @html_output_file = Tempfile.new %w(gobstones.output .html)
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
       @initial_board_file = write_tempfile initial_board, 'gbb'
-
-      id_program = write_tempfile 'program {}', 'gbs'
-
-      run_command  "#{language.run @source_file, @initial_board_file, @actual_final_board_file} 2>&1 &&" +
-          "#{Language::Gobstones.run id_program, @actual_final_board_file, @html_output_file}"
+      run_command  "#{language.run @source_file, @initial_board_file, @actual_final_board_file} 2>&1"
     end
 
     def result
+      html_output_file = Tempfile.new %w(gobstones.output .html)
+
       actual = Gobgems::Gbb.read(@actual_final_board_file.read)
 
+      id_program = write_tempfile 'program {}', 'gbs'
+      run_command "#{Language::Gobstones.run id_program, @actual_final_board_file, html_output_file}"
+
       if matches_with_expected_board? actual
-        ["<div>#{@html_output_file.read}</div>", :passed]
+        ["<div>#{html_output_file.read}</div>", :passed]
       else
         initial_board_html = get_html_board @initial_board_file.open.read
         expected_board_html = get_html_board @expected_final_board_gbb
@@ -37,12 +37,14 @@ module Gobstones::Spec
         output =
 "<div>
   #{add_caption initial_board_html, 'Tablero inicial'}
-  #{add_caption @html_output_file.read, 'Tablero final obtenido'}
+  #{add_caption html_output_file.read, 'Tablero final obtenido'}
   #{add_caption expected_board_html, 'Tablero final esperado'}
 </div>"
 
         [output, :failed]
       end
+    ensure
+      html_output_file.unlink
     end
 
     def parse_error_message(result)
@@ -50,7 +52,7 @@ module Gobstones::Spec
     end
 
     def stop!
-      [@html_output_file, @actual_final_board_file, @initial_board_file].each { |it| it.unlink }
+      [@actual_final_board_file, @initial_board_file].each { |it| it.unlink }
     end
 
     private
