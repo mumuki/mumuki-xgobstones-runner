@@ -1,10 +1,8 @@
 module Gobstones
 end
 
-require_relative 'gobstones/board'
-require_relative 'gobstones/cell'
-require_relative 'gobstones/gbb_parser'
-require_relative 'gobstones/position'
+require 'gobgems'
+
 require_relative 'gobstones/with_tempfile'
 require_relative 'gobstones/with_command_line'
 require_relative 'gobstones/spec'
