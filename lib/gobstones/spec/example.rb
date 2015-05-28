@@ -12,7 +12,7 @@ module Gobstones::Spec
     def start!(source_file, initial_board, final_board)
       @source_file = source_file
       @expected_final_board_gbb = final_board
-      @expected_final_board = Gobstones::GbbParser.new.from_string final_board
+      @expected_final_board = Gobgems::GbbParser.new.from_string final_board
 
       @html_output_file = Tempfile.new %w(gobstones.output .html)
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
@@ -23,7 +23,7 @@ module Gobstones::Spec
     end
 
     def result
-      actual = Gobstones::GbbParser.new.from_string(@actual_final_board_file.read)
+      actual = Gobgems::GbbParser.new.from_string(@actual_final_board_file.read)
 
       if matches_with_expected_board? actual
         ["<div>#{@html_output_file.read}</div>", :passed]
