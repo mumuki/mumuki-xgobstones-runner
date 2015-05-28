@@ -6,7 +6,9 @@ include Gobstones::Expectations
 
 describe HasProcedureUsage do
   context '#value' do
-    it { expect(HasProcedureUsage.new('program { IrAlBorde(Oeste) }', 'IrAlBorde').value).to be_true }
-    it { expect(HasProcedureUsage.new('program { IrAlBorde(Oeste) }', 'Mover').value).to be_false }
+    let(:runner) { ExpectationsRunner.new('python .heroku/vendor/pygobstones/language/vgbs/gbs.py', 'program { IrAlBorde(Oeste) }') }
+    let(:results) { runner.run! [HasProcedureUsage.new('IrAlBorde'), HasProcedureUsage.new('Mover')] }
+    it { expect(results.first[1]).to be_true }
+    it { expect(results.last[1]).to be_false }
   end
 end
