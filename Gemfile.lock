@@ -16,10 +16,11 @@ GIT
 
 GIT
   remote: git://github.com/uqbar-project/gobstones-spec.git
-  revision: 6cde2e4200b57a17637f0cae75fb970681f02c85
-  tag: v0.2.0
+  revision: f03ca819adc11983bdd52fe33d689d44b8d99dda
+  branch: master
   specs:
     gobstones-spec (0.2.0)
+      gobgems (= 0.0.3)
 
 GEM
   remote: https://rubygems.org/
@@ -30,6 +31,7 @@ GEM
     docile (1.1.5)
     domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
+    gobgems (0.0.3)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     json (1.8.2)

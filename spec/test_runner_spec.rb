@@ -2,7 +2,10 @@ require 'spec_helper'
 require_relative '../lib/test_runner'
 
 describe TestRunner do
-  let(:runner) { TestRunner.new('gobstones_command' => 'python .heroku/vendor/pygobstones/language/vgbs/gbs.py') }
+  let(:runner) { TestRunner.new(
+      'gobstones_command' => 'python .heroku/vendor/pygobstones/language/vgbs/gbs.py',
+      'program_language' => 'gobstones'
+  ) }
 
   context 'when the file is sintactically ok' do
     context 'when the final board matches' do
