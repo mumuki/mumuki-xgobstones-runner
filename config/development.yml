@@ -1,2 +1,2 @@
 gobstones_command: python .heroku/vendor/pygobstones/language/vgbs/gbs.py
-program_language: gobstones
+program_language: ruby
