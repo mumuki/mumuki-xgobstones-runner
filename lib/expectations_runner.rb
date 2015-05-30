@@ -1,6 +1,6 @@
 require 'mumukit'
 require 'mumukit/inspection'
-require 'gobstones'
+require 'stones-spec'
 
 
 class Mumukit::Inspection::PlainInspection
@@ -27,7 +27,7 @@ end
 
 class ExpectationsRunner
   include Mumukit
-  include Gobstones::WithTempfile
+  include StonesSpec::WithTempfile
 
   def run_expectations!(expectations, content)
     ast = generate_ast!(content)
@@ -44,6 +44,6 @@ class ExpectationsRunner
   end
 
   def gobstones_command
-    Gobstones::Spec::Language::Gobstones.gobstones_command
+    StonesSpec::Language::Gobstones.gobstones_command
   end
 end

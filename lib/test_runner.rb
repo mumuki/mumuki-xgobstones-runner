@@ -1,9 +1,9 @@
 require 'mumukit'
 require 'yaml'
-require 'gobstones'
+require 'stones-spec'
 
 class TestRunner < Mumukit::Stub
   def run_compilation!(test_definition)
-    Gobstones::Spec::Runner.new(Gobstones::Spec::Language::Gobstones).run!(test_definition)
+    StonesSpec::Runner.new(StonesSpec::Language::Gobstones).run!(test_definition)
   end
 end
