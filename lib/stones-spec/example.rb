@@ -1,7 +1,7 @@
-module Gobstones::Spec
+module StonesSpec::Spec
   class Example
-    include Gobstones::WithTempfile
-    include Gobstones::WithCommandLine
+    include StonesSpec::WithTempfile
+    include StonesSpec::WithCommandLine
 
     attr_reader :language
 
@@ -68,7 +68,7 @@ module Gobstones::Spec
       board = write_tempfile gbb_representation, '.gbb'
       board_html = Tempfile.new %w(gobstones.board .html)
 
-      %x"#{Language::Gobstones.run(identity, board, board_html)}"
+      %x"#{Language::StonesSpec.run(identity, board, board_html)}"
 
       board_html.read
     ensure

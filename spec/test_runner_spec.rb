@@ -3,9 +3,9 @@
 require_relative './spec_helper'
 require 'yaml'
 
-require_relative '../lib/gobstones'
+require_relative '../lib/stones-spec'
 
-include Gobstones::Spec
+include StonesSpec
 
 describe Runner do
   describe Language::Gobstones do

@@ -1,4 +1,4 @@
-module Gobstones::Spec
+module StonesSpec::Spec
   class ErrorMessageParser
     def remove_traceback (x)
       x.take_while { |str| not str.start_with? 'Traceback' }

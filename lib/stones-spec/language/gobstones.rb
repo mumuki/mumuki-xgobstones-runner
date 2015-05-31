@@ -1,4 +1,4 @@
-module Gobstones::Spec::Language
+module StonesSpec::Language
   module Gobstones
 
     def self.source_code_extension
