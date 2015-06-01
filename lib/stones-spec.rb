@@ -1,7 +1,7 @@
 module StonesSpec
 end
 
-require 'ruby-stones'
+require 'stones'
 
 require_relative 'stones-spec/language'
 require_relative 'stones-spec/error_message_parser'
