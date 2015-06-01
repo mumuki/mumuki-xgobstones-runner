@@ -41,7 +41,7 @@ describe TestRunner do
       it { expect(results[1]).to eq(:failed) }
       it do
         expect(results[0]).to eq(
-'cerca de invocación a procedimiento
+'<pre>cerca de invocación a procedimiento
   |
   V
   Mover(Este)
@@ -51,7 +51,7 @@ describe TestRunner do
 Error en tiempo de ejecución:
 
     No se puede mover el cabezal en dirección: Este
-    La posición cae afuera del tablero')
+    La posición cae afuera del tablero</pre>')
       end
     end
   end
@@ -61,7 +61,7 @@ Error en tiempo de ejecución:
     it { expect(results[1]).to eq(:failed) }
     it do
       expect(results[0]).to eq(
-'cerca de un identificador con mayúscula "Error"
+'<pre>cerca de un identificador con mayúscula "Error"
         |
         V
   Poner(Error)
@@ -70,7 +70,7 @@ Error en tiempo de ejecución:
 
 Error en el programa:
 
-    La constante "Error" no está definida')
+    La constante "Error" no está definida</pre>')
     end
   end
 end
