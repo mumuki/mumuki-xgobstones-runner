@@ -13,7 +13,7 @@ module StonesSpec
     def start!(source_file, initial_board, final_board)
       @source_file = source_file
       @expected_final_board_gbb = final_board
-      @expected_final_board = Gobgems::Gbb.read final_board
+      @expected_final_board = Stones::Gbb.read final_board
 
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
       @initial_board_file = write_tempfile initial_board, 'gbb'
@@ -22,7 +22,7 @@ module StonesSpec
 
     def result
       actual_final_board_gbb = @actual_final_board_file.read
-      actual_final_board = Gobgems::Gbb.read(actual_final_board_gbb)
+      actual_final_board = Stones::Gbb.read(actual_final_board_gbb)
       actual_final_board_html = get_html_board(actual_final_board_gbb)
 
       if matches_with_expected_board? actual_final_board
@@ -68,7 +68,7 @@ module StonesSpec
       board = write_tempfile gbb_representation, '.gbb'
       board_html = Tempfile.new %w(gobstones.board .html)
 
-      %x"#{Language::StonesSpec.run(identity, board, board_html)}"
+      %x"#{Language::Gobstones.run(identity, board, board_html)}"
 
       board_html.read
     ensure
