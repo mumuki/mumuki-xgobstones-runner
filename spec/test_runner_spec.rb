@@ -113,8 +113,8 @@ Error en el programa:
 
       it { expect(results[1]).to eq(:failed) }
 
-      it { expect(html).to start_with('<div>') }
-      it { expect(html).to end_with('</div>') }
+      it { expect(html).to start_with('<pre>') }
+      it { expect(html).to end_with('</pre>') }
     end
   end
 end

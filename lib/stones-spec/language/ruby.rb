@@ -11,5 +11,9 @@ module StonesSpec::Language
     def self.stones_command
       'stones'
     end
+
+    def self.parse_error_message(result)
+      "<pre>#{result}</pre>"
+    end
   end
 end

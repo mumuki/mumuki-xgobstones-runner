@@ -33,7 +33,7 @@ module StonesSpec
     end
 
     def parse_error_message(result)
-      ErrorMessageParser.new.parse(result)
+      language.parse_error_message(result)
     end
 
     def stop!
