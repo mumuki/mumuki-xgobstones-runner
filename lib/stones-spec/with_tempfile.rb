@@ -1,6 +1,6 @@
 require 'tempfile'
 
-module Stones::Spec
+module StonesSpec
   module WithTempfile
 
     def write_tempfile(content, extension)

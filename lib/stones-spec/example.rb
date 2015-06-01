@@ -1,4 +1,4 @@
-module StonesSpec::Spec
+module StonesSpec
   class Example
     include StonesSpec::WithTempfile
     include StonesSpec::WithCommandLine

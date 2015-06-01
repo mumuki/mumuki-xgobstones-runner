@@ -1,4 +1,4 @@
-module StonesSpec::Spec
+module StonesSpec
   class Runner
     include StonesSpec::WithTempfile
 
@@ -41,7 +41,7 @@ module StonesSpec::Spec
     end
 
     def start_example(source, example_definition)
-      @example = StonesSpec::Spec::Example.new(example_definition[:check_head_position], language)
+      @example = StonesSpec::Example.new(example_definition[:check_head_position], language)
       @example.start!(source, example_definition[:initial_board], example_definition[:final_board])
     end
   end

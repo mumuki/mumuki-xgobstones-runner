@@ -1,4 +1,4 @@
-module StonesSpec::Spec
+module StonesSpec
   class ErrorMessageParser
     def remove_traceback (x)
       x.take_while { |str| not str.start_with? 'Traceback' }
