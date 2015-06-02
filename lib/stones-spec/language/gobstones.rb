@@ -14,7 +14,7 @@ module StonesSpec::Language
     end
 
     def self.parse_error_message(result)
-      ErrorMessageParser.new.parse(result)
+      "<pre>#{ErrorMessageParser.new.parse(result)}</pre>"
     end
   end
 end
