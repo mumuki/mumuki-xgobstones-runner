@@ -92,29 +92,4 @@ Error en el programa:
       end
     end
   end
-  describe Language::Ruby do
-    let(:lang) { Language::Ruby }
-    let(:runner) { Runner.new(lang) }
-
-    context 'when its ok' do
-      let(:results) { runner.run!(YAML.load_file 'spec/data/head_position_ok_ruby.yml') }
-      let(:html) { results[0] }
-
-      it { expect(results[1]).to eq(:passed) }
-
-      it { expect(html).to start_with('<div>') }
-      it { expect(html).to end_with('</div>') }
-    end
-
-
-    context 'when its not ok' do
-      let(:results) { runner.run!(YAML.load_file 'spec/data/runtime_error_ruby.yml') }
-      let(:html) { results[0] }
-
-      it { expect(results[1]).to eq(:failed) }
-
-      it { expect(html).to start_with('<pre>') }
-      it { expect(html).to end_with('</pre>') }
-    end
-  end
 end
