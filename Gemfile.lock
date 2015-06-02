@@ -15,19 +15,19 @@ GIT
       sinatra (~> 1.4)
 
 GIT
-  remote: git://github.com/uqbar-project/gobstones-spec.git
-  revision: 6716ae9b6e49bc35503b35f0ba8e89ef5857b6b1
-  branch: master
-  specs:
-    gobstones-spec (0.2.0)
-      gobgems (= 0.0.4)
-
-GIT
   remote: git://github.com/uqbar-project/mumukit-inspection.git
   revision: 467ea454a85fed1ea4136b1c1d2b4f6d5dc88ad0
   branch: master
   specs:
     mumukit-inspection (0.0.1)
+
+GIT
+  remote: git://github.com/uqbar-project/stones-spec.git
+  revision: 1ef4dc0a5c682a7c9efd738265a1657767c86811
+  branch: master
+  specs:
+    stones-spec (0.2.0)
+      ruby-stones (= 0.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -38,7 +38,6 @@ GEM
     docile (1.1.5)
     domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
-    gobgems (0.0.4)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     json (1.8.2)
@@ -60,6 +59,7 @@ GEM
     rspec-expectations (2.13.0)
       diff-lcs (>= 1.1.3, < 2.0)
     rspec-mocks (2.13.1)
+    ruby-stones (0.1.0)
     simplecov (0.10.0)
       docile (~> 1.1.0)
       json (~> 1.8)
@@ -79,9 +79,9 @@ PLATFORMS
 
 DEPENDENCIES
   codeclimate-test-reporter
-  gobstones-spec!
   mumukit!
   mumukit-bridge!
   mumukit-inspection!
   rake
   rspec (= 2.13)
+  stones-spec!
