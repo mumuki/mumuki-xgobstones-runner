@@ -1,4 +1,4 @@
-module Gobstones::Spec
+module StonesSpec
   module Language
 
   end

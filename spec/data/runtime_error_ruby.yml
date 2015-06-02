@@ -1,6 +1,7 @@
 :source: |
   def main
-    move north
+    move_to_edge! east
+    move! east
   end
 
 :examples:
@@ -8,7 +9,6 @@
      GBB/1.0
      size 4 4
      head 0 0
-
    :final_board: |
      GBB/1.0
      size 4 4

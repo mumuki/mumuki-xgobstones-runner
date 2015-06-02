@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    gobstones-spec (0.2.0)
-      gobgems (= 0.0.4)
+    stones-spec (0.2.0)
+      ruby-stones (= 0.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -11,7 +11,6 @@ GEM
       simplecov (>= 0.7.1, < 1.0.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
-    gobgems (0.0.4)
     json (1.8.2)
     rake (10.4.2)
     rspec (2.13.0)
@@ -22,6 +21,7 @@ GEM
     rspec-expectations (2.13.0)
       diff-lcs (>= 1.1.3, < 2.0)
     rspec-mocks (2.13.1)
+    ruby-stones (0.1.0)
     simplecov (0.10.0)
       docile (~> 1.1.0)
       json (~> 1.8)
@@ -34,6 +34,6 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.7)
   codeclimate-test-reporter
-  gobstones-spec!
   rake (~> 10.0)
   rspec (~> 2)
+  stones-spec!

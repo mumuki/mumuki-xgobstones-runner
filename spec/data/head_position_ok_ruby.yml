@@ -2,7 +2,7 @@
 
 :source: |
   def main
-    move north
+    move! north
   end
 
 :examples:

@@ -1,4 +1,4 @@
-module Gobstones::Spec::Language
+module StonesSpec::Language
   module Gobstones
 
     def self.source_code_extension
@@ -11,6 +11,10 @@ module Gobstones::Spec::Language
 
     def self.gobstones_command
       'python .heroku/vendor/pygobstones/language/vgbs/gbs.py'
+    end
+
+    def self.parse_error_message(result)
+      ErrorMessageParser.new.parse(result)
     end
   end
 end

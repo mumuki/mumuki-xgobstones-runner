@@ -1,7 +1,7 @@
-module Gobstones::Spec
+module StonesSpec
   class Example
-    include Gobstones::WithTempfile
-    include Gobstones::WithCommandLine
+    include StonesSpec::WithTempfile
+    include StonesSpec::WithCommandLine
 
     attr_reader :language
 
@@ -13,7 +13,7 @@ module Gobstones::Spec
     def start!(source_file, initial_board, final_board)
       @source_file = source_file
       @expected_final_board_gbb = final_board
-      @expected_final_board = Gobgems::Gbb.read final_board
+      @expected_final_board = Stones::Gbb.read final_board
 
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
       @initial_board_file = write_tempfile initial_board, 'gbb'
@@ -22,7 +22,7 @@ module Gobstones::Spec
 
     def result
       actual_final_board_gbb = @actual_final_board_file.read
-      actual_final_board = Gobgems::Gbb.read(actual_final_board_gbb)
+      actual_final_board = Stones::Gbb.read(actual_final_board_gbb)
       actual_final_board_html = get_html_board(actual_final_board_gbb)
 
       if matches_with_expected_board? actual_final_board
@@ -33,7 +33,7 @@ module Gobstones::Spec
     end
 
     def parse_error_message(result)
-      ErrorMessageParser.new.parse(result)
+      language.parse_error_message(result)
     end
 
     def stop!
