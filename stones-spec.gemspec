@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Federico Aloi', 'Franco Bulgarelli']
   spec.email         = ['federico.aloi@gmail.com', 'flbulgarelli@yahoo.com.ar']
   spec.summary       = 'Write specs for programs with Gobstones-like boards'
-  spec.description   = 'Minimal test framework for any language with a Gobstones-like'
+  spec.description   = 'Minimal test framework for any language with a Gobstones-like board'
   spec.homepage      = 'https://github.com/uqbar-project/stones-spec'
   spec.license       = 'MIT'
 
