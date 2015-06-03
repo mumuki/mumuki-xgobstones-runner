@@ -24,6 +24,11 @@ describe Runner do
       end
     end
 
+    context 'doesnt check head position if the flag is false' do
+      let(:results) { runner.run!(YAML.load_file 'spec/data/dont_check_head_position.yml') }
+      it { expect(results[1]).to eq(:passed) }
+    end
+
     context 'when the file is sintactically ok' do
       context 'when the final board matches' do
         let(:results) { runner.run!(YAML.load_file 'spec/data/red_ball_at_origin.yml') }

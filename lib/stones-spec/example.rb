@@ -58,9 +58,12 @@ module StonesSpec
       ["<div>#{actual_final_board_html}</div>", :passed]
     end
 
-
     def matches_with_expected_board?(actual_board)
-      actual_board == @expected_final_board && (!@check_head_position || actual_board.head_position == @expected_final_board.head_position)
+      if @check_head_position
+        actual_board == @expected_final_board
+      else
+        actual_board.cells_equal? @expected_final_board
+      end
     end
 
     def get_html_board(gbb_representation)
