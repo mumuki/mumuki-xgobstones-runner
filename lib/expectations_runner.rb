@@ -32,7 +32,7 @@ class ExpectationsRunner
   include StonesSpec::WithTempfile
 
   def run_expectations!(expectations, content, extra = '')
-    ast = generate_ast!(concatenate_source(extra, content))
+    ast = generate_ast!(concatenate_source(content, extra))
 
     expectations.map { |exp| {'expectation' => exp, 'result' => run_expectation!(exp, ast)} }
   end
