@@ -2,6 +2,7 @@ require 'mumukit'
 require 'mumukit/inspection'
 require 'stones-spec'
 
+require_relative 'test_compiler'
 
 class Mumukit::Inspection::PlainInspection
   def eval_in_gobstones(ast)
@@ -29,8 +30,9 @@ class ExpectationsRunner
   include Mumukit
   include StonesSpec::WithTempfile
 
-  def run_expectations!(expectations, content)
-    ast = generate_ast!(content)
+  def run_expectations!(expectations, content, extra = '')
+    source = TestCompiler.new.create_compilation!('examples: []', extra, content)[:source]
+    ast = generate_ast!(source)
 
     expectations.map { |exp| {'expectation' => exp, 'result' => run_expectation!(exp, ast)} }
   end
