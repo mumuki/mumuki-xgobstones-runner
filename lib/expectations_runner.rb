@@ -2,7 +2,7 @@ require 'mumukit'
 require 'mumukit/inspection'
 require 'stones-spec'
 
-require_relative 'test_compiler'
+require_relative 'with_source_concatenation'
 
 class Mumukit::Inspection::PlainInspection
   def eval_in_gobstones(ast)
@@ -28,11 +28,11 @@ end
 
 class ExpectationsRunner
   include Mumukit
+  include WithSourceConcatenation
   include StonesSpec::WithTempfile
 
   def run_expectations!(expectations, content, extra = '')
-    source = TestCompiler.new.create_compilation!('examples: []', extra, content)[:source]
-    ast = generate_ast!(source)
+    ast = generate_ast!(concatenate_source(extra, content))
 
     expectations.map { |exp| {'expectation' => exp, 'result' => run_expectation!(exp, ast)} }
   end
