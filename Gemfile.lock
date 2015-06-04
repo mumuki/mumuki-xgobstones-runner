@@ -8,10 +8,10 @@ GIT
 
 GIT
   remote: git://github.com/mumuki/mumukit.git
-  revision: f29dd726ff127e357caf2d9279a0cfc2cac14057
-  tag: v0.3.0
+  revision: 9743dc9108264586d5fc1d4246847e0b70d82619
+  tag: v0.4.0
   specs:
-    mumukit (0.3.0)
+    mumukit (0.4.0)
       sinatra (~> 1.4)
 
 GIT
