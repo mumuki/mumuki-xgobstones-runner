@@ -4,4 +4,4 @@
 [![Test Coverage](https://codeclimate.com/github/uqbar-project/mumuki-gobstones-server/badges/coverage.svg)](https://codeclimate.com/github/uqbar-project/mumuki-gobstones-server/coverage)
 
 # mumuki-gobstones-server
-> Sinatra server for validating Gobstones tests within Mumuki
+> Sinatra server for validating Gobstones tests within [Mumuki](http://github.com/mumuki)
