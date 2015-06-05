@@ -5,10 +5,10 @@ describe 'runner' do
   let(:bridge) { Mumukit::Bridge::Bridge.new('http://localhost:4567') }
 
   before(:all) do
-    @pid = Process.spawn 'RACK_ENV=development rackup -p 4567'
+    @pid = Process.spawn 'rackup -p 4567', err: '/dev/null'
     sleep 3
   end
-  after(:all) { Process.kill 'QUIT', @pid }
+  after(:all) { Process.kill 'TERM', @pid }
 
   context 'when submission is ok' do
     it 'answers a valid hash' do
