@@ -93,7 +93,7 @@ Error en tiempo de ejecución:
 
 Error en el programa:
 
-    La constante "Error" no está definida</pre>')
+    El tipo Error no está definido</pre>')
       end
     end
   end
