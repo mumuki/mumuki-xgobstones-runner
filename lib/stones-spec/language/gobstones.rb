@@ -10,7 +10,7 @@ module StonesSpec::Language
     end
 
     def self.gobstones_command
-      'python .heroku/vendor/pygobstones/language/vgbs/gbs.py'
+      'python .heroku/vendor/pygobstones-lang/gbs.py'
     end
 
     def self.parse_error_message(result)
