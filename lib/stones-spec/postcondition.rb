@@ -18,7 +18,7 @@ module StonesSpec
       @check_head_position = check_head_position
     end
 
-    def validate(initial_board_file, actual_final_board_gbb)
+    def validate(initial_board_file, actual_final_board_gbb, _actual_return)
       actual_final_board = Stones::Gbb.read(actual_final_board_gbb)
       actual_final_board_html = get_html_board(actual_final_board_gbb)
 
@@ -66,12 +66,18 @@ module StonesSpec
   end
 
   class ReturnPostcondition
+    attr_reader :return_value
+
     def initialize(return_value)
       @return_value = return_value
     end
 
-    def validate(_1, _2)
-      ['', :passed]
+    def validate(_initial_board_file, _actual_final_board_gbb, actual_return)
+      if actual_return == return_value
+        ['', :passed]
+      else
+        ["Expected #{return_value} but got #{actual_return}"]
+      end
     end
   end
 end

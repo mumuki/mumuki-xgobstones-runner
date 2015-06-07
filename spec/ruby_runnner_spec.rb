@@ -55,6 +55,7 @@ describe Language::Ruby do
       let(:results) { runner.run!(YAML.load_file 'spec/data/ruby/function/remaining_cells_fail.yml') }
 
       it { expect(results[1]).to eq :failed }
+      it { expect(results[0]).to eq 'Expected 9 but got 10' }
     end
   end
 

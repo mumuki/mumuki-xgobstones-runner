@@ -25,7 +25,7 @@ module StonesSpec
       if @status == :failed
         return [language.parse_error_message(@result), :failed]
       end
-      @postcondition.validate(@initial_board_file, @actual_final_board_file.read)
+      @postcondition.validate(@initial_board_file, @actual_final_board_file.read, 0)
     end
 
     def stop!
