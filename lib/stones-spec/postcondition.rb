@@ -69,14 +69,16 @@ module StonesSpec
     attr_reader :return_value
 
     def initialize(return_value)
-      @return_value = return_value
+      @return_value = return_value.to_s
     end
 
     def validate(_initial_board_file, _actual_final_board_gbb, actual_return)
-      if actual_return == return_value
+      normalized_actual_return = actual_return.strip
+
+      if normalized_actual_return == return_value
         ['', :passed]
       else
-        ["Expected #{return_value} but got #{actual_return}"]
+        ["Expected #{return_value} but got #{normalized_actual_return}"]
       end
     end
   end
