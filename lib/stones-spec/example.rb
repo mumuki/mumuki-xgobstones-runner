@@ -17,8 +17,6 @@ module StonesSpec
       @source_file = write_tempfile @subject.test_program(language, source, precondition.arguments),
                                     language.source_code_extension
 
-      @expected_final_board = Stones::Gbb.read @postcondition.final_board_gbb
-
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
       @initial_board_file = write_tempfile precondition.initial_board_gbb, 'gbb'
       @result, @status = run_command  "#{language.run @source_file, @initial_board_file, @actual_final_board_file} 2>&1"
@@ -33,7 +31,7 @@ module StonesSpec
       actual_final_board = Stones::Gbb.read(actual_final_board_gbb)
       actual_final_board_html = get_html_board(actual_final_board_gbb)
 
-      if matches_with_expected_board? actual_final_board
+      if @postcondition.matches_with_expected_board? actual_final_board
         passed_result(actual_final_board_html)
       else
         failed_result(actual_final_board_html)
@@ -60,14 +58,6 @@ module StonesSpec
 
     def passed_result(actual_final_board_html)
       ["<div>#{actual_final_board_html}</div>", :passed]
-    end
-
-    def matches_with_expected_board?(actual_board)
-      if @postcondition.check_head_position
-        actual_board == @expected_final_board
-      else
-        actual_board.cells_equal? @expected_final_board
-      end
     end
 
 

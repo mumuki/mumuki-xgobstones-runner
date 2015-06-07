@@ -14,6 +14,18 @@ module StonesSpec
       @final_board_gbb = final_board
       @check_head_position = check_head_position
     end
+
+    def matches_with_expected_board?(actual_board)
+      if check_head_position
+        actual_board == final_board
+      else
+        actual_board.cells_equal? final_board
+      end
+    end
+
+    def final_board
+      Stones::Gbb.read final_board_gbb
+    end
   end
 
   class ReturnPostcondition
