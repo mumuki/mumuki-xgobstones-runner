@@ -16,6 +16,10 @@ module StonesSpec::Language
       "<pre>#{result}</pre>"
     end
 
+    def self.parse_success_output(result)
+      result
+    end
+
     def self.test_procedure(original, subject, args)
       "def main
         puts #{subject} #{args.join(',')}

@@ -49,7 +49,7 @@ describe Runner do
         let(:results) { runner.run!(YAML.load_file 'spec/data/gobstones/function/remaining_cells_fail.yml') }
 
         it { expect(results[1]).to eq :failed }
-        it { expect(results[0]).to eq 'Expected 9 but got 18' }
+        it { expect(results[0]).to eq 'Se esperaba <b>9</b> pero se obtuvo <b>18</b>' }
       end
     end
 

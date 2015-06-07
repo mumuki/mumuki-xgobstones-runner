@@ -13,7 +13,7 @@ module StonesSpec::Language
     end
 
     def self.run(source_file, initial_board_file, final_board_file)
-      "#{gobstones_command} #{source_file.path} --from #{initial_board_file.path} --to #{final_board_file.path}"
+      "#{gobstones_command} #{source_file.path} --from #{initial_board_file.path} --to #{final_board_file.path} --no-print-board"
     end
 
     def self.gobstones_command
@@ -22,6 +22,10 @@ module StonesSpec::Language
 
     def self.parse_error_message(result)
       "<pre>#{ErrorMessageParser.new.parse(result)}</pre>"
+    end
+
+    def self.parse_success_output(result)
+      get_first_return_value result || ''
     end
 
     def self.test_procedure(original, subject, args)
@@ -42,6 +46,12 @@ module StonesSpec::Language
 
     def self.infer_subject_type_for(string)
       string.start_with_lowercase? ? Subject::Function : Subject::Procedure
+    end
+
+    private
+
+    def self.get_first_return_value(result)
+      result[/#1 -> (\w+)/, 1]
     end
   end
 
