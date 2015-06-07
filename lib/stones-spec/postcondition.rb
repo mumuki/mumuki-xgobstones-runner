@@ -78,7 +78,7 @@ module StonesSpec
       if normalized_actual_return == return_value
         ['', :passed]
       else
-        ["Expected #{return_value} but got #{normalized_actual_return}"]
+        ["Se esperaba <b>#{return_value}</b> pero se obtuvo <b>#{normalized_actual_return}</b>"]
       end
     end
   end
