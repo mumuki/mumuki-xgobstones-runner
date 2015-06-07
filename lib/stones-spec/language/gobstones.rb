@@ -10,7 +10,7 @@ module StonesSpec::Language
     end
 
     def self.gobstones_command
-      'python .heroku/vendor/pygobstones/language/vgbs/gbs.py'
+      'python .heroku/vendor/pygobstones-lang/gbs.py'
     end
 
     def self.parse_error_message(result)
@@ -24,7 +24,11 @@ module StonesSpec::Language
     end
 
     def remove_line_specification(x)
-      x.drop(3)
+      x.drop(1)
+    end
+
+    def remove_compilation_steps(x)
+      x.drop_while { |str| not str.start_with? '--' }.drop(1)
     end
 
     def remove_boom_line_specification(x)
@@ -32,7 +36,7 @@ module StonesSpec::Language
     end
 
     def parse(result)
-      remove_boom_line_specification(remove_traceback(remove_line_specification(result.lines))).join.strip
+      remove_boom_line_specification(remove_traceback(remove_line_specification(remove_compilation_steps(result.lines)))).join.strip
     end
   end
 end
