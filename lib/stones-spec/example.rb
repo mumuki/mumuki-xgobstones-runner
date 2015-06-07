@@ -12,16 +12,15 @@ module StonesSpec
     end
 
     def start!(source, precondition, postcondition)
-      @check_head_position = postcondition.check_head_position
+      @postcondition = postcondition
 
       @source_file = write_tempfile @subject.test_program(language, source, precondition.arguments),
                                     language.source_code_extension
 
-      @expected_final_board_gbb = postcondition.final_board
-      @expected_final_board = Stones::Gbb.read postcondition.final_board
+      @expected_final_board = Stones::Gbb.read @postcondition.final_board_gbb
 
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
-      @initial_board_file = write_tempfile precondition.initial_board, 'gbb'
+      @initial_board_file = write_tempfile precondition.initial_board_gbb, 'gbb'
       @result, @status = run_command  "#{language.run @source_file, @initial_board_file, @actual_final_board_file} 2>&1"
     end
 
@@ -49,7 +48,7 @@ module StonesSpec
 
     def failed_result(actual_final_board_html)
       initial_board_html = get_html_board @initial_board_file.open.read
-      expected_board_html = get_html_board @expected_final_board_gbb
+      expected_board_html = get_html_board @postcondition.final_board_gbb
       output =
 "<div>
   #{add_caption initial_board_html, 'Tablero inicial'}
@@ -64,7 +63,7 @@ module StonesSpec
     end
 
     def matches_with_expected_board?(actual_board)
-      if @check_head_position
+      if @postcondition.check_head_position
         actual_board == @expected_final_board
       else
         actual_board.cells_equal? @expected_final_board

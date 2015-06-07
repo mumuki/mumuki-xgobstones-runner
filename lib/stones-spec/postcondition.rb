@@ -8,10 +8,10 @@ module StonesSpec
   end
 
   class FinalBoardPostcondition
-    attr_reader :final_board, :check_head_position
+    attr_reader :final_board_gbb, :check_head_position
 
     def initialize(final_board, check_head_position)
-      @final_board = final_board
+      @final_board_gbb = final_board
       @check_head_position = check_head_position
     end
   end
