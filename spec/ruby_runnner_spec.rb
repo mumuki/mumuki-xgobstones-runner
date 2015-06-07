@@ -43,6 +43,17 @@ describe Language::Ruby do
 
   end
 
+
+  describe 'function spec' do
+    context 'when passes' do
+      let(:results) { runner.run!(YAML.load_file 'spec/data/ruby/function/remaining_cells_ok.yml') }
+
+      it { expect(results[1]).to eq :passed }
+    end
+
+  end
+
+
   context 'when its ok' do
     let(:results) { runner.run!(YAML.load_file 'spec/data/head_position_ok_ruby.yml') }
 
