@@ -18,7 +18,7 @@ module StonesSpec::Language
 
     def self.test_program(original, subject, args)
       "def main
-        #{subject} #{args.join(',')}
+        puts #{subject} #{args.join(',')}
       end
 
       #{original}"
