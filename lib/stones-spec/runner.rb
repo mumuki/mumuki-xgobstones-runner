@@ -9,7 +9,7 @@ module StonesSpec
     end
 
     def run!(test_definition)
-      subject = Subject.from(test_definition[:subject])
+      subject = Subject.from(test_definition[:subject], language)
       source = test_definition[:source]
       check_head_position = test_definition[:check_head_position]
 

@@ -1,15 +1,8 @@
-class String
-  def start_with_lowercase?
-    first_letter = self[0]
-    first_letter.downcase == first_letter
-  end
-end
-
 module StonesSpec
   module Subject
-    def self.from(string)
+    def self.from(string, language)
       if string
-        string.start_with_lowercase? ? Function.new(string) : Procedure.new(string)
+        language.infer_subject_type_for(string).new(string)
       else
         Program
       end
@@ -41,6 +34,4 @@ module StonesSpec
       end
     end
   end
-
-
 end

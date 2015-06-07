@@ -1,3 +1,10 @@
+class String
+  def start_with_lowercase?
+    first_letter = self[0]
+    first_letter.downcase == first_letter
+  end
+end
+
 module StonesSpec::Language
   module Gobstones
 
@@ -31,6 +38,10 @@ module StonesSpec::Language
       }
 
       #{original}"
+    end
+
+    def self.infer_subject_type_for(string)
+      string.start_with_lowercase? ? Subject::Function : Subject::Procedure
     end
   end
 

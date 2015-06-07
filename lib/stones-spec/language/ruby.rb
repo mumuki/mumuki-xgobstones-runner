@@ -24,6 +24,10 @@ module StonesSpec::Language
       #{original}"
     end
 
+    def self.infer_subject_type_for(string)
+      string.end_with?('!') ? Subject::Procedure : Subject::Function
+    end
+
     self.singleton_class.send :alias_method, :test_function, :test_procedure
   end
 end
