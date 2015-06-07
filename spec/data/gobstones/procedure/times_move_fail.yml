@@ -9,7 +9,7 @@
      head 0 9
    :arguments:
     - 3
-    - south
+    - Sur
    :final_board: |
      GBB/1.0
      size 10 10
@@ -20,7 +20,7 @@
      head 0 9
    :arguments:
     - 2
-    - east
+    - Este
    :final_board: |
      GBB/1.0
      size 10 10
