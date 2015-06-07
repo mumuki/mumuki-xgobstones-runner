@@ -2,6 +2,7 @@ module StonesSpec
   class Example
     include StonesSpec::WithTempfile
     include StonesSpec::WithCommandLine
+    include StonesSpec::WithGbbHtmlRendering
 
     attr_reader :language
 
@@ -69,17 +70,6 @@ module StonesSpec
       end
     end
 
-    def get_html_board(gbb_representation)
-      identity = write_tempfile 'program {}', '.gbs'
-      board = write_tempfile gbb_representation, '.gbb'
-      board_html = Tempfile.new %w(gobstones.board .html)
-
-      %x"#{Language::Gobstones.run(identity, board, board_html)}"
-
-      board_html.read
-    ensure
-      [identity, board, board_html].compact.each(&:unlink)
-    end
 
     def add_caption(board_html, caption)
       board_html.sub '<table class="gbs_board">', "<table class=\"gbs_board\">\n<caption>#{caption}</caption>"
