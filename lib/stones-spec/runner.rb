@@ -9,40 +9,39 @@ module StonesSpec
     end
 
     def run!(test_definition)
-      source_file = write_tempfile test_definition[:source], language.source_code_extension
+      subject = Subject.from(test_definition[:subject])
+      source = test_definition[:source]
+      check_head_position = test_definition[:check_head_position]
+
       results = test_definition[:examples].map do |example_definition|
-        example_definition[:check_head_position] = test_definition[:check_head_position]
-        run_example!(example_definition, source_file)
+        run_example!(example_definition, check_head_position, source, subject)
       end
       aggregate_results(results)
-    ensure
-      source_file.unlink
     end
 
     private
 
-    def run_example!(example_definition, source_file)
-      result, status = start_example(source_file, example_definition)
-      post_process result, status
+    def test_program(source, subject)
+      language.test_program(source, subject)
+    end
+
+    def run_example!(example_definition, check_head_position, source, subject)
+      example = StonesSpec::Example.new(check_head_position, language, subject)
+      example.start!(
+          source,
+          example_definition[:initial_board],
+          example_definition[:final_board],
+          example_definition[:arguments])
+
+      example.result
+    ensure
+      example.stop!
     end
 
     def aggregate_results(results)
       [results.map { |it| it[0] }.join("\n<hr>\n"), results.all? { |it| it[1] == :passed } ? :passed : :failed]
     end
 
-    def post_process(result, status)
-      if status == :passed
-        @example.result
-      else
-        [@example.parse_error_message(result), status]
-      end
-    ensure
-      @example.stop!
-    end
 
-    def start_example(source, example_definition)
-      @example = StonesSpec::Example.new(example_definition[:check_head_position], language)
-      @example.start!(source, example_definition[:initial_board], example_definition[:final_board])
-    end
   end
 end

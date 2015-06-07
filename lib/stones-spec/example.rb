@@ -2,25 +2,33 @@ module StonesSpec
   class Example
     include StonesSpec::WithTempfile
     include StonesSpec::WithCommandLine
+    include StonesSpec::WithGbbHtmlRendering
 
     attr_reader :language
 
-    def initialize(check_head_position, language)
+    def initialize(check_head_position, language, subject)
       @check_head_position = check_head_position
       @language = language
+      @subject = subject
     end
 
-    def start!(source_file, initial_board, final_board)
-      @source_file = source_file
+    def start!(source, initial_board, final_board, arguments)
+      @source_file = write_tempfile @subject.test_program(language, source, arguments),
+                                    language.source_code_extension
+
       @expected_final_board_gbb = final_board
       @expected_final_board = Stones::Gbb.read final_board
 
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
       @initial_board_file = write_tempfile initial_board, 'gbb'
-      run_command  "#{language.run @source_file, @initial_board_file, @actual_final_board_file} 2>&1"
+      @result, @status = run_command  "#{language.run @source_file, @initial_board_file, @actual_final_board_file} 2>&1"
     end
 
     def result
+      if @status == :failed
+        return [language.parse_error_message(@result), :failed]
+      end
+
       actual_final_board_gbb = @actual_final_board_file.read
       actual_final_board = Stones::Gbb.read(actual_final_board_gbb)
       actual_final_board_html = get_html_board(actual_final_board_gbb)
@@ -30,10 +38,6 @@ module StonesSpec
       else
         failed_result(actual_final_board_html)
       end
-    end
-
-    def parse_error_message(result)
-      language.parse_error_message(result)
     end
 
     def stop!
@@ -66,17 +70,6 @@ module StonesSpec
       end
     end
 
-    def get_html_board(gbb_representation)
-      identity = write_tempfile 'program {}', '.gbs'
-      board = write_tempfile gbb_representation, '.gbb'
-      board_html = Tempfile.new %w(gobstones.board .html)
-
-      %x"#{Language::Gobstones.run(identity, board, board_html)}"
-
-      board_html.read
-    ensure
-      [identity, board, board_html].compact.each(&:unlink)
-    end
 
     def add_caption(board_html, caption)
       board_html.sub '<table class="gbs_board">', "<table class=\"gbs_board\">\n<caption>#{caption}</caption>"
