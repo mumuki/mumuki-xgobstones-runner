@@ -19,7 +19,7 @@ module StonesSpec::Language
 
     def self.test_program(original, subject, args)
       "program {
-        #{subject}(#{(args||[]).join(',')})
+        #{subject}(#{args.join(',')})
       }
 
       #{original}"

@@ -29,10 +29,10 @@ module StonesSpec
       example = StonesSpec::Example.new(check_head_position, language, subject)
       example.start!(
           source,
-          example_definition[:initial_board],
-          example_definition[:final_board],
-          example_definition[:arguments])
-
+          Precondition.new(
+              example_definition[:initial_board],
+              example_definition[:arguments]),
+          example_definition[:final_board])
       example.result
     ensure
       example.stop!

@@ -12,15 +12,15 @@ module StonesSpec
       @subject = subject
     end
 
-    def start!(source, initial_board, final_board, arguments)
-      @source_file = write_tempfile @subject.test_program(language, source, arguments),
+    def start!(source, precondition, final_board)
+      @source_file = write_tempfile @subject.test_program(language, source, precondition.arguments),
                                     language.source_code_extension
 
       @expected_final_board_gbb = final_board
       @expected_final_board = Stones::Gbb.read final_board
 
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
-      @initial_board_file = write_tempfile initial_board, 'gbb'
+      @initial_board_file = write_tempfile precondition.initial_board, 'gbb'
       @result, @status = run_command  "#{language.run @source_file, @initial_board_file, @actual_final_board_file} 2>&1"
     end
 
