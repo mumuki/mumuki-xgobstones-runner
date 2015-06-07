@@ -16,12 +16,14 @@ module StonesSpec::Language
       "<pre>#{result}</pre>"
     end
 
-    def self.test_program(original, subject, args)
+    def self.test_procedure(original, subject, args)
       "def main
         puts #{subject} #{args.join(',')}
       end
 
       #{original}"
     end
+
+    self.singleton_class.send :alias_method, :test_function, :test_procedure
   end
 end

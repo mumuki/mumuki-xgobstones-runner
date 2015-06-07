@@ -38,6 +38,21 @@ describe Runner do
       end
     end
 
+    describe 'function spec' do
+      context 'when passes with args' do
+        let(:results) { runner.run!(YAML.load_file 'spec/data/gobstones/function/remaining_cells_ok.yml') }
+
+        it { expect(results[1]).to eq :passed }
+      end
+
+      context 'when fails with args' do
+        let(:results) { runner.run!(YAML.load_file 'spec/data/gobstones/function/remaining_cells_fail.yml') }
+
+        it { expect(results[1]).to eq :failed }
+        it { expect(results[0]).to eq 'Expected 9 but got 18' }
+      end
+    end
+
     describe 'program spec' do
       context 'can check head position' do
         context 'when its wrong' do

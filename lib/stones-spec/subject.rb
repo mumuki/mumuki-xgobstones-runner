@@ -1,7 +1,18 @@
+class String
+  def start_with_lowercase?
+    first_letter = self[0]
+    first_letter.downcase == first_letter
+  end
+end
+
 module StonesSpec
   module Subject
     def self.from(string)
-      string ? Procedure.new(string) : Program
+      if string
+        string.start_with_lowercase? ? Function.new(string) : Procedure.new(string)
+      else
+        Program
+      end
     end
 
     module Program
@@ -14,8 +25,19 @@ module StonesSpec
       def initialize(name)
         @name = name
       end
+
       def test_program(language, source, arguments)
-        language.test_program(source, @name, arguments)
+        language.test_procedure(source, @name, arguments)
+      end
+    end
+
+    class Function
+      def initialize(name)
+        @name = name
+      end
+
+      def test_program(language, source, arguments)
+        language.test_function(source, @name, arguments)
       end
     end
   end
