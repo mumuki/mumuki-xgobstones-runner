@@ -1,3 +1,4 @@
+:check_head_position: true
 :source: |
   def move_to_origin!
     move_to_edge! south

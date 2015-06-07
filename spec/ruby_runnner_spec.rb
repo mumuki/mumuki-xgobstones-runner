@@ -17,9 +17,16 @@ describe Language::Ruby do
 
 
   describe 'procedure example' do
-    let(:results) { runner.run!(YAML.load_file 'spec/data/red_ball_at_origin_ruby_nullary_procedure.yml') }
+    context 'when passes' do
+      let(:results) { runner.run!(YAML.load_file 'spec/data/red_ball_at_origin_ruby_nullary_procedure_ok.yml') }
 
-    it { expect(results[1]).to eq :passed }
+      it { expect(results[1]).to eq :passed }
+    end
+    context 'when fails' do
+      let(:results) { runner.run!(YAML.load_file 'spec/data/red_ball_at_origin_ruby_nullary_procedure_fail.yml') }
+
+      it { expect(results[1]).to eq :failed }
+    end
   end
 
   context 'when its ok' do
