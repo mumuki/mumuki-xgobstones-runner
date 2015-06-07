@@ -16,9 +16,9 @@ module StonesSpec::Language
       "<pre>#{result}</pre>"
     end
 
-    def self.test_program(subject, original)
+    def self.test_program(original, subject, args)
       "def main
-        #{subject}
+        #{subject} #{(args||[]).join(',')}
       end
 
       #{original}"

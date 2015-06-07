@@ -22,11 +22,25 @@ describe Language::Ruby do
 
       it { expect(results[1]).to eq :passed }
     end
+
+    context 'when passes with arguments' do
+      let(:results) { runner.run!(YAML.load_file 'spec/data/ruby/procedure/times_move_ok.yml') }
+
+      it { expect(results[1]).to eq :passed }
+    end
+
     context 'when fails' do
       let(:results) { runner.run!(YAML.load_file 'spec/data/ruby/procedure/move_to_origin_fail.yml') }
 
       it { expect(results[1]).to eq :failed }
     end
+
+    context 'when fails with arguments' do
+      let(:results) { runner.run!(YAML.load_file 'spec/data/ruby/procedure/times_move_fail.yml') }
+
+      it { expect(results[1]).to eq :failed }
+    end
+
   end
 
   context 'when its ok' do

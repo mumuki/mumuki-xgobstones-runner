@@ -9,29 +9,22 @@ module StonesSpec
     end
 
     def run!(test_definition)
-      if test_definition[:subject]
-        source_file = write_tempfile test_program(test_definition[:subject], test_definition[:source]), language.source_code_extension
-      else
-        source_file = write_tempfile test_definition[:source], language.source_code_extension
-      end
-
+      subject = Subject.from(test_definition[:subject])
       results = test_definition[:examples].map do |example_definition|
         example_definition[:check_head_position] = test_definition[:check_head_position]
-        run_example!(example_definition, source_file)
+        run_example!(example_definition, test_definition[:source], subject)
       end
       aggregate_results(results)
-    ensure
-      source_file.unlink
     end
 
     private
 
-    def test_program(subject, source)
-      language.test_program(subject, source)
+    def test_program(source, subject)
+      language.test_program(source, subject)
     end
 
-    def run_example!(example_definition, source_file)
-      result, status = start_example(source_file, example_definition)
+    def run_example!(example_definition, source, subject)
+      result, status = start_example(source, example_definition, subject)
       post_process result, status
     end
 
@@ -49,9 +42,9 @@ module StonesSpec
       @example.stop!
     end
 
-    def start_example(source, example_definition)
-      @example = StonesSpec::Example.new(example_definition[:check_head_position], language)
-      @example.start!(source, example_definition[:initial_board], example_definition[:final_board])
+    def start_example(source, example_definition, subject)
+      @example = StonesSpec::Example.new(example_definition[:check_head_position], language, subject)
+      @example.start!(source, example_definition[:initial_board], example_definition[:final_board], example_definition[:arguments])
     end
   end
 end

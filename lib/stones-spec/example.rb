@@ -5,13 +5,16 @@ module StonesSpec
 
     attr_reader :language
 
-    def initialize(check_head_position, language)
+    def initialize(check_head_position, language, subject)
       @check_head_position = check_head_position
       @language = language
+      @subject = subject
     end
 
-    def start!(source_file, initial_board, final_board)
-      @source_file = source_file
+    def start!(source, initial_board, final_board, arguments)
+      @source_file = write_tempfile @subject.test_program(language, source, arguments),
+                                    language.source_code_extension
+
       @expected_final_board_gbb = final_board
       @expected_final_board = Stones::Gbb.read final_board
 

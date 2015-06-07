@@ -17,9 +17,9 @@ module StonesSpec::Language
       "<pre>#{ErrorMessageParser.new.parse(result)}</pre>"
     end
 
-    def self.test_program(subject, original)
+    def self.test_program(original, subject, args)
       "program {
-        #{subject}()
+        #{subject}(#{(args||[]).join(',')})
       }
 
       #{original}"
