@@ -32,5 +32,9 @@ module StonesSpec
     def initialize(return_value)
       @return_value = return_value
     end
+
+    def matches_with_expected_board?(_)
+      true
+    end
   end
 end
