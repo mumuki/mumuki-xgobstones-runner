@@ -25,7 +25,7 @@ module StonesSpec
       if matches_with_expected_board? actual_final_board
         passed_result(actual_final_board_html)
       else
-        failed_result(initial_board_file, final_board, actual_final_board_html)
+        failed_result(initial_board_file, final_board_gbb, actual_final_board_html)
       end
     end
 
