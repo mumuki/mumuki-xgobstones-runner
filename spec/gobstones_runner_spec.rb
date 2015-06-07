@@ -18,8 +18,21 @@ describe Runner do
 
         it { expect(results[1]).to eq :passed }
       end
+
+      context 'when passes with arguments' do
+        let(:results) { runner.run!(YAML.load_file 'spec/data/gobstones/procedure/times_move_ok.yml') }
+
+        it { expect(results[1]).to eq :passed }
+      end
+
       context 'when fails' do
         let(:results) { runner.run!(YAML.load_file 'spec/data/gobstones/procedure/move_to_origin_fail.yml') }
+
+        it { expect(results[1]).to eq :failed }
+      end
+
+      context 'when fails with arguments' do
+        let(:results) { runner.run!(YAML.load_file 'spec/data/gobstones/procedure/times_move_fail.yml') }
 
         it { expect(results[1]).to eq :failed }
       end
