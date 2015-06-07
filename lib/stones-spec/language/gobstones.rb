@@ -16,6 +16,14 @@ module StonesSpec::Language
     def self.parse_error_message(result)
       "<pre>#{ErrorMessageParser.new.parse(result)}</pre>"
     end
+
+    def self.test_program(subject, original)
+      "program {
+        #{subject}()
+      }
+
+      #{original}"
+    end
   end
 
   class ErrorMessageParser

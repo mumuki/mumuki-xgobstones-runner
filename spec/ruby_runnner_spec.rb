@@ -15,6 +15,13 @@ describe Language::Ruby do
   let(:runner) { Runner.new(lang) }
   let(:html) { results[0] }
 
+
+  describe 'procedure example' do
+    let(:results) { runner.run!(YAML.load_file 'spec/data/red_ball_at_origin_ruby_nullary_procedure.yml') }
+
+    it { expect(results[1]).to eq :passed }
+  end
+
   context 'when its ok' do
     let(:results) { runner.run!(YAML.load_file 'spec/data/head_position_ok_ruby.yml') }
 

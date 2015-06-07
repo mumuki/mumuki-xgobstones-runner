@@ -15,5 +15,13 @@ module StonesSpec::Language
     def self.parse_error_message(result)
       "<pre>#{result}</pre>"
     end
+
+    def self.test_program(subject, original)
+      "def main
+        #{subject}
+      end
+
+      #{original}"
+    end
   end
 end

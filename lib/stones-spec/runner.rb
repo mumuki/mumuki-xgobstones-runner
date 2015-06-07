@@ -9,7 +9,12 @@ module StonesSpec
     end
 
     def run!(test_definition)
-      source_file = write_tempfile test_definition[:source], language.source_code_extension
+      if test_definition[:subject]
+        source_file = write_tempfile test_program(test_definition[:subject], test_definition[:source]), language.source_code_extension
+      else
+        source_file = write_tempfile test_definition[:source], language.source_code_extension
+      end
+
       results = test_definition[:examples].map do |example_definition|
         example_definition[:check_head_position] = test_definition[:check_head_position]
         run_example!(example_definition, source_file)
@@ -20,6 +25,10 @@ module StonesSpec
     end
 
     private
+
+    def test_program(subject, source)
+      language.test_program(subject, source)
+    end
 
     def run_example!(example_definition, source_file)
       result, status = start_example(source_file, example_definition)
