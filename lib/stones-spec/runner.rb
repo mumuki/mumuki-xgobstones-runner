@@ -27,17 +27,13 @@ module StonesSpec
 
     def run_example!(example_definition, check_head_position, source, subject)
       example = StonesSpec::Example.new(check_head_position, language, subject)
-      result, status = example.start!(
+      example.start!(
           source,
           example_definition[:initial_board],
           example_definition[:final_board],
           example_definition[:arguments])
 
-      if status == :passed
-        example.result
-      else
-        [example.parse_error_message(result), status]
-      end
+      example.result
     ensure
       example.stop!
     end

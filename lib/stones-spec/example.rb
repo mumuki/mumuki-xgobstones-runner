@@ -20,10 +20,14 @@ module StonesSpec
 
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
       @initial_board_file = write_tempfile initial_board, 'gbb'
-      run_command  "#{language.run @source_file, @initial_board_file, @actual_final_board_file} 2>&1"
+      @result, @status = run_command  "#{language.run @source_file, @initial_board_file, @actual_final_board_file} 2>&1"
     end
 
     def result
+      if @status == :failed
+        return [language.parse_error_message(@result), :failed]
+      end
+
       actual_final_board_gbb = @actual_final_board_file.read
       actual_final_board = Stones::Gbb.read(actual_final_board_gbb)
       actual_final_board_html = get_html_board(actual_final_board_gbb)
@@ -33,10 +37,6 @@ module StonesSpec
       else
         failed_result(actual_final_board_html)
       end
-    end
-
-    def parse_error_message(result)
-      language.parse_error_message(result)
     end
 
     def stop!
