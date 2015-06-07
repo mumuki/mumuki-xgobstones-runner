@@ -8,11 +8,48 @@ module StonesSpec
   end
 
   class FinalBoardPostcondition
+    include StonesSpec::WithTempfile
+    include StonesSpec::WithGbbHtmlRendering
+
     attr_reader :final_board_gbb, :check_head_position
 
     def initialize(final_board, check_head_position)
       @final_board_gbb = final_board
       @check_head_position = check_head_position
+    end
+
+    def validate(initial_board_file, actual_final_board_gbb)
+      actual_final_board = Stones::Gbb.read(actual_final_board_gbb)
+      actual_final_board_html = get_html_board(actual_final_board_gbb)
+
+      if matches_with_expected_board? actual_final_board
+        passed_result(actual_final_board_html)
+      else
+        failed_result(initial_board_file, final_board, actual_final_board_html)
+      end
+    end
+
+    private
+
+    def failed_result(initial_board_file, final_board_gbb, actual_final_board_html)
+      initial_board_html = get_html_board initial_board_file.open.read
+      expected_board_html = get_html_board final_board_gbb
+      output =
+"<div>
+  #{add_caption initial_board_html, 'Tablero inicial'}
+  #{add_caption actual_final_board_html, 'Tablero final obtenido'}
+  #{add_caption expected_board_html, 'Tablero final esperado'}
+</div>"
+      [output, :failed]
+    end
+
+    def passed_result(actual_final_board_html)
+      ["<div>#{actual_final_board_html}</div>", :passed]
+    end
+
+
+    def add_caption(board_html, caption)
+      board_html.sub '<table class="gbs_board">', "<table class=\"gbs_board\">\n<caption>#{caption}</caption>"
     end
 
     def matches_with_expected_board?(actual_board)
@@ -33,8 +70,8 @@ module StonesSpec
       @return_value = return_value
     end
 
-    def matches_with_expected_board?(_)
-      true
+    def validate(_1, _2)
+      ['', :passed]
     end
   end
 end

@@ -45,12 +45,17 @@ describe Language::Ruby do
 
 
   describe 'function spec' do
-    context 'when passes' do
+    context 'when passes with args' do
       let(:results) { runner.run!(YAML.load_file 'spec/data/ruby/function/remaining_cells_ok.yml') }
 
       it { expect(results[1]).to eq :passed }
     end
 
+    context 'when fails with args' do
+      let(:results) { runner.run!(YAML.load_file 'spec/data/ruby/function/remaining_cells_fail.yml') }
+
+      it { expect(results[1]).to eq :failed }
+    end
   end
 
 
