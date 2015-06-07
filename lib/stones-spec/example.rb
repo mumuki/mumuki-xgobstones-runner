@@ -6,18 +6,19 @@ module StonesSpec
 
     attr_reader :language
 
-    def initialize(check_head_position, language, subject)
-      @check_head_position = check_head_position
+    def initialize(language, subject)
       @language = language
       @subject = subject
     end
 
-    def start!(source, precondition, final_board)
+    def start!(source, precondition, postcondition)
+      @check_head_position = postcondition.check_head_position
+
       @source_file = write_tempfile @subject.test_program(language, source, precondition.arguments),
                                     language.source_code_extension
 
-      @expected_final_board_gbb = final_board
-      @expected_final_board = Stones::Gbb.read final_board
+      @expected_final_board_gbb = postcondition.final_board
+      @expected_final_board = Stones::Gbb.read postcondition.final_board
 
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
       @initial_board_file = write_tempfile precondition.initial_board, 'gbb'
