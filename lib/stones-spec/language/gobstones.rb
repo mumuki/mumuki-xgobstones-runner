@@ -45,7 +45,7 @@ module StonesSpec::Language
     end
 
     def self.infer_subject_type_for(string)
-      string.start_with_lowercase? ? Subject::Function : Subject::Procedure
+      string.start_with_lowercase? ? StonesSpec::Subject::Function : StonesSpec::Subject::Procedure
     end
 
     private
