@@ -24,8 +24,8 @@ describe ExpectationsRunner do
                   program)).to eq [{'expectation' => unknown_expectation, 'result' => false}] }
 
   context 'when procedure definitions are missing' do
-    let(:program_with_extra_code) { 'program { DibujarMacetero(Rojo) }' }
-    let(:has_usage_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:DibujarMacetero' }  }
+    let(:program_with_extra_code) { 'procedure DibujarJardin() { DibujarMacetero(Rojo) }' }
+    let(:has_usage_expectation) { {'binding' => 'DibujarJardin', 'inspection' => 'HasUsage:DibujarMacetero' }  }
 
     it { expect(runner.run_expectations!(
                   [has_usage_expectation],
