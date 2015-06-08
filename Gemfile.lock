@@ -23,7 +23,7 @@ GIT
 
 GIT
   remote: git://github.com/uqbar-project/stones-spec.git
-  revision: 8245edaacd5b74f72b69839acfaf059d41593fb6
+  revision: f8b831675e1fe7151800215ae66681e93332e010
   branch: master
   specs:
     stones-spec (0.2.0)

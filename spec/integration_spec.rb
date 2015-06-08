@@ -13,31 +13,40 @@ describe 'runner' do
   context 'when submission is ok' do
     it 'answers a valid hash' do
       response = bridge.run_tests!(content: '
-procedure IrAlOrigen() {
-  IrAlBorde(Sur)
-  IrAlBorde(Oeste)
-}
-
-program {
-  VaciarTablero()
-  IrAlOrigen()
-  Poner(Rojo)
+procedure PonerUnaDeCada() {
+    Poner (Rojo)
+    Poner (Azul)
+    Poner (Negro)
+    Poner (Verde)
 }
 ', extra: '', test: '
+check_head_position: true
+
+subject: PonerUnaDeCada
+
 examples:
  - initial_board: |
-    GBB/1.0
-    size 4 4
-    head 3 0
-
+     GBB/1.0
+     size 4 4
+     head 0 0
    final_board: |
-    GBB/1.0
-    size 4 4
-    cell 0 0 Rojo 1
-    head 0 0
-')
-      expect(response[:result]).to include '<div>'
+     GBB/1.0
+     size 4 4
+     cell 0 0 Azul 1 Rojo 1 Verde 1 Negro 1
+     head 0 0
+
+ - initial_board: |
+     GBB/1.0
+     size 5 5
+     head 3 3
+   final_board: |
+     GBB/1.0
+     size 5 5
+     cell 3 3 Azul 1 Rojo 1 Verde 1 Negro 1
+     head 3 3')
+
       expect(response[:status]).to eq 'passed'
+      expect(response[:result]).to include '<div>'
     end
   end
 end
