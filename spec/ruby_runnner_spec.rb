@@ -43,6 +43,23 @@ describe Language::Ruby do
 
   end
 
+
+  describe 'function spec' do
+    context 'when passes with args' do
+      let(:results) { runner.run!(YAML.load_file 'spec/data/ruby/function/remaining_cells_ok.yml') }
+
+      it { expect(results[1]).to eq :passed }
+    end
+
+    context 'when fails with args' do
+      let(:results) { runner.run!(YAML.load_file 'spec/data/ruby/function/remaining_cells_fail.yml') }
+
+      it { expect(results[1]).to eq :failed }
+      it { expect(results[0]).to eq 'Se esperaba <b>9</b> pero se obtuvo <b>18</b>' }
+    end
+  end
+
+
   context 'when its ok' do
     let(:results) { runner.run!(YAML.load_file 'spec/data/head_position_ok_ruby.yml') }
 

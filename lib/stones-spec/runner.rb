@@ -9,7 +9,7 @@ module StonesSpec
     end
 
     def run!(test_definition)
-      subject = Subject.from(test_definition[:subject])
+      subject = Subject.from(test_definition[:subject], language)
       source = test_definition[:source]
       check_head_position = test_definition[:check_head_position]
 
@@ -26,13 +26,15 @@ module StonesSpec
     end
 
     def run_example!(example_definition, check_head_position, source, subject)
-      example = StonesSpec::Example.new(check_head_position, language, subject)
+      example = StonesSpec::Example.new(language, subject)
       example.start!(
           source,
-          example_definition[:initial_board],
-          example_definition[:final_board],
-          example_definition[:arguments])
-
+          Precondition.new(
+              example_definition[:initial_board],
+              example_definition[:arguments]),
+          Postcondition.from(
+              example_definition,
+              check_head_position))
       example.result
     ensure
       example.stop!

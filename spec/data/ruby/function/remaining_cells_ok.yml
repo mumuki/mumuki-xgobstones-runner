@@ -1,0 +1,19 @@
+:check_head_position: true
+:source: |
+  def remaining_cells(dir)
+    steps = 0
+    while can_move? dir
+      move! dir
+      steps += 1
+    end
+    steps
+  end
+:subject: remaining_cells
+:examples:
+ - :initial_board: |
+     GBB/1.0
+     size 10 10
+     head 0 0
+   :arguments:
+     - east
+   :return: 9

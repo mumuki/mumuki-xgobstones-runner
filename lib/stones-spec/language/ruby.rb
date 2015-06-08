@@ -16,12 +16,22 @@ module StonesSpec::Language
       "<pre>#{result}</pre>"
     end
 
-    def self.test_program(original, subject, args)
+    def self.parse_success_output(result)
+      result
+    end
+
+    def self.test_procedure(original, subject, args)
       "def main
-        #{subject} #{(args||[]).join(',')}
+        puts #{subject} #{args.join(',')}
       end
 
       #{original}"
     end
+
+    def self.infer_subject_type_for(string)
+      string.end_with?('!') ? Subject::Procedure : Subject::Function
+    end
+
+    self.singleton_class.send :alias_method, :test_function, :test_procedure
   end
 end

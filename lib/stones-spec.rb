@@ -8,6 +8,8 @@ require_relative 'stones-spec/with_command_line'
 require_relative 'stones-spec/with_gbb_html_rendering'
 require_relative 'stones-spec/version'
 
+require_relative 'stones-spec/precondition'
+require_relative 'stones-spec/postcondition'
 require_relative 'stones-spec/language'
 require_relative 'stones-spec/example'
 require_relative 'stones-spec/subject'
