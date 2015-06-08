@@ -20,6 +20,7 @@ describe TestCompiler do
       it {
         expect(output).to eq({
           source: "content\nextra",
+          subject: nil,
           examples: [{initial_board: 'initial', final_board: 'final'}],
           check_head_position: true })
       }
@@ -38,6 +39,7 @@ describe TestCompiler do
       it {
         expect(output).to eq({
                                  source: "content\nextra",
+                                 subject: nil,
                                  examples: [{initial_board: 'initial', final_board: 'final'}],
                                  check_head_position: false })
       }
@@ -54,6 +56,7 @@ describe TestCompiler do
       it {
         expect(output).to eq({
                                  source: "content\nextra",
+                                 subject: nil,
                                  examples: [{initial_board: 'initial', final_board: 'final'}],
                                  check_head_position: false })
       }
