@@ -12,7 +12,11 @@ class TestCompiler < Mumukit::Stub
       source: concatenate_source(content_src, extra_src),
       subject: test['subject'],
       check_head_position: !!test['check_head_position'],
-      examples: test['examples'].map { |it| {initial_board: it['initial_board'], final_board: it['final_board']} }
+      examples: test['examples'].map do |it|
+        hash = { initial_board: it['initial_board'], final_board: it['final_board'] }
+        hash[:arguments] = it['arguments'] if it['arguments']
+        hash
+      end
     }
   end
 end

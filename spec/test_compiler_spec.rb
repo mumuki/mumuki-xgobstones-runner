@@ -61,5 +61,27 @@ describe TestCompiler do
                                  check_head_position: false })
       }
     end
+
+    context 'when arguments are given' do
+      let(:test_file) {
+        '
+  subject: PonerN
+
+  examples:
+   - initial_board: initial
+     final_board: final
+     arguments:
+      - 3
+      - Rojo'
+      }
+      let(:output) { compiler.create_compilation!(test_file, 'extra', 'content') }
+      it {
+        expect(output).to eq({
+                                 source: "content\nextra",
+                                 subject: 'PonerN',
+                                 examples: [{initial_board: 'initial', final_board: 'final', arguments: [3, 'Rojo']}],
+                                 check_head_position: false })
+      }
+    end
   end
 end
