@@ -23,15 +23,23 @@ describe ExpectationsRunner do
                   [unknown_expectation],
                   program)).to eq [{'expectation' => unknown_expectation, 'result' => false}] }
 
-  context 'when extra code is provided' do
+  context 'when procedure definitions are missing' do
     let(:program_with_extra_code) { 'program { DibujarMacetero(Rojo) }' }
-    let(:extra_code) { 'procedure DibujarMacetero(color) { Poner(color) }' }
     let(:has_usage_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:DibujarMacetero' }  }
 
     it { expect(runner.run_expectations!(
                   [has_usage_expectation],
-                  program_with_extra_code,
-                  extra_code)).to eq [{'expectation' => has_usage_expectation, 'result' => true}] }
+                  program_with_extra_code)).to eq [{'expectation' => has_usage_expectation, 'result' => true}] }
+
+  end
+
+  context 'when the code would produce a runtime error' do
+    let(:program_with_extra_code) { 'program { Sacar(Rojo) }' }
+    let(:has_usage_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Sacar' }  }
+
+    it { expect(runner.run_expectations!(
+                    [has_usage_expectation],
+                    program_with_extra_code)).to eq [{'expectation' => has_usage_expectation, 'result' => true}] }
 
   end
 end
