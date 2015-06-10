@@ -15,7 +15,7 @@ describe ExpectationsRunner do
                   program)).to eq [{'expectation' => unknown_expectation, 'result' => false}] }
   end
 
-  context 'HasUsage' do
+  context 'HasUsage expectation' do
     let(:program) { 'program { Foo() } procedure Foo() {}' }
 
     let(:foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Foo'} }
@@ -28,6 +28,26 @@ describe ExpectationsRunner do
     it { expect(runner.run_expectations!(
                     [bar_expectation],
                     program)).to eq [{'expectation' => bar_expectation, 'result' => false}] }
+  end
+
+  context 'HasWhile expectation' do
+    let(:has_while_expectation) { {'binding' => 'program', 'inspection' => 'HasWhile'} }
+
+    it { expect(runner.run_expectations!([has_while_expectation], 'program {}'))
+             .to eq [{'expectation' => has_while_expectation, 'result' => false}] }
+
+    let(:program_with_while) { '
+      program {
+        i := 3
+        while(i > 0) {
+          Mover(Oeste)
+          i := i - 1
+        }
+      }
+    ' }
+
+    it { expect(runner.run_expectations!([has_while_expectation], program_with_while))
+             .to eq [{'expectation' => has_while_expectation, 'result' => true}] }
   end
 
   context 'when procedure definitions are missing' do

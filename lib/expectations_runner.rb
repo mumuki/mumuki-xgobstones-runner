@@ -4,7 +4,11 @@ require 'stones-spec'
 
 class Mumukit::Inspection::PlainInspection
   def eval_in_gobstones(ast)
-    false
+    if type == 'HasWhile'
+      !!(ast =~ /AST\(while/)
+    else
+      false
+    end
   end
 end
 
@@ -13,7 +17,7 @@ class Mumukit::Inspection::TargetedInspection
     if type == 'HasUsage'
       !!(ast =~ /AST\(procCall\s*#{target}/)
     else
-      false
+       false
     end
   end
 end
