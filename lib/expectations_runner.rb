@@ -2,25 +2,30 @@ require 'mumukit'
 require 'mumukit/inspection'
 require 'stones-spec'
 
-class Mumukit::Inspection::PlainInspection
+module EvalExpectationsOnAST
   def eval_in_gobstones(ast)
-    if type == 'HasWhile'
-      !!(ast =~ /AST\(while/)
-    else
-      false
-    end
+    !!(ast =~ expectations[type])
+  end
+end
+
+class Mumukit::Inspection::PlainInspection
+  include EvalExpectationsOnAST
+
+  def expectations
+    {
+      'HasWhile' => /AST\(while/
+    }
   end
 end
 
 class Mumukit::Inspection::TargetedInspection
-  def eval_in_gobstones(ast)
-    if type == 'HasUsage'
-      !!(ast =~ /AST\(procCall\s*#{target}/)
-    elsif type == 'HasRepeatOf'
-      !!(ast =~ /AST\(repeat\s*AST\(literal\s*#{target}\)/)
-    else
-      false
-    end
+  include EvalExpectationsOnAST
+
+  def expectations
+    {
+      'HasUsage' => /AST\(procCall\s*#{target}/,
+      'HasRepeatOf' => /AST\(repeat\s*AST\(literal\s*#{target}\)/
+    }
   end
 end
 
