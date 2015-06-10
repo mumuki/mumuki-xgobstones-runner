@@ -4,7 +4,11 @@ require 'stones-spec'
 
 class Mumukit::Inspection::PlainInspection
   def eval_in_gobstones(ast)
-    false
+    if type == 'HasWhile'
+      !!(ast =~ /AST\(while/)
+    else
+      false
+    end
   end
 end
 
@@ -38,10 +42,16 @@ class ExpectationsRunner
   end
 
   def generate_ast!(source_code)
-    %x"#{gobstones_command} #{write_tempfile(source_code, 'gbs').path} --print-ast --target parse --no-print-retvals"
+    remove_compilation_steps %x"#{gobstones_command} #{write_tempfile(source_code, 'gbs').path} --print-ast --target parse --no-print-retvals"
   end
 
   def gobstones_command
     StonesSpec::Language::Gobstones.gobstones_command
+  end
+
+  private
+
+  def remove_compilation_steps(output)
+    output.lines.drop(2).join
   end
 end
