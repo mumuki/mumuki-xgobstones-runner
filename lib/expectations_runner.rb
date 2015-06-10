@@ -23,8 +23,14 @@ class Mumukit::Inspection::TargetedInspection
 
   def expectations
     {
-      'HasUsage' => /AST\(procCall\s*#{target}/,
-      'HasRepeatOf' => /AST\(repeat\s*AST\(literal\s*#{target}\)/
+      'HasUsage' =>
+/AST\(procCall
+\s*#{target}/,
+
+      'HasRepeatOf' =>
+/AST\(repeat
+\s*AST\(literal
+\s*#{target}\)/
     }
   end
 end
