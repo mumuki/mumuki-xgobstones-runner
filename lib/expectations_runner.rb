@@ -16,6 +16,8 @@ class Mumukit::Inspection::TargetedInspection
   def eval_in_gobstones(ast)
     if type == 'HasUsage'
       !!(ast =~ /AST\(procCall\s*#{target}/)
+    elsif type == 'HasRepeatOf'
+      !!(ast =~ /AST\(repeat\s*AST\(literal\s*#{target}\)/)
     else
       false
     end

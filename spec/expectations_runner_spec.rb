@@ -50,6 +50,41 @@ describe ExpectationsRunner do
              .to eq [{'expectation' => has_while_expectation, 'result' => true}] }
   end
 
+  context 'HasRepeatOf:n expectation' do
+    let(:has_repeat_of_1_expectation) { {'binding' => 'program', 'inspection' => 'HasRepeatOf:1'} }
+
+    let(:program_with_repeat_1) { '
+      program {
+        repeat(1) {
+          Mover(Oeste)
+        }
+      }
+    ' }
+
+    let(:program_with_repeat_8) { '
+      program {
+        repeat(8) {
+          Mover(Oeste)
+        }
+      }
+    ' }
+
+    let(:program_without_repeat) { '
+      program {
+        Mover(Oeste)
+      }
+    ' }
+
+    it { expect(runner.run_expectations!([has_repeat_of_1_expectation], program_with_repeat_1))
+             .to eq [{'expectation' => has_repeat_of_1_expectation, 'result' => true}] }
+
+    it { expect(runner.run_expectations!([has_repeat_of_1_expectation], program_with_repeat_8))
+             .to eq [{'expectation' => has_repeat_of_1_expectation, 'result' => false}] }
+
+    it { expect(runner.run_expectations!([has_repeat_of_1_expectation], program_without_repeat))
+             .to eq [{'expectation' => has_repeat_of_1_expectation, 'result' => false}] }
+  end
+
   context 'when procedure definitions are missing' do
     let(:program_with_extra_code) { 'procedure DibujarJardin() { DibujarMacetero(Rojo) }' }
     let(:has_usage_expectation) { {'binding' => 'DibujarJardin', 'inspection' => 'HasUsage:DibujarMacetero' }  }
