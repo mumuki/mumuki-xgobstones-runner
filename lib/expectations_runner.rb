@@ -55,16 +55,10 @@ class ExpectationsRunner
   end
 
   def generate_ast!(source_code)
-    remove_compilation_steps %x"#{gobstones_command} #{write_tempfile(source_code, 'gbs').path} --print-ast --target parse --no-print-retvals"
+    %x"#{gobstones_command} #{write_tempfile(source_code, 'gbs').path} --print-ast --target parse --no-print-retvals --silent"
   end
 
   def gobstones_command
     StonesSpec::Language::Gobstones.gobstones_command
-  end
-
-  private
-
-  def remove_compilation_steps(output)
-    output.lines.drop(2).join
   end
 end
