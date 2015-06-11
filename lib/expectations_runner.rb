@@ -3,14 +3,18 @@ require 'mumukit/inspection'
 require 'stones-spec'
 
 module EvalExpectationsOnAST
-  def eval_in_gobstones(ast)
-    pattern = expectations[type]
+  def eval_in_gobstones(binding, ast)
+    pattern_generator = expectations[type]
 
-    if pattern
-      !!(ast =~ pattern)
+    if pattern_generator
+      !!(ast =~ pattern_generator[binding])
     else
       true
     end
+  end
+
+  def use(regexp)
+    lambda { |_| regexp }
   end
 end
 
@@ -19,10 +23,8 @@ class Mumukit::Inspection::PlainInspection
 
   def expectations
     {
-      'HasWhile' => /AST\(while/,
-      'HasBinding' =>
-/AST\(entrypoint
-\s*program/
+      'HasWhile' => use(/AST\(while/),
+      'HasBinding' => ->(binding) { binding == 'program' ? /AST\(entrypoint\s*program/ : /AST\(procedure\s*#{binding}/ }
     }
   end
 end
@@ -32,21 +34,21 @@ class Mumukit::Inspection::TargetedInspection
 
   def expectations
     {
-      'HasUsage' =>
+      'HasUsage' => use(
 /AST\(procCall
-\s*#{target}/,
+\s*#{target}/),
 
-      'HasRepeatOf' =>
+      'HasRepeatOf' => use(
 /AST\(repeat
 \s*AST\(literal
-\s*#{target}\)/
+\s*#{target}\)/)
     }
   end
 end
 
 class Mumukit::Inspection::NegatedInspection
-  def eval_in_gobstones(ast)
-    !@inspection.eval_in_gobstones(ast)
+  def eval_in_gobstones(binding, ast)
+    !@inspection.eval_in_gobstones(binding, ast)
   end
 end
 
@@ -60,7 +62,7 @@ class ExpectationsRunner
   end
 
   def run_expectation!(expectation, ast)
-    Mumukit::Inspection.parse(expectation['inspection']).eval_in_gobstones(ast)
+    Mumukit::Inspection.parse(expectation['inspection']).eval_in_gobstones(expectation['binding'], ast)
   end
 
   def generate_ast!(source_code)

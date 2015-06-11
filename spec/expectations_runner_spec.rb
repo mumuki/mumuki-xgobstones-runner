@@ -80,11 +80,21 @@ describe ExpectationsRunner do
   end
 
   context 'HasBinding expectation' do
+    let(:program) { 'program {}' }
+    let(:procedure) { 'procedure Dummy() {}' }
+
     context 'when the binding is program' do
       let(:has_binding_program_expectation) { {'binding' => 'program', 'inspection' => 'HasBinding' }  }
 
-      it { expect('program {}').to comply_with has_binding_program_expectation }
-      it { expect('procedure Dummy() {}').not_to comply_with has_binding_program_expectation }
+      it { expect(program).to comply_with has_binding_program_expectation }
+      it { expect(procedure).not_to comply_with has_binding_program_expectation }
+    end
+
+    context 'when the binding is a procedure' do
+      let(:has_binding_procedure_expectation) { {'binding' => 'Dummy', 'inspection' => 'HasBinding' }  }
+
+      it { expect(procedure).to comply_with has_binding_procedure_expectation }
+      it { expect(program).not_to comply_with has_binding_procedure_expectation }
     end
   end
 
