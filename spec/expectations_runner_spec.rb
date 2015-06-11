@@ -79,12 +79,20 @@ describe ExpectationsRunner do
     it { expect('program { Mover(Oeste) }').not_to comply_with has_repeat_of_1_expectation }
   end
 
+  context 'HasBinding expectation' do
+    context 'when the binding is program' do
+      let(:has_binding_program_expectation) { {'binding' => 'program', 'inspection' => 'HasBinding' }  }
+
+      it { expect('program {}').to comply_with has_binding_program_expectation }
+      it { expect('procedure Dummy() {}').not_to comply_with has_binding_program_expectation }
+    end
+  end
+
   context 'when procedure definitions are missing' do
     let(:program_with_extra_code) { 'procedure DibujarJardin() { DibujarMacetero(Rojo) }' }
     let(:has_usage_expectation) { {'binding' => 'DibujarJardin', 'inspection' => 'HasUsage:DibujarMacetero' }  }
 
     it { expect(program_with_extra_code).to comply_with has_usage_expectation }
-
   end
 
   context 'when the code would produce a runtime error' do

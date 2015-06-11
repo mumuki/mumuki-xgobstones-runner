@@ -19,7 +19,10 @@ class Mumukit::Inspection::PlainInspection
 
   def expectations
     {
-      'HasWhile' => /AST\(while/
+      'HasWhile' => /AST\(while/,
+      'HasBinding' =>
+/AST\(entrypoint
+\s*program/
     }
   end
 end
