@@ -12,7 +12,7 @@ describe ExpectationsRunner do
 
     it { expect(runner.run_expectations!(
                   [unknown_expectation],
-                  program)).to eq [{'expectation' => unknown_expectation, 'result' => false}] }
+                  program)).to eq [{'expectation' => unknown_expectation, 'result' => true}] }
   end
 
   context 'HasUsage expectation' do

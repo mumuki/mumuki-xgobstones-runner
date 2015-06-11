@@ -4,7 +4,13 @@ require 'stones-spec'
 
 module EvalExpectationsOnAST
   def eval_in_gobstones(ast)
-    !!(ast =~ expectations[type])
+    pattern = expectations[type]
+
+    if pattern
+      !!(ast =~ pattern)
+    else
+      true
+    end
   end
 end
 
