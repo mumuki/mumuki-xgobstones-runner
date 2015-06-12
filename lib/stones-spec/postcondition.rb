@@ -19,21 +19,19 @@ module StonesSpec
     end
 
     def validate(initial_board_file, actual_final_board_gbb, _actual_return)
-      actual_final_board = Stones::Gbb.read(actual_final_board_gbb)
-      actual_final_board_html = get_html_board(actual_final_board_gbb)
+      actual_final_board_html = get_html_board actual_final_board_gbb
+      initial_board_html = get_html_board initial_board_file.open.read
 
-      if matches_with_expected_board? actual_final_board
+      if matches_with_expected_board? Stones::Gbb.read actual_final_board_gbb
         passed_result(actual_final_board_html)
       else
-        failed_result(initial_board_file, final_board_gbb, actual_final_board_html)
+        failed_result(initial_board_html, get_html_board(final_board_gbb), actual_final_board_html)
       end
     end
 
     private
 
-    def failed_result(initial_board_file, final_board_gbb, actual_final_board_html)
-      initial_board_html = get_html_board initial_board_file.open.read
-      expected_board_html = get_html_board final_board_gbb
+    def failed_result(initial_board_html, expected_board_html, actual_final_board_html)
       output =
 "<div>
   #{add_caption initial_board_html, 'Tablero inicial'}
@@ -46,7 +44,6 @@ module StonesSpec
     def passed_result(actual_final_board_html)
       ["<div>#{actual_final_board_html}</div>", :passed]
     end
-
 
     def add_caption(board_html, caption)
       board_html.sub '<table class="gbs_board">', "<table class=\"gbs_board\">\n<caption>#{caption}</caption>"
