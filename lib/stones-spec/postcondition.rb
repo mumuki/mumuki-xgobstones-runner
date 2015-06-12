@@ -20,7 +20,7 @@ module StonesSpec
 
     def validate(initial_board_gbb, actual_final_board_gbb, _actual_return)
       if matches_with_expected_board? Stones::Gbb.read actual_final_board_gbb
-        passed_result actual_final_board_gbb
+        passed_result initial_board_gbb, actual_final_board_gbb
       else
         failed_result initial_board_gbb, final_board_gbb, actual_final_board_gbb
       end
@@ -28,18 +28,23 @@ module StonesSpec
 
     private
 
-    def failed_result(initial_board_gbb, expected_board_gbb, actual_final_board_gbb)
+    def failed_result(initial_board_gbb, expected_board_gbb, actual_board_gbb)
       boards = [
         ['Tablero inicial', initial_board_gbb],
         ['Tablero final esperado', expected_board_gbb],
-        ['Tablero final obtenido', actual_final_board_gbb]
+        ['Tablero final obtenido', actual_board_gbb]
       ]
 
       make_result boards, :failed
     end
 
-    def passed_result(actual_final_board_gbb)
-      ["<div>#{get_html_board actual_final_board_gbb}</div>", :passed]
+    def passed_result(initial_board_gbb, actual_board_gbb)
+      boards = [
+        ['Tablero inicial', initial_board_gbb],
+        ['Tablero final', actual_board_gbb],
+      ]
+
+      make_result boards, :passed
     end
 
     def make_result(gbb_boards, status)

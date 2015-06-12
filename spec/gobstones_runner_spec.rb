@@ -77,9 +77,10 @@ describe Runner do
 
           it { expect(results[1]).to eq(:passed) }
 
-          context 'should return an html representation of the board as result' do
+          context 'should return an html representation of the initial and final board as result' do
             let(:html) { results[0] }
 
+            it { expect(html).to include(File.new('spec/data/red_ball_at_origin_initial.html').read) }
             it { expect(html).to include(File.new('spec/data/red_ball_at_origin.html').read) }
             it { expect(html).to start_with('<div>') }
             it { expect(html).to end_with('</div>') }
