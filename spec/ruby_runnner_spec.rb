@@ -40,9 +40,7 @@ describe Language::Ruby do
 
       it { expect(results[1]).to eq :failed }
     end
-
   end
-
 
   describe 'function spec' do
     context 'when passes with args' do
@@ -59,7 +57,6 @@ describe Language::Ruby do
     end
   end
 
-
   context 'when its ok' do
     let(:results) { runner.run!(YAML.load_file 'spec/data/head_position_ok_ruby.yml') }
 
@@ -70,13 +67,21 @@ describe Language::Ruby do
   end
 
   describe 'program spec' do
-
-    context 'when its not ok' do
+    context 'when head falls out of board' do
       let(:results) { runner.run!(YAML.load_file 'spec/data/runtime_error_ruby.yml') }
 
       it { expect(results[1]).to eq(:failed) }
 
-      it { expect(html).to start_with('<pre>') }
+      it { expect(html).to include(File.new('spec/data/runtime_error_initial.html').read) }
+      it { expect(html).to end_with('</pre>') }
+    end
+
+    context 'when no stones are available for popping' do
+      let(:results) { runner.run!(YAML.load_file 'spec/data/runtime_error_pop_ruby.yml') }
+
+      it { expect(results[1]).to eq(:failed) }
+
+      it { expect(html).to include(File.new('spec/data/runtime_error_initial.html').read) }
       it { expect(html).to end_with('</pre>') }
     end
 
@@ -86,7 +91,8 @@ describe Language::Ruby do
 
         it { expect(results[1]).to eq(:passed) }
 
-        context 'should return an html representation of the board as result' do
+        context 'should return an html representation of the initial and final board as result' do
+          it { expect(html).to include(File.new('spec/data/red_ball_at_origin_initial.html').read) }
           it { expect(html).to include(File.new('spec/data/red_ball_at_origin.html').read) }
           it { expect(html).to start_with('<div>') }
           it { expect(html).to end_with('</div>') }

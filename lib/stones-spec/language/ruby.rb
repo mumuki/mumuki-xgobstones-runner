@@ -17,7 +17,7 @@ module StonesSpec::Language
     end
 
     def self.is_runtime_error?(result)
-      false
+      (result.include? 'OutOfBoardError') || !!(result =~ /(red|blue|green|black) Underflow/)
     end
 
     def self.parse_success_output(result)
