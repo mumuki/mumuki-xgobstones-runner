@@ -4,7 +4,7 @@ gem 'rake'
 gem 'mumukit', github: 'mumuki/mumukit', tag: 'v0.4.0'
 gem 'mumukit-inspection', github: 'uqbar-project/mumukit-inspection', branch: 'master'
 gem 'stones-spec', github: 'uqbar-project/stones-spec', branch: 'master'
-gem 'recursive-open-struct', github: 'mumuki/recursive-open-struct', branch: 'feature-use-symbols-for-hash-representation'
+gem 'activesupport'
 
 group :test do
   gem 'rspec', '2.13'

@@ -15,13 +15,6 @@ GIT
       sinatra (~> 1.4)
 
 GIT
-  remote: git://github.com/mumuki/recursive-open-struct.git
-  revision: a3319f61dc4194631882fcc33f0b257c2a85cf38
-  branch: feature-use-symbols-for-hash-representation
-  specs:
-    recursive-open-struct (0.6.4)
-
-GIT
   remote: git://github.com/uqbar-project/mumukit-inspection.git
   revision: 467ea454a85fed1ea4136b1c1d2b4f6d5dc88ad0
   branch: master
@@ -39,6 +32,12 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    activesupport (4.2.1)
+      i18n (~> 0.7)
+      json (~> 1.7, >= 1.7.7)
+      minitest (~> 5.1)
+      thread_safe (~> 0.3, >= 0.3.4)
+      tzinfo (~> 1.1)
     codeclimate-test-reporter (0.4.7)
       simplecov (>= 0.7.1, < 1.0.0)
     diff-lcs (1.2.5)
@@ -47,8 +46,10 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
+    i18n (0.7.0)
     json (1.8.2)
     mime-types (2.5)
+    minitest (5.5.0)
     netrc (0.10.3)
     rack (1.6.1)
     rack-protection (1.5.3)
@@ -76,7 +77,10 @@ GEM
       rack (~> 1.4)
       rack-protection (~> 1.4)
       tilt (>= 1.3, < 3)
+    thread_safe (0.3.4)
     tilt (2.0.1)
+    tzinfo (1.2.2)
+      thread_safe (~> 0.1)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.1)
@@ -85,11 +89,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activesupport
   codeclimate-test-reporter
   mumukit!
   mumukit-bridge!
   mumukit-inspection!
   rake
-  recursive-open-struct!
   rspec (= 2.13)
   stones-spec!
