@@ -23,15 +23,21 @@ GIT
 
 GIT
   remote: git://github.com/uqbar-project/stones-spec.git
-  revision: f8b831675e1fe7151800215ae66681e93332e010
+  revision: 1afe036cb75c6daddfa90cd2bed5d8cad7243fdc
   branch: master
   specs:
-    stones-spec (0.2.0)
+    stones-spec (0.3.0)
       ruby-stones (= 0.1.1)
 
 GEM
   remote: https://rubygems.org/
   specs:
+    activesupport (4.2.1)
+      i18n (~> 0.7)
+      json (~> 1.7, >= 1.7.7)
+      minitest (~> 5.1)
+      thread_safe (~> 0.3, >= 0.3.4)
+      tzinfo (~> 1.1)
     codeclimate-test-reporter (0.4.7)
       simplecov (>= 0.7.1, < 1.0.0)
     diff-lcs (1.2.5)
@@ -40,8 +46,10 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
+    i18n (0.7.0)
     json (1.8.2)
     mime-types (2.5)
+    minitest (5.5.0)
     netrc (0.10.3)
     rack (1.6.1)
     rack-protection (1.5.3)
@@ -69,7 +77,10 @@ GEM
       rack (~> 1.4)
       rack-protection (~> 1.4)
       tilt (>= 1.3, < 3)
+    thread_safe (0.3.4)
     tilt (2.0.1)
+    tzinfo (1.2.2)
+      thread_safe (~> 0.1)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.1)
@@ -78,6 +89,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activesupport
   codeclimate-test-reporter
   mumukit!
   mumukit-bridge!

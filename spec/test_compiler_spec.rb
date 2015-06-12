@@ -20,7 +20,6 @@ describe TestCompiler do
       it {
         expect(output).to eq({
           source: "content\nextra",
-          subject: nil,
           examples: [{initial_board: 'initial', final_board: 'final'}],
           check_head_position: true })
       }
@@ -38,10 +37,9 @@ describe TestCompiler do
       let(:output) { compiler.create_compilation!(test_file, 'extra', 'content') }
       it {
         expect(output).to eq({
-                                 source: "content\nextra",
-                                 subject: nil,
-                                 examples: [{initial_board: 'initial', final_board: 'final'}],
-                                 check_head_position: false })
+          source: "content\nextra",
+          examples: [{initial_board: 'initial', final_board: 'final'}],
+          check_head_position: false })
       }
     end
 
@@ -55,10 +53,9 @@ describe TestCompiler do
       let(:output) { compiler.create_compilation!(test_file, 'extra', 'content') }
       it {
         expect(output).to eq({
-                                 source: "content\nextra",
-                                 subject: nil,
-                                 examples: [{initial_board: 'initial', final_board: 'final'}],
-                                 check_head_position: false })
+          source: "content\nextra",
+          examples: [{initial_board: 'initial', final_board: 'final'}],
+          check_head_position: false })
       }
     end
 
@@ -77,10 +74,10 @@ describe TestCompiler do
       let(:output) { compiler.create_compilation!(test_file, 'extra', 'content') }
       it {
         expect(output).to eq({
-                                 source: "content\nextra",
-                                 subject: 'PonerN',
-                                 examples: [{initial_board: 'initial', final_board: 'final', arguments: [3, 'Rojo']}],
-                                 check_head_position: false })
+          source: "content\nextra",
+          subject: 'PonerN',
+          examples: [{initial_board: 'initial', final_board: 'final', arguments: [3, 'Rojo']}],
+          check_head_position: false })
       }
     end
   end
