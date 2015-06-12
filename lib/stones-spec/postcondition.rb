@@ -48,8 +48,7 @@ module StonesSpec
     end
 
     def make_result(gbb_boards, status)
-      output = "<div>#{gbb_boards.map { |gbb_with_caption| caption, board_gbb = *gbb_with_caption
-      get_html_board caption, board_gbb }.join("\n")}</div>"
+      output = "<div>#{gbb_boards.map { |gbb_with_caption| get_html_board *gbb_with_caption }.join("\n")}</div>"
       [output, status]
     end
 
