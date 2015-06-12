@@ -12,9 +12,10 @@ module StonesSpec
       subject = Subject.from(test_definition[:subject], language)
       source = test_definition[:source]
       check_head_position = test_definition[:check_head_position]
+      show_initial_board = test_definition[:show_initial_board].nil? ? true : test_definition[:show_initial_board]
 
       results = test_definition[:examples].map do |example_definition|
-        run_example!(example_definition, check_head_position, source, subject)
+        run_example!(example_definition, check_head_position, show_initial_board, source, subject)
       end
       aggregate_results(results)
     end
@@ -25,7 +26,7 @@ module StonesSpec
       language.test_program(source, subject)
     end
 
-    def run_example!(example_definition, check_head_position, source, subject)
+    def run_example!(example_definition, check_head_position, show_initial_board, source, subject)
       example = StonesSpec::Example.new(language, subject)
       example.start!(
           source,
@@ -34,7 +35,8 @@ module StonesSpec
               example_definition[:arguments]),
           Postcondition.from(
               example_definition,
-              check_head_position))
+              check_head_position,
+              show_initial_board))
       example.result
     ensure
       example.stop!

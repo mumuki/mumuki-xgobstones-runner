@@ -1,8 +1,8 @@
 module StonesSpec
   module Postcondition
-    def self.from(example_definition, check_head_position)
+    def self.from(example_definition, check_head_position, show_initial_board)
       example_definition[:final_board] ?
-          FinalBoardPostcondition.new(example_definition[:final_board], check_head_position) :
+          FinalBoardPostcondition.new(example_definition[:final_board], check_head_position, show_initial_board) :
           ReturnPostcondition.new(example_definition[:return])
     end
   end
@@ -11,11 +11,12 @@ module StonesSpec
     include StonesSpec::WithTempfile
     include StonesSpec::WithGbbHtmlRendering
 
-    attr_reader :final_board_gbb, :check_head_position
+    attr_reader :final_board_gbb, :check_head_position, :show_initial_board
 
-    def initialize(final_board, check_head_position)
+    def initialize(final_board, check_head_position, show_initial_board)
       @final_board_gbb = final_board
       @check_head_position = check_head_position
+      @show_initial_board = show_initial_board
     end
 
     def validate(initial_board_gbb, actual_final_board_gbb, _actual_return)
@@ -30,19 +31,21 @@ module StonesSpec
 
     def failed_result(initial_board_gbb, expected_board_gbb, actual_board_gbb)
       boards = [
-        ['Tablero inicial', initial_board_gbb],
         ['Tablero final esperado', expected_board_gbb],
         ['Tablero final obtenido', actual_board_gbb]
       ]
+
+      boards.unshift ['Tablero inicial', initial_board_gbb] if show_initial_board
 
       make_result boards, :failed
     end
 
     def passed_result(initial_board_gbb, actual_board_gbb)
       boards = [
-        ['Tablero inicial', initial_board_gbb],
-        ['Tablero final', actual_board_gbb],
+        ['Tablero final', actual_board_gbb]
       ]
+
+      boards.unshift ['Tablero inicial', initial_board_gbb] if show_initial_board
 
       make_result boards, :passed
     end
