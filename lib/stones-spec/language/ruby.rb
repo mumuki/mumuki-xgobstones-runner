@@ -16,6 +16,10 @@ module StonesSpec::Language
       "<pre>#{result}</pre>"
     end
 
+    def self.is_runtime_error?(result)
+      false
+    end
+
     def self.parse_success_output(result)
       result
     end

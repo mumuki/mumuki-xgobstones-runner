@@ -105,8 +105,10 @@ describe Runner do
         context 'when produces BOOM' do
           let(:results) { runner.run!(YAML.load_file 'spec/data/runtime_error.yml') }
           it { expect(results[1]).to eq(:failed) }
+
+          it { expect(results[0]).to include(File.new('spec/data/runtime_error_initial.html').read) }
           it do
-            expect(results[0]).to eq(
+            expect(results[0]).to include(
 '<pre>cerca de invocación a procedimiento
   |
   V
