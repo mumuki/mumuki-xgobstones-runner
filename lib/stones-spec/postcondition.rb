@@ -48,13 +48,9 @@ module StonesSpec
     end
 
     def make_result(gbb_boards, status)
-      output = "<div>#{gbb_boards.map { |gbb_with_caption| to_html_with_caption *gbb_with_caption }.join("\n")}</div>"
+      output = "<div>#{gbb_boards.map { |gbb_with_caption| caption, board_gbb = *gbb_with_caption
+      get_html_board caption, board_gbb }.join("\n")}</div>"
       [output, status]
-    end
-
-    def to_html_with_caption(caption, board_gbb)
-      board_html = get_html_board board_gbb
-      board_html.sub '<table class="gbs_board">', "<table class=\"gbs_board\">\n<caption>#{caption}</caption>"
     end
 
     def matches_with_expected_board?(actual_board)
