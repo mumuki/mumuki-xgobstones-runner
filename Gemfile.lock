@@ -15,6 +15,13 @@ GIT
       sinatra (~> 1.4)
 
 GIT
+  remote: git://github.com/mumuki/recursive-open-struct.git
+  revision: a3319f61dc4194631882fcc33f0b257c2a85cf38
+  branch: feature-use-symbols-for-hash-representation
+  specs:
+    recursive-open-struct (0.6.4)
+
+GIT
   remote: git://github.com/uqbar-project/mumukit-inspection.git
   revision: 467ea454a85fed1ea4136b1c1d2b4f6d5dc88ad0
   branch: master
@@ -83,5 +90,6 @@ DEPENDENCIES
   mumukit-bridge!
   mumukit-inspection!
   rake
+  recursive-open-struct!
   rspec (= 2.13)
   stones-spec!
