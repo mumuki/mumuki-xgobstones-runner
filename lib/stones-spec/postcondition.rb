@@ -29,20 +29,25 @@ module StonesSpec
     private
 
     def failed_result(initial_board_gbb, expected_board_gbb, actual_final_board_gbb)
-      output =
-"<div>
-  #{to_html_with_caption initial_board_gbb, 'Tablero inicial'}
-  #{to_html_with_caption actual_final_board_gbb, 'Tablero final obtenido'}
-  #{to_html_with_caption expected_board_gbb, 'Tablero final esperado'}
-</div>"
-      [output, :failed]
+      boards = [
+        ['Tablero inicial', initial_board_gbb],
+        ['Tablero final esperado', expected_board_gbb],
+        ['Tablero final obtenido', actual_final_board_gbb]
+      ]
+
+      make_result boards, :failed
     end
 
     def passed_result(actual_final_board_gbb)
       ["<div>#{get_html_board actual_final_board_gbb}</div>", :passed]
     end
 
-    def to_html_with_caption(board_gbb, caption)
+    def make_result(gbb_boards, status)
+      output = "<div>#{gbb_boards.map { |gbb_with_caption| to_html_with_caption *gbb_with_caption }.join("\n")}</div>"
+      [output, status]
+    end
+
+    def to_html_with_caption(caption, board_gbb)
       board_html = get_html_board board_gbb
       board_html.sub '<table class="gbs_board">', "<table class=\"gbs_board\">\n<caption>#{caption}</caption>"
     end
