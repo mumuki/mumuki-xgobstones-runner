@@ -1,8 +1,8 @@
 module StonesSpec
   module Postcondition
-    def self.from(example_definition, check_head_position)
+    def self.from(example_definition, check_head_position, show_initial_board)
       example_definition[:final_board] ?
-          FinalBoardPostcondition.new(example_definition[:final_board], check_head_position) :
+          FinalBoardPostcondition.new(example_definition[:final_board], check_head_position, show_initial_board) :
           ReturnPostcondition.new(example_definition[:return])
     end
   end
@@ -11,45 +11,48 @@ module StonesSpec
     include StonesSpec::WithTempfile
     include StonesSpec::WithGbbHtmlRendering
 
-    attr_reader :final_board_gbb, :check_head_position
+    attr_reader :final_board_gbb, :check_head_position, :show_initial_board
 
-    def initialize(final_board, check_head_position)
+    def initialize(final_board, check_head_position, show_initial_board)
       @final_board_gbb = final_board
       @check_head_position = check_head_position
+      @show_initial_board = show_initial_board
     end
 
-    def validate(initial_board_file, actual_final_board_gbb, _actual_return)
-      actual_final_board = Stones::Gbb.read(actual_final_board_gbb)
-      actual_final_board_html = get_html_board(actual_final_board_gbb)
-
-      if matches_with_expected_board? actual_final_board
-        passed_result(actual_final_board_html)
+    def validate(initial_board_gbb, actual_final_board_gbb, _actual_return)
+      if matches_with_expected_board? Stones::Gbb.read actual_final_board_gbb
+        passed_result initial_board_gbb, actual_final_board_gbb
       else
-        failed_result(initial_board_file, final_board_gbb, actual_final_board_html)
+        failed_result initial_board_gbb, final_board_gbb, actual_final_board_gbb
       end
     end
 
     private
 
-    def failed_result(initial_board_file, final_board_gbb, actual_final_board_html)
-      initial_board_html = get_html_board initial_board_file.open.read
-      expected_board_html = get_html_board final_board_gbb
-      output =
-"<div>
-  #{add_caption initial_board_html, 'Tablero inicial'}
-  #{add_caption actual_final_board_html, 'Tablero final obtenido'}
-  #{add_caption expected_board_html, 'Tablero final esperado'}
-</div>"
-      [output, :failed]
+    def failed_result(initial_board_gbb, expected_board_gbb, actual_board_gbb)
+      boards = [
+        ['Tablero final esperado', expected_board_gbb],
+        ['Tablero final obtenido', actual_board_gbb]
+      ]
+
+      boards.unshift ['Tablero inicial', initial_board_gbb] if show_initial_board
+
+      make_result boards, :failed
     end
 
-    def passed_result(actual_final_board_html)
-      ["<div>#{actual_final_board_html}</div>", :passed]
+    def passed_result(initial_board_gbb, actual_board_gbb)
+      boards = [
+        ['Tablero final', actual_board_gbb]
+      ]
+
+      boards.unshift ['Tablero inicial', initial_board_gbb] if show_initial_board
+
+      make_result boards, :passed
     end
 
-
-    def add_caption(board_html, caption)
-      board_html.sub '<table class="gbs_board">', "<table class=\"gbs_board\">\n<caption>#{caption}</caption>"
+    def make_result(gbb_boards, status)
+      output = "<div>#{gbb_boards.map { |gbb_with_caption| get_html_board *gbb_with_caption }.join("\n")}</div>"
+      [output, status]
     end
 
     def matches_with_expected_board?(actual_board)
@@ -72,7 +75,7 @@ module StonesSpec
       @return_value = return_value.to_s
     end
 
-    def validate(_initial_board_file, _actual_final_board_gbb, actual_return)
+    def validate(_initial_board_gbb, _actual_final_board_gbb, actual_return)
       normalized_actual_return = actual_return.strip
 
       if normalized_actual_return == return_value

@@ -11,6 +11,7 @@ describe Runner do
   describe Language::Gobstones do
     let(:lang) { Language::Gobstones }
     let(:runner) { Runner.new(lang) }
+    let(:html) { results[0] }
 
     describe 'procedure spec' do
       context 'when passes' do
@@ -49,7 +50,7 @@ describe Runner do
         let(:results) { runner.run!(YAML.load_file 'spec/data/gobstones/function/remaining_cells_fail.yml') }
 
         it { expect(results[1]).to eq :failed }
-        it { expect(results[0]).to eq 'Se esperaba <b>9</b> pero se obtuvo <b>18</b>' }
+        it { expect(html).to eq 'Se esperaba <b>9</b> pero se obtuvo <b>18</b>' }
       end
     end
 
@@ -71,15 +72,19 @@ describe Runner do
         it { expect(results[1]).to eq(:passed) }
       end
 
+      context 'doesnt include the initial board if the flag is false' do
+        let(:results) { runner.run!(YAML.load_file 'spec/data/red_ball_at_origin_without_initial_board.yml') }
+        it { expect(html).not_to include(File.new('spec/data/red_ball_at_origin_initial.html').read) }
+      end
+
       context 'when the file is sintactically ok' do
         context 'when the final board matches' do
           let(:results) { runner.run!(YAML.load_file 'spec/data/red_ball_at_origin.yml') }
 
           it { expect(results[1]).to eq(:passed) }
 
-          context 'should return an html representation of the board as result' do
-            let(:html) { results[0] }
-
+          context 'should return an html representation of the initial and final board as result' do
+            it { expect(html).to include(File.new('spec/data/red_ball_at_origin_initial.html').read) }
             it { expect(html).to include(File.new('spec/data/red_ball_at_origin.html').read) }
             it { expect(html).to start_with('<div>') }
             it { expect(html).to end_with('</div>') }
@@ -91,8 +96,6 @@ describe Runner do
           it { expect(results[1]).to eq(:failed) }
 
           context 'should return an html representation of the initial, expected and actual boards as result' do
-            let(:html) { results[0] }
-
             it { expect(html).to include(File.new('spec/data/red_ball_at_origin_initial.html').read) }
             it { expect(html).to include(File.new('spec/data/red_ball_at_origin_wrong.html').read) }
             it { expect(html).to include(File.new('spec/data/red_ball_at_origin_expected.html').read) }
@@ -104,8 +107,10 @@ describe Runner do
         context 'when produces BOOM' do
           let(:results) { runner.run!(YAML.load_file 'spec/data/runtime_error.yml') }
           it { expect(results[1]).to eq(:failed) }
+
+          it { expect(html).to include(File.new('spec/data/runtime_error_initial.html').read) }
           it do
-            expect(results[0]).to eq(
+            expect(html).to include(
 '<pre>cerca de invocación a procedimiento
   |
   V
@@ -125,7 +130,7 @@ Error en tiempo de ejecución:
         let(:results) { runner.run!(YAML.load_file 'spec/data/syntax_error.yml') }
         it { expect(results[1]).to eq(:failed) }
         it do
-          expect(results[0]).to eq(
+          expect(html).to eq(
 '<pre>cerca de un identificador con mayúscula "Error"
         |
         V
