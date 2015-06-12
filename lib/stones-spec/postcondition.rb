@@ -18,34 +18,32 @@ module StonesSpec
       @check_head_position = check_head_position
     end
 
-    def validate(initial_board_file, actual_final_board_gbb, _actual_return)
-      actual_final_board_html = get_html_board actual_final_board_gbb
-      initial_board_html = get_html_board initial_board_file.open.read
-
+    def validate(initial_board_gbb, actual_final_board_gbb, _actual_return)
       if matches_with_expected_board? Stones::Gbb.read actual_final_board_gbb
-        passed_result(actual_final_board_html)
+        passed_result actual_final_board_gbb
       else
-        failed_result(initial_board_html, get_html_board(final_board_gbb), actual_final_board_html)
+        failed_result initial_board_gbb, final_board_gbb, actual_final_board_gbb
       end
     end
 
     private
 
-    def failed_result(initial_board_html, expected_board_html, actual_final_board_html)
+    def failed_result(initial_board_gbb, expected_board_gbb, actual_final_board_gbb)
       output =
 "<div>
-  #{add_caption initial_board_html, 'Tablero inicial'}
-  #{add_caption actual_final_board_html, 'Tablero final obtenido'}
-  #{add_caption expected_board_html, 'Tablero final esperado'}
+  #{to_html_with_caption initial_board_gbb, 'Tablero inicial'}
+  #{to_html_with_caption actual_final_board_gbb, 'Tablero final obtenido'}
+  #{to_html_with_caption expected_board_gbb, 'Tablero final esperado'}
 </div>"
       [output, :failed]
     end
 
-    def passed_result(actual_final_board_html)
-      ["<div>#{actual_final_board_html}</div>", :passed]
+    def passed_result(actual_final_board_gbb)
+      ["<div>#{get_html_board actual_final_board_gbb}</div>", :passed]
     end
 
-    def add_caption(board_html, caption)
+    def to_html_with_caption(board_gbb, caption)
+      board_html = get_html_board board_gbb
       board_html.sub '<table class="gbs_board">', "<table class=\"gbs_board\">\n<caption>#{caption}</caption>"
     end
 
@@ -69,7 +67,7 @@ module StonesSpec
       @return_value = return_value.to_s
     end
 
-    def validate(_initial_board_file, _actual_final_board_gbb, actual_return)
+    def validate(_initial_board_gbb, _actual_final_board_gbb, actual_return)
       normalized_actual_return = actual_return.strip
 
       if normalized_actual_return == return_value
