@@ -121,4 +121,10 @@ describe ExpectationsRunner do
 
     it { expect('program { Sacar(Rojo) }').to comply_with has_usage_expectation }
   end
+
+  context 'when the program is empty' do
+    let(:has_usage_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Sacar' }  }
+
+    it { expect('').not_to comply_with has_usage_expectation }
+  end
 end
