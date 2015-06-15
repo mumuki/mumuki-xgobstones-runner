@@ -53,6 +53,11 @@ describe Runner do
     end
 
     describe 'program spec' do
+      context 'when the program is empty' do
+        let(:test_file) { 'empty_program' }
+        it { expect(html).to include "El programa está vacío." }
+      end
+
       context 'can check head position' do
         context 'when its wrong' do
           let(:test_file) { 'head_position_wrong' }
