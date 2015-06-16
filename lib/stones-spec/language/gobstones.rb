@@ -3,6 +3,10 @@ class String
     first_letter = self[0]
     first_letter.downcase == first_letter
   end
+
+  def include_any?(other_strs)
+    other_strs.any? { |other| include? other }
+  end
 end
 
 module StonesSpec::Language
@@ -61,7 +65,7 @@ module StonesSpec::Language
 
   class ErrorMessageParser
     def remove_line_specification(x)
-      x.drop(3)
+      x.drop_while { |str| !str.include_any? ['cerca de', 'Error de Gobstones'] }
     end
 
     def remove_boom_line_specification(x)
