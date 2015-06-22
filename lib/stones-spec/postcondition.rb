@@ -2,7 +2,7 @@ module StonesSpec
   module Postcondition
     def self.from(example_definition, check_head_position, show_initial_board)
       example_definition[:final_board] ?
-          FinalBoardPostcondition.new(example_definition[:final_board], check_head_position, show_initial_board) :
+          FinalBoardPostcondition.new(example_definition, check_head_position, show_initial_board) :
           ReturnPostcondition.new(example_definition[:return])
     end
   end
@@ -13,8 +13,9 @@ module StonesSpec
 
     attr_reader :final_board_gbb, :check_head_position, :show_initial_board
 
-    def initialize(final_board, check_head_position, show_initial_board)
-      @final_board_gbb = final_board
+    def initialize(example_definition, check_head_position, show_initial_board)
+      @final_board_gbb = example_definition[:final_board]
+      @title = example_definition[:title]
       @check_head_position = check_head_position
       @show_initial_board = show_initial_board
     end
@@ -51,7 +52,7 @@ module StonesSpec
     end
 
     def make_result(gbb_boards, status)
-      output = "<div>#{gbb_boards.map { |gbb_with_caption| get_html_board *gbb_with_caption }.join("\n")}</div>"
+      output = "<div><h3>#{@title}</h3>#{gbb_boards.map { |gbb_with_caption| get_html_board *gbb_with_caption }.join("\n")}</div>"
       [output, status]
     end
 

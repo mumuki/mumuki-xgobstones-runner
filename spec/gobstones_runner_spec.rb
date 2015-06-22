@@ -70,6 +70,18 @@ describe Runner do
         end
       end
 
+      context 'when a title is given' do
+        context 'and the test passes' do
+          let(:test_file) { 'red_ball_at_origin' }
+          it { expect(html).to include '<h3>An example</h3>' }
+        end
+
+        context 'and the test fails' do
+          let(:test_file) { 'red_ball_at_origin_wrong' }
+          it { expect(html).to include '<h3>An example</h3>' }
+        end
+      end
+
       context 'doesnt check head position if the flag is false' do
         let(:test_file) { 'dont_check_head_position' }
         it { expect(status).to eq(:passed) }
