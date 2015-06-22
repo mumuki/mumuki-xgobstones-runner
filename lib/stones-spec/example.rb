@@ -6,7 +6,8 @@ module StonesSpec
 
     attr_reader :language
 
-    def initialize(language, subject)
+    def initialize(title, language, subject)
+      @title = title
       @language = language
       @subject = subject
     end
@@ -41,7 +42,7 @@ module StonesSpec
 
     def make_error_output(error_message, initial_board_gbb)
       if language.is_runtime_error?(@result)
-        "#{get_html_board 'Tablero inicial', initial_board_gbb}\n#{error_message}"
+        "<h3>#{@title}</h3>#{get_html_board 'Tablero inicial', initial_board_gbb}\n#{error_message}"
       else
         error_message
       end

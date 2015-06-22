@@ -80,6 +80,16 @@ describe Runner do
           let(:test_file) { 'red_ball_at_origin_wrong' }
           it { expect(html).to include '<h3>An example</h3>' }
         end
+
+        context 'and syntax errors are present' do
+          let(:test_file) { 'syntax_error' }
+          it { expect(html).not_to include '<h3>An example</h3>' }
+        end
+
+        context 'and a runtime error occurs' do
+          let(:test_file) { 'runtime_error' }
+          it { expect(html).to include '<h3>An example</h3>' }
+        end
       end
 
       context 'doesnt check head position if the flag is false' do

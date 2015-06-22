@@ -27,7 +27,7 @@ module StonesSpec
     end
 
     def run_example!(example_definition, check_head_position, show_initial_board, source, subject)
-      example = StonesSpec::Example.new(language, subject)
+      example = StonesSpec::Example.new(example_definition[:title], language, subject)
       example.start!(
           source,
           Precondition.new(
