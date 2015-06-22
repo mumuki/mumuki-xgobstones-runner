@@ -92,6 +92,18 @@ describe Runner do
         end
       end
 
+      context 'when a title is not given' do
+        context 'and the test passes' do
+          let(:test_file) { 'red_ball_at_origin_without_title' }
+          it { expect(html).not_to include '<h3></h3>' }
+        end
+
+        context 'and a runtime error occurs' do
+          let(:test_file) { 'runtime_error_without_title' }
+          it { expect(html).not_to include '<h3></h3>' }
+        end
+      end
+
       context 'doesnt check head position if the flag is false' do
         let(:test_file) { 'dont_check_head_position' }
         it { expect(status).to eq(:passed) }

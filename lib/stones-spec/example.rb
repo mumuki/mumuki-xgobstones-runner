@@ -42,7 +42,7 @@ module StonesSpec
 
     def make_error_output(error_message, initial_board_gbb)
       if language.is_runtime_error?(@result)
-        "<h3>#{@title}</h3>#{get_html_board 'Tablero inicial', initial_board_gbb}\n#{error_message}"
+        with_title @title, "#{get_html_board 'Tablero inicial', initial_board_gbb}\n#{error_message}"
       else
         error_message
       end

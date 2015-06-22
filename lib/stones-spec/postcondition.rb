@@ -52,7 +52,8 @@ module StonesSpec
     end
 
     def make_result(gbb_boards, status)
-      output = "<div><h3>#{@title}</h3>#{gbb_boards.map { |gbb_with_caption| get_html_board *gbb_with_caption }.join("\n")}</div>"
+      boards = gbb_boards.map { |gbb_with_caption| get_html_board *gbb_with_caption }.join("\n")
+      output = "<div>#{with_title @title, boards}</div>"
       [output, status]
     end
 
