@@ -14,6 +14,7 @@ module StonesSpec
     attr_reader :final_board_gbb, :check_head_position, :show_initial_board
 
     def initialize(example, check_head_position, show_initial_board)
+      @example = example
       @final_board_gbb = example.final_board
       @title = example.title
       @check_head_position = check_head_position
@@ -53,7 +54,7 @@ module StonesSpec
 
     def make_result(gbb_boards, status)
       boards = gbb_boards.map { |gbb_with_caption| get_html_board *gbb_with_caption }.join("\n")
-      output = "<div>#{with_title @title, boards}</div>"
+      output = "<div>#{with_title @example, @title, boards}</div>"
       [output, status]
     end
 

@@ -9,8 +9,12 @@ module StonesSpec
     end
 
     module Program
-      def self.test_program(language, source, arguments)
+      def self.test_program(_language, source, _arguments)
         source
+      end
+
+      def self.default_title(_language, _source, _arguments)
+        nil
       end
     end
 
@@ -22,6 +26,10 @@ module StonesSpec
       def test_program(language, source, arguments)
         language.test_procedure(source, @name, arguments)
       end
+
+      def default_title(language, _source, arguments)
+        language.procedure_call(@name, arguments)
+      end
     end
 
     class Function
@@ -31,6 +39,10 @@ module StonesSpec
 
       def test_program(language, source, arguments)
         language.test_function(source, @name, arguments)
+      end
+
+      def default_title(_language, _source, _arguments)
+        nil
       end
     end
   end

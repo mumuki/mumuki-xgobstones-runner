@@ -26,7 +26,7 @@ module StonesSpec::Language
 
     def self.test_procedure(original, subject, args)
       "def main
-        puts #{subject} #{args.join(',')}
+        puts #{self.procedure_call subject, args}
       end
 
       #{original}"
@@ -34,6 +34,10 @@ module StonesSpec::Language
 
     def self.infer_subject_type_for(string)
       string.end_with?('!') ? StonesSpec::Subject::Procedure : StonesSpec::Subject::Function
+    end
+
+    def self.procedure_call(subject, args)
+      "#{subject} #{args.join(',')}"
     end
 
     self.singleton_class.send :alias_method, :test_function, :test_procedure
