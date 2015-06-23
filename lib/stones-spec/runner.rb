@@ -30,7 +30,7 @@ module StonesSpec
       example = StonesSpec::Example.new(language, subject, example_definition)
       example.start!(
           source,
-          Precondition.new(example),
+          Precondition.from_example(example),
           Postcondition.from(example, check_head_position, show_initial_board))
       example.result
     ensure
