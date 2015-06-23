@@ -27,16 +27,11 @@ module StonesSpec
     end
 
     def run_example!(example_definition, check_head_position, show_initial_board, source, subject)
-      example = StonesSpec::Example.new(language, subject)
+      example = StonesSpec::Example.new(language, subject, example_definition)
       example.start!(
           source,
-          Precondition.new(
-              example_definition[:initial_board],
-              example_definition[:arguments]),
-          Postcondition.from(
-              example_definition,
-              check_head_position,
-              show_initial_board))
+          Precondition.from_example(example),
+          Postcondition.from(example, check_head_position, show_initial_board))
       example.result
     ensure
       example.stop!

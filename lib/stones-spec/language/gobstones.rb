@@ -38,7 +38,7 @@ module StonesSpec::Language
 
     def self.test_procedure(original, subject, args)
       "program {
-        #{subject}(#{args.join(',')})
+        #{self.procedure_call(subject, args)}
       }
 
       #{original}"
@@ -46,7 +46,7 @@ module StonesSpec::Language
 
     def self.test_function(original, subject, args)
       "program {
-        return (#{subject}(#{args.join(',')}))
+        return (#{self.procedure_call(subject, args)})
       }
 
       #{original}"
@@ -54,6 +54,10 @@ module StonesSpec::Language
 
     def self.infer_subject_type_for(string)
       string.start_with_lowercase? ? StonesSpec::Subject::Function : StonesSpec::Subject::Procedure
+    end
+
+    def self.procedure_call(subject, args)
+      "#{subject}(#{args.join(',')})"
     end
 
     private

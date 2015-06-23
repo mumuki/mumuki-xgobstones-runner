@@ -1,9 +1,9 @@
 module StonesSpec
   module Postcondition
-    def self.from(example_definition, check_head_position, show_initial_board)
-      example_definition[:final_board] ?
-          FinalBoardPostcondition.new(example_definition[:final_board], check_head_position, show_initial_board) :
-          ReturnPostcondition.new(example_definition[:return])
+    def self.from(example, check_head_position, show_initial_board)
+      example.final_board ?
+          FinalBoardPostcondition.new(example, check_head_position, show_initial_board) :
+          ReturnPostcondition.new(example.return)
     end
   end
 
@@ -11,10 +11,10 @@ module StonesSpec
     include StonesSpec::WithTempfile
     include StonesSpec::WithGbbHtmlRendering
 
-    attr_reader :final_board_gbb, :check_head_position, :show_initial_board
+    attr_reader :example, :check_head_position, :show_initial_board
 
-    def initialize(final_board, check_head_position, show_initial_board)
-      @final_board_gbb = final_board
+    def initialize(example, check_head_position, show_initial_board)
+      @example = example
       @check_head_position = check_head_position
       @show_initial_board = show_initial_board
     end
@@ -23,7 +23,7 @@ module StonesSpec
       if matches_with_expected_board? Stones::Gbb.read actual_final_board_gbb
         passed_result initial_board_gbb, actual_final_board_gbb
       else
-        failed_result initial_board_gbb, final_board_gbb, actual_final_board_gbb
+        failed_result initial_board_gbb, example.final_board, actual_final_board_gbb
       end
     end
 
@@ -51,7 +51,8 @@ module StonesSpec
     end
 
     def make_result(gbb_boards, status)
-      output = "<div>#{gbb_boards.map { |gbb_with_caption| get_html_board *gbb_with_caption }.join("\n")}</div>"
+      boards = gbb_boards.map { |gbb_with_caption| get_html_board *gbb_with_caption }.join("\n")
+      output = "<div>#{with_title example.title, boards}</div>"
       [output, status]
     end
 
@@ -64,7 +65,7 @@ module StonesSpec
     end
 
     def final_board
-      Stones::Gbb.read final_board_gbb
+      Stones::Gbb.read example.final_board
     end
   end
 

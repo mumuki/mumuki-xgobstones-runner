@@ -70,6 +70,40 @@ describe Runner do
         end
       end
 
+      context 'when a title is given' do
+        context 'and the test passes' do
+          let(:test_file) { 'red_ball_at_origin' }
+          it { expect(html).to include '<h3>A red ball</h3>' }
+        end
+
+        context 'and the test fails' do
+          let(:test_file) { 'red_ball_at_origin_wrong' }
+          it { expect(html).to include '<h3>A red ball</h3>' }
+        end
+
+        context 'and syntax errors are present' do
+          let(:test_file) { 'syntax_error' }
+          it { expect(html).not_to include '<h3>A syntax error</h3>' }
+        end
+
+        context 'and a runtime error occurs' do
+          let(:test_file) { 'runtime_error' }
+          it { expect(html).to include '<h3>A runtime error</h3>' }
+        end
+      end
+
+      context 'when a title is not given' do
+        context 'and the test passes' do
+          let(:test_file) { 'red_ball_at_origin_without_title' }
+          it { expect(html).not_to include '<h3></h3>' }
+        end
+
+        context 'and a runtime error occurs' do
+          let(:test_file) { 'runtime_error_without_title' }
+          it { expect(html).not_to include '<h3></h3>' }
+        end
+      end
+
       context 'doesnt check head position if the flag is false' do
         let(:test_file) { 'dont_check_head_position' }
         it { expect(status).to eq(:passed) }

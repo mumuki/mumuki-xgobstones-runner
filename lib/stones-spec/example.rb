@@ -1,18 +1,23 @@
+require 'ostruct'
+
 module StonesSpec
-  class Example
+  class Example < OpenStruct
     include StonesSpec::WithTempfile
     include StonesSpec::WithCommandLine
     include StonesSpec::WithGbbHtmlRendering
 
     attr_reader :language
 
-    def initialize(language, subject)
+    def initialize(language, subject, attributes)
+      super attributes
+      @title = attributes[:title]
       @language = language
       @subject = subject
     end
 
     def start!(source, precondition, postcondition)
       @postcondition = postcondition
+      @precondition = precondition
 
       @source_file = write_tempfile @subject.test_program(language, source, precondition.arguments),
                                     language.source_code_extension
@@ -37,11 +42,19 @@ module StonesSpec
       [@actual_final_board_file, @initial_board_file].each { |it| it.unlink }
     end
 
+    def title
+      @title || default_title
+    end
+
     private
+
+    def default_title
+      @subject.default_title language, source, @precondition.arguments
+    end
 
     def make_error_output(error_message, initial_board_gbb)
       if language.is_runtime_error?(@result)
-        "#{get_html_board 'Tablero inicial', initial_board_gbb}\n#{error_message}"
+        with_title self.title, "#{get_html_board 'Tablero inicial', initial_board_gbb}\n#{error_message}"
       else
         error_message
       end
