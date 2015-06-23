@@ -10,6 +10,7 @@ module StonesSpec
 
     def initialize(language, subject, attributes)
       super attributes
+      @title = attributes[:title]
       @language = language
       @subject = subject
     end
@@ -41,15 +42,19 @@ module StonesSpec
       [@actual_final_board_file, @initial_board_file].each { |it| it.unlink }
     end
 
-    def default_title
-      @subject.default_title language, source, @precondition.arguments
+    def title
+      @title || default_title
     end
 
     private
 
+    def default_title
+      @subject.default_title language, source, @precondition.arguments
+    end
+
     def make_error_output(error_message, initial_board_gbb)
       if language.is_runtime_error?(@result)
-        with_title self, title, "#{get_html_board 'Tablero inicial', initial_board_gbb}\n#{error_message}"
+        with_title self.title, "#{get_html_board 'Tablero inicial', initial_board_gbb}\n#{error_message}"
       else
         error_message
       end

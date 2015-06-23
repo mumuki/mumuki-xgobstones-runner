@@ -12,11 +12,9 @@ module StonesSpec
       [identity, board, board_html].compact.each(&:unlink)
     end
 
-    def with_title(example, title, html)
-      effective_title = title || example.default_title
-
-      if effective_title
-        "<h3>#{effective_title}</h3>#{html}"
+    def with_title(title, html)
+      if title
+        "<h3>#{title}</h3>#{html}"
       else
         html
       end
