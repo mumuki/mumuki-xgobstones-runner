@@ -36,6 +36,12 @@ describe Runner do
         let(:test_file) { 'gobstones/procedure/times_move_fail' }
         it { expect(status).to eq :failed }
       end
+
+      context 'when no title is given, it uses the procedure name and the arguments' do
+        let(:test_file) { 'gobstones/procedure/times_move_ok' }
+        it { expect(html).to include '<h3>TimesMove(3, Sur)</h3>' }
+        it { expect(html).to include '<h3>TimesMove(2, Este)</h3>' }
+      end
     end
 
     describe 'function spec' do

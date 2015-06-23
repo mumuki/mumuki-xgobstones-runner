@@ -57,7 +57,7 @@ module StonesSpec::Language
     end
 
     def self.procedure_call(subject, args)
-      "#{subject}(#{args.join(',')})"
+      "#{subject}(#{args.join(', ')})"
     end
 
     private

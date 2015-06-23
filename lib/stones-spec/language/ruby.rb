@@ -37,7 +37,7 @@ module StonesSpec::Language
     end
 
     def self.procedure_call(subject, args)
-      "#{subject} #{args.join(',')}"
+      "#{subject} #{args.join(', ')}"
     end
 
     self.singleton_class.send :alias_method, :test_function, :test_procedure
