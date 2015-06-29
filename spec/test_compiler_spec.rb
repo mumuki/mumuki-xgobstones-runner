@@ -6,6 +6,7 @@ require_relative '../lib/test_compiler'
 describe TestCompiler do
   context '#compile' do
     let(:compiler) { TestCompiler.new }
+    let(:output) { compiler.create_compilation!({test: test_file, extra: 'extra', content: 'content'}) }
 
     context 'when check_head_position is true' do
       let(:test_file) {
@@ -16,7 +17,7 @@ describe TestCompiler do
    - initial_board: initial
      final_board: final'
       }
-      let(:output) { compiler.create_compilation!(test_file, 'extra', 'content') }
+
       it {
         expect(output).to eq({
           source: "content\nextra",
@@ -34,7 +35,7 @@ describe TestCompiler do
    - initial_board: initial
      final_board: final'
       }
-      let(:output) { compiler.create_compilation!(test_file, 'extra', 'content') }
+
       it {
         expect(output).to eq({
           source: "content\nextra",
@@ -50,7 +51,7 @@ describe TestCompiler do
    - initial_board: initial
      final_board: final'
       }
-      let(:output) { compiler.create_compilation!(test_file, 'extra', 'content') }
+
       it {
         expect(output).to eq({
           source: "content\nextra",
@@ -71,7 +72,7 @@ describe TestCompiler do
       - 3
       - Rojo'
       }
-      let(:output) { compiler.create_compilation!(test_file, 'extra', 'content') }
+
       it {
         expect(output).to eq({
           source: "content\nextra",

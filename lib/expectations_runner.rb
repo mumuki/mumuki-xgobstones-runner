@@ -68,13 +68,13 @@ class ExpectationsRunner
   include Mumukit
   include StonesSpec::WithTempfile
 
-  def run_expectations!(expectations, content, _extra='')
-    if content.strip.empty?
-      return expectations.map { |exp| {'expectation' => exp, 'result' => false } }
+  def run_expectations!(request)
+    if request[:content].strip.empty?
+      return request[:expectations].map { |exp| {'expectation' => exp, 'result' => false } }
     end
 
-    ast = generate_ast!(content)
-    expectations.map { |exp| {'expectation' => exp, 'result' => run_expectation!(exp, ast)} }
+    ast = generate_ast! request[:content]
+    request[:expectations].map { |exp| {'expectation' => exp, 'result' => run_expectation!(exp, ast)} }
   end
 
   def run_expectation!(expectation, ast)

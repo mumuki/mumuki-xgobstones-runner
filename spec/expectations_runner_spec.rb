@@ -13,7 +13,7 @@ RSpec::Matchers.define :comply_with do |expectation|
   end
 
   define_method :run_expectation! do |code, expected_result|
-    runner.run_expectations!([expectation], code) == [{'expectation' => expectation, 'result' => expected_result}]
+    runner.run_expectations!(expectations: [expectation], content: code) == [{'expectation' => expectation, 'result' => expected_result}]
   end
 end
 

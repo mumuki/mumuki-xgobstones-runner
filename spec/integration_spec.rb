@@ -8,18 +8,19 @@ describe 'runner' do
     @pid = Process.spawn 'rackup -p 4567', err: '/dev/null'
     sleep 3
   end
+
   after(:all) { Process.kill 'TERM', @pid }
 
   context 'when submission is ok' do
-    it 'answers a valid hash' do
-      response = bridge.run_tests!(content: '
+    let(:content) { '
 procedure PonerUnaDeCada() {
     Poner (Rojo)
     Poner (Azul)
     Poner (Negro)
     Poner (Verde)
-}
-', extra: '', test: '
+}' }
+
+    let(:test) { '
 check_head_position: true
 
 subject: PonerUnaDeCada
@@ -43,10 +44,15 @@ examples:
      GBB/1.0
      size 5 5
      cell 3 3 Azul 1 Rojo 1 Verde 1 Negro 1
-     head 3 3')
+     head 3 3' }
 
-      expect(response[:status]).to eq 'passed'
-      expect(response[:result]).to include '<div>'
-    end
+    let(:expectations) { [{binding: 'PonerUnaDeCada', inspection: 'HasUsage'}] }
+    let(:extra) { '' }
+
+    let(:response) { bridge.run_tests! content: content, extra: extra, expectations: expectations, test: test }
+
+    it { expect(response[:status]).to eq 'passed' }
+    it { expect(response[:result]).to include '<div>' }
+    it { expect(response[:expectation_results]).to eq [{:binding=>'PonerUnaDeCada', :inspection=>'HasUsage', :result=>:passed}] }
   end
 end
