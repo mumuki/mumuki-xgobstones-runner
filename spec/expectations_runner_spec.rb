@@ -109,6 +109,26 @@ describe ExpectationsRunner do
     end
   end
 
+  context 'HasArity:n expectation' do
+    context 'when the binding is a procedure' do
+      let(:procedure) { 'procedure MoverN(n, direccion) { repeat(n) { Mover(direccion) } }' }
+      let(:has_arity_1) { {'binding' => 'MoverN', 'inspection' => 'HasArity:1' }  }
+      let(:has_arity_2) { {'binding' => 'MoverN', 'inspection' => 'HasArity:2' }  }
+
+      it { expect(procedure).to comply_with has_arity_2 }
+      it { expect(procedure).not_to comply_with has_arity_1 }
+    end
+
+    context 'when the binding is a program' do
+      let(:function) { 'function colorDestacado() { return (Rojo) }' }
+      let(:has_arity_0) { {'binding' => 'colorDestacado', 'inspection' => 'HasArity:0' }  }
+      let(:has_arity_2) { {'binding' => 'colorDestacado', 'inspection' => 'HasArity:2' }  }
+
+      it { expect(function).to comply_with has_arity_0 }
+      it { expect(function).not_to comply_with has_arity_2 }
+    end
+  end
+
   context 'when procedure definitions are missing' do
     let(:program_with_extra_code) { 'procedure DibujarJardin() { DibujarMacetero(Rojo) }' }
     let(:has_usage_expectation) { {'binding' => 'DibujarJardin', 'inspection' => 'HasUsage:DibujarMacetero' }  }

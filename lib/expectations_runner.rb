@@ -18,6 +18,14 @@ module EvalExpectationsOnAST
   def use(regexp)
     lambda { |_| regexp }
   end
+
+  def subject_for(binding)
+    if binding == 'program'
+      StonesSpec::Subject::Program
+    else
+      StonesSpec::Subject.from(binding, StonesSpec::Language::Gobstones)
+    end
+  end
 end
 
 class Mumukit::Inspection::PlainInspection
@@ -28,14 +36,6 @@ class Mumukit::Inspection::PlainInspection
       'HasWhile' => use(/AST\(while/),
       'HasBinding' => lambda { |binding| subject_for(binding).ast_regexp }
     }
-  end
-
-  def subject_for(binding)
-    if binding == 'program'
-      StonesSpec::Subject::Program
-    else
-      StonesSpec::Subject.from(binding, StonesSpec::Language::Gobstones)
-    end
   end
 end
 
@@ -51,7 +51,9 @@ class Mumukit::Inspection::TargetedInspection
       'HasRepeatOf' => use(
 /AST\(repeat
 \s*AST\(literal
-\s*#{target}\)/)
+\s*#{target}\)/),
+
+      'HasArity' => lambda { |binding| /#{subject_for(binding).ast_regexp}\s*AST\((\s*\w+){#{target}}\)/ }
     }
   end
 end
