@@ -13,7 +13,7 @@ RSpec::Matchers.define :comply_with do |expectation|
   end
 
   define_method :run_expectation! do |code, expected_result|
-    runner.run_expectations!([expectation], code) == [{'expectation' => expectation, 'result' => expected_result}]
+    runner.run_expectations!(expectations: [expectation], content: code, test: 'dummy: true').include?({'expectation' => expectation, 'result' => expected_result})
   end
 end
 
@@ -126,6 +126,39 @@ describe ExpectationsRunner do
 
       it { expect(function).to comply_with has_arity_0 }
       it { expect(function).not_to comply_with has_arity_2 }
+    end
+  end
+
+  describe 'automatic expectations' do
+    context 'when the subject is program' do
+      let(:program) { 'program {}' }
+      let(:has_binding_program) { {'binding' => 'program', 'inspection' => 'HasBinding' }  }
+
+      let(:result) { runner.run_expectations! content: program, expectations: [], test: 'dummy: true' }
+
+      it { expect(result).to eq [{ 'expectation' => has_binding_program, 'result' => true }] }
+    end
+
+    context 'when the subject is a procedure' do
+      let(:procedure) { 'procedure Dummy() {}' }
+      let(:not_has_binding_program) { {'binding' => 'program', 'inspection' => 'Not:HasBinding' }  }
+      let(:has_binding_procedure) { {'binding' => 'Dummy', 'inspection' => 'HasBinding' }  }
+
+      let(:result) { runner.run_expectations! content: procedure, expectations: [], test: 'subject: Dummy' }
+
+      it { expect(result).to include({ 'expectation' => not_has_binding_program, 'result' => true }) }
+      it { expect(result).to include({ 'expectation' => has_binding_procedure, 'result' => true }) }
+    end
+
+    context 'when the subject is a function' do
+      let(:function) { 'function dummy() { return(25) }' }
+      let(:not_has_binding_program) { {'binding' => 'program', 'inspection' => 'Not:HasBinding' }  }
+      let(:has_binding_function) { {'binding' => 'dummy', 'inspection' => 'HasBinding' }  }
+
+      let(:result) { runner.run_expectations! content: function, expectations: [], test: 'subject: dummy' }
+
+      it { expect(result).to include({ 'expectation' => not_has_binding_program, 'result' => true }) }
+      it { expect(result).to include({ 'expectation' => has_binding_function, 'result' => true }) }
     end
   end
 

@@ -1,16 +1,14 @@
 require 'mumukit'
-require 'yaml'
-require 'active_support/core_ext/hash'
 
-require_relative 'with_source_concatenation'
+require_relative 'with_test_parser'
 
 class TestCompiler < Mumukit::Stub
-  include WithSourceConcatenation
+  include WithTestParser
 
-  def create_compilation!(test_src, extra_src, content_src)
-    test = YAML::load test_src
-    test['source'] = concatenate_source(content_src, extra_src)
-    test['check_head_position'] = !!test['check_head_position']
-    test.deep_symbolize_keys
+  def create_compilation!(request)
+    test = parse_test request
+    test[:source] = "#{request[:content]}\n#{request[:extra]}"
+    test[:check_head_position] = !!test[:check_head_position]
+    test
   end
 end
