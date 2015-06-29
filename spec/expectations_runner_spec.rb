@@ -138,6 +138,17 @@ describe ExpectationsRunner do
 
       it { expect(result).to eq [{ 'expectation' => has_binding_program, 'result' => true }] }
     end
+
+    context 'when the subject is a procedure' do
+      let(:procedure) { 'procedure Dummy() {}' }
+      let(:not_has_binding_program) { {'binding' => 'program', 'inspection' => 'Not:HasBinding' }  }
+      let(:has_binding_procedure) { {'binding' => 'Dummy', 'inspection' => 'HasBinding' }  }
+
+      let(:result) { runner.run_expectations! content: procedure, expectations: [], test: 'subject: Dummy' }
+
+      it { expect(result).to include({ 'expectation' => not_has_binding_program, 'result' => true }) }
+      it { expect(result).to include({ 'expectation' => has_binding_procedure, 'result' => true }) }
+    end
   end
 
   context 'when procedure definitions are missing' do

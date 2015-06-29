@@ -5,7 +5,7 @@ module StonesSpec::Subject
     end
 
     def default_expectations
-      []
+      [{ 'binding' => 'program', 'inspection' => 'Not:HasBinding' }, { 'binding' => "#{@name}", 'inspection' => 'HasBinding' }]
     end
   end
 
