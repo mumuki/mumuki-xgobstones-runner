@@ -1,6 +1,9 @@
 module WithDefaultExpectations
   def default_expectations
-    [{ 'binding' => 'program', 'inspection' => 'Not:HasBinding' }, { 'binding' => "#{@name}", 'inspection' => 'HasBinding' }]
+    [
+      { 'binding' => 'program', 'inspection' => 'Not:HasBinding' },
+      { 'binding' => "#{@name}", 'inspection' => 'HasBinding' }
+    ]
   end
 end
 
