@@ -1,6 +1,7 @@
 require 'mumukit'
 require 'mumukit/inspection'
 require 'stones-spec'
+require 'yaml'
 
 require_relative 'subject_extensions'
 
@@ -69,12 +70,21 @@ class ExpectationsRunner
   include StonesSpec::WithTempfile
 
   def run_expectations!(request)
-    if request[:content].strip.empty?
-      return request[:expectations].map { |exp| {'expectation' => exp, 'result' => false } }
+    content = request[:content]
+    expectations = request[:expectations]
+
+    if content.strip.empty?
+      return expectations.map { |exp| {'expectation' => exp, 'result' => false } }
     end
 
-    ast = generate_ast! request[:content]
-    request[:expectations].map { |exp| {'expectation' => exp, 'result' => run_expectation!(exp, ast)} }
+    ast = generate_ast! content
+    all_expectations = expectations + (default_expectations_for YAML.load request[:test])
+
+    all_expectations.map { |exp| {'expectation' => exp, 'result' => run_expectation!(exp, ast)} }
+  end
+
+  def default_expectations_for(test)
+    StonesSpec::Subject.from(test['subject'], StonesSpec::Language::Gobstones).default_expectations
   end
 
   def run_expectation!(expectation, ast)

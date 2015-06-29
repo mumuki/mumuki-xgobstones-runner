@@ -13,7 +13,7 @@ RSpec::Matchers.define :comply_with do |expectation|
   end
 
   define_method :run_expectation! do |code, expected_result|
-    runner.run_expectations!(expectations: [expectation], content: code) == [{'expectation' => expectation, 'result' => expected_result}]
+    runner.run_expectations!(expectations: [expectation], content: code, test: 'dummy: true').include?({'expectation' => expectation, 'result' => expected_result})
   end
 end
 
@@ -126,6 +126,17 @@ describe ExpectationsRunner do
 
       it { expect(function).to comply_with has_arity_0 }
       it { expect(function).not_to comply_with has_arity_2 }
+    end
+  end
+
+  describe 'automatic expectations' do
+    context 'when the subject is program' do
+      let(:program) { 'program {}' }
+      let(:has_binding_program) { {'binding' => 'program', 'inspection' => 'HasBinding' }  }
+
+      let(:result) { runner.run_expectations! content: program, expectations: [], test: 'dummy: true' }
+
+      it { expect(result).to eq [{ 'expectation' => has_binding_program, 'result' => true }] }
     end
   end
 

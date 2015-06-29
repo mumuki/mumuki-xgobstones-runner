@@ -53,6 +53,6 @@ examples:
 
     it { expect(response[:status]).to eq 'passed' }
     it { expect(response[:result]).to include '<div>' }
-    it { expect(response[:expectation_results]).to eq [{:binding=>'PonerUnaDeCada', :inspection=>'HasUsage', :result=>:passed}] }
+    it { expect(response[:expectation_results]).to eq [{:binding => 'PonerUnaDeCada', :inspection => 'HasUsage', :result => :passed}] }
   end
 end
