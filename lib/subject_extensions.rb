@@ -1,21 +1,23 @@
+module WithDefaultExpectations
+  def default_expectations
+    [{ 'binding' => 'program', 'inspection' => 'Not:HasBinding' }, { 'binding' => "#{@name}", 'inspection' => 'HasBinding' }]
+  end
+end
+
 module StonesSpec::Subject
   class Procedure
+    include WithDefaultExpectations
+
     def ast_regexp
       /AST\(procedure\s*#{@name}/
-    end
-
-    def default_expectations
-      [{ 'binding' => 'program', 'inspection' => 'Not:HasBinding' }, { 'binding' => "#{@name}", 'inspection' => 'HasBinding' }]
     end
   end
 
   class Function
+    include WithDefaultExpectations
+
     def ast_regexp
       /AST\(function\s*#{@name}/
-    end
-
-    def default_expectations
-      []
     end
   end
 
