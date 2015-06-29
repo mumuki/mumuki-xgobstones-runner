@@ -4,6 +4,7 @@ require 'stones-spec'
 require 'yaml'
 
 require_relative 'subject_extensions'
+require_relative 'with_test_parser'
 
 module EvalExpectationsOnAST
   def eval_in_gobstones(binding, ast)
@@ -68,6 +69,7 @@ end
 class ExpectationsRunner
   include Mumukit
   include StonesSpec::WithTempfile
+  include WithTestParser
 
   def run_expectations!(request)
     content = request[:content]
@@ -78,13 +80,13 @@ class ExpectationsRunner
     end
 
     ast = generate_ast! content
-    all_expectations = expectations + (default_expectations_for YAML.load request[:test])
+    all_expectations = expectations + (default_expectations_for parse_test request)
 
     all_expectations.map { |exp| {'expectation' => exp, 'result' => run_expectation!(exp, ast)} }
   end
 
   def default_expectations_for(test)
-    StonesSpec::Subject.from(test['subject'], StonesSpec::Language::Gobstones).default_expectations
+    StonesSpec::Subject.from(test[:subject], StonesSpec::Language::Gobstones).default_expectations
   end
 
   def run_expectation!(expectation, ast)
