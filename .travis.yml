@@ -10,4 +10,4 @@ deploy:
     repo: mumuki/mumuki-gobstones-server
 addons:
   code_climate:
-    repo_token: e9d83ed3c5f8477767e6428d5906a6734e7159ef462ddf4e94cce952d8670f82
+    repo_token: 8548eba8b9cf270d3deee106d407bb9a9fdc3a44df9b2e03d1a68b0e6200117c
