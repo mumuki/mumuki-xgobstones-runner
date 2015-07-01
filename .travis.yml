@@ -7,7 +7,7 @@ deploy:
     secure: NWg+0au+RBDQFC8YGkdQg3kbIx+f2e2Wjprl911KJ16H1wDQDJYXGQEt9dvsB4e8xC3vhKLYwNSabbgIuzlTUD6f0utKRzPqO0Qxdr/PebSTNzQuEtNFJDVDY1fK7yk9jeVRH4ldpXQY1B76ett0B2brPpVa7xxPPlJ7PNhzC0o=
   app: mumuki-gobstones-server
   on:
-    repo: uqbar-project/mumuki-gobstones-server
+    repo: mumuki/mumuki-gobstones-server
 addons:
   code_climate:
     repo_token: e9d83ed3c5f8477767e6428d5906a6734e7159ef462ddf4e94cce952d8670f82
