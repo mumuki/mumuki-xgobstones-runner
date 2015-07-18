@@ -12,8 +12,9 @@
 
 
 #Setup
-  Open  the Terminal Console, located in this project's
-  directory, run the following commands: 
+ Open  the Terminal Console, located in this project's
+ directory, run the following commands: 
+	
 	bundle install
 	
 	in order to install repository's submodules:
@@ -29,10 +30,15 @@
 
 1. If you want to run tests by console you can do the following steps:
 	Open the Terminal console and inside the Project's directory 		run the following commands:
-	   bundle exec rspec
-	(that should run the expectarion tests) 
+	   
+
+	bundle exec rspec
+
+(that should run the expectarion tests) 
 	
-	Also you can all the tests running the following command:
+Also you can all the tests running the following command:
+
+
 	   bundle exec rake
 
 2. If you want to run the test using rubymine just look for the "spec" 	  folder inside mumuki-gobstones-server project, right click on the   		prevously mention folder and click on "Run all Specs..." option.
