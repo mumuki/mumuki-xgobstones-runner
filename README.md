@@ -14,10 +14,10 @@
 #Setup
   Open  the Terminal Console, located in this project's
   directory, run the following commands: 
-1.	bundle install
+	bundle install
 	
 	in order to install repository's submodules:
-2.	git submodule update --init-- resursive
+	git submodule update --init-- resursive
 
 
 #RUN TESTS
