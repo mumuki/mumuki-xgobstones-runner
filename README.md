@@ -17,7 +17,7 @@
 	
 	bundle install
 	
-	in order to install repository's submodules:
+In order to install repository's submodules:
 	git submodule update --init-- resursive
 
 
@@ -31,7 +31,6 @@
 1. If you want to run tests by console you can do the following steps:
 	Open the Terminal console and inside the Project's directory 		run the following commands:
 	   
-
 	bundle exec rspec
 
 (that should run the expectarion tests) 
