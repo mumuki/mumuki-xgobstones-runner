@@ -4,6 +4,7 @@
 
 *.gem
 *.rbc
+*.*~
 /.config
 /coverage/
 /InstalledFiles
