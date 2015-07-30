@@ -8,9 +8,9 @@
 > Sinatra server for validating Gobstones tests within [Mumuki](http://github.com/mumuki)
 
 #Prerequisites
-  install rbenv:
+  Install rbenv:
 		
->[RVENV](http://uqbar-wiki.org/index.php?title=Gu%C3%ADa_de_Instalaci%C3%B3n_de_Ruby)
+>You can install rbenv following the instructions of this [Link](http://uqbar-wiki.org/index.php?title=Gu%C3%ADa_de_Instalaci%C3%B3n_de_Ruby)
 
 #Setup
  Open  the Terminal Console, located in this project's
