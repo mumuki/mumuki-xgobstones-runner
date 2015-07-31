@@ -28,6 +28,10 @@ module EvalExpectationsOnAST
       StonesSpec::Subject.from(binding, StonesSpec::Language::Gobstones)
     end
   end
+
+  def check_repeat_of(target)
+    use(/AST\(repeat\s*AST\(literal\s*#{target}\)/)
+  end
 end
 
 class Mumukit::Inspection::PlainInspection
@@ -36,7 +40,8 @@ class Mumukit::Inspection::PlainInspection
   def expectations
     {
       'HasWhile' => use(/AST\(while/),
-      'HasBinding' => lambda { |binding| subject_for(binding).ast_regexp }
+      'HasBinding' => lambda { |binding| subject_for(binding).ast_regexp },
+      'HasRepeat' => check_repeat_of('\d+')
     }
   end
 end
@@ -46,15 +51,8 @@ class Mumukit::Inspection::TargetedInspection
 
   def expectations
     {
-      'HasUsage' => use(
-/AST\(procCall
-\s*#{target}/),
-
-      'HasRepeatOf' => use(
-/AST\(repeat
-\s*AST\(literal
-\s*#{target}\)/),
-
+      'HasUsage' => use(/AST\(procCall\s*#{target}/),
+      'HasRepeatOf' => check_repeat_of(target),
       'HasArity' => lambda { |binding| /#{subject_for(binding).ast_regexp}\s*AST\((\s*\w+){#{target}}\)/ }
     }
   end
