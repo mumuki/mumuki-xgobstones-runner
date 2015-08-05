@@ -20,7 +20,7 @@
 	
 In order to install repository's submodules:
 	
-	git submodule update --init --resursive	
+	git submodule update --init --recursive	
 
 
 #RUN TESTS
