@@ -79,6 +79,27 @@ describe ExpectationsRunner do
     it { expect('program { Mover(Oeste) }').not_to comply_with has_repeat_of_1_expectation }
   end
 
+  context 'HasRepeat expectation' do
+    let(:has_repeat_expectation) { {'binding' => 'program', 'inspection' => 'HasRepeat'} }
+
+    let(:program_with_repeat) { '
+      program {
+        repeat(6) {
+          Mover(Oeste)
+        }
+      }
+    ' }
+
+    let(:program_without_repeat) { '
+      program {
+        Mover(Oeste)
+      }
+    ' }
+
+    it { expect(program_with_repeat).to comply_with has_repeat_expectation }
+    it { expect(program_without_repeat).not_to comply_with has_repeat_expectation }
+  end
+
   context 'HasBinding expectation' do
     let(:program) { 'program {}' }
     let(:procedure) { 'procedure Dummy() {}' }
