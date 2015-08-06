@@ -30,7 +30,7 @@ module EvalExpectationsOnAST
   end
 
   def check_repeat_of(target)
-    use(/AST\(repeat\s*AST\(literal\s*#{target}\)/)
+    use(/AST\(repeat\s*#{target}/)
   end
 end
 
@@ -41,7 +41,7 @@ class Mumukit::Inspection::PlainInspection
     {
       'HasWhile' => use(/AST\(while/),
       'HasBinding' => lambda { |binding| subject_for(binding).ast_regexp },
-      'HasRepeat' => check_repeat_of('\d+')
+      'HasRepeat' => check_repeat_of('.+')
     }
   end
 end
@@ -52,7 +52,7 @@ class Mumukit::Inspection::TargetedInspection
   def expectations
     {
       'HasUsage' => use(/AST\(procCall\s*#{target}/),
-      'HasRepeatOf' => check_repeat_of(target),
+      'HasRepeatOf' => check_repeat_of("AST\\(literal\\s*#{target}\\)"),
       'HasArity' => lambda { |binding| /#{subject_for(binding).ast_regexp}\s*AST\((\s*\w+){#{target}}\)/ }
     }
   end
