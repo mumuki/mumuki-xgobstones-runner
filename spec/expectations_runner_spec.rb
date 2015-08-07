@@ -96,8 +96,17 @@ describe ExpectationsRunner do
       }
     ' }
 
+    let(:program_with_repeat_using_an_expression) { '
+      program {
+        repeat(10 * 2) {
+          Mover(Oeste)
+        }
+      }
+    ' }
+
     it { expect(program_with_repeat).to comply_with has_repeat_expectation }
     it { expect(program_without_repeat).not_to comply_with has_repeat_expectation }
+    it { expect(program_with_repeat_using_an_expression).to comply_with has_repeat_expectation }
   end
 
   context 'HasBinding expectation' do
