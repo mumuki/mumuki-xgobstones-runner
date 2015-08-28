@@ -56,7 +56,7 @@ examples:
     it { expect(response[:expectation_results]).to include({binding: 'PonerUnaDeCada', inspection: 'HasUsage', result: :passed}) }
   end
 
-  context 'when the program is Empty' do
+  context 'when submission is empty and no extra code is given' do
     let(:content) { '' }
 
     let(:test) { '
