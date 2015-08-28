@@ -7,7 +7,7 @@ class TestCompiler < Mumukit::Stub
 
   def create_compilation!(request)
     test = parse_test request
-    test[:source] = "#{request[:content]}\n#{request[:extra]}"
+    test[:source] = "#{request[:content]}\n#{request[:extra]}".strip
     test[:check_head_position] = !!test[:check_head_position]
     test
   end

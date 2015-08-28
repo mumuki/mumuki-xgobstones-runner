@@ -55,4 +55,29 @@ examples:
     it { expect(response[:result]).to include '<div>' }
     it { expect(response[:expectation_results]).to include({binding: 'PonerUnaDeCada', inspection: 'HasUsage', result: :passed}) }
   end
+
+  context 'when the program is Empty' do
+    let(:content) { '' }
+
+    let(:test) { '
+check_head_position: true
+examples:
+ - initial_board: |
+     GBB/1.0
+     size 3 3
+     head 0 0
+   final_board: |
+     GBB/1.0
+     size 3 3
+     head 0 0' }
+
+    let(:expectations) { [] }
+    let(:extra) { '' }
+
+    let(:response) { bridge.run_tests! content: content, extra: extra, expectations: expectations, test: test }
+
+    it { expect(response[:status]).to eq 'failed' }
+    it { expect(response[:result]).to include 'No es posible ejecutar un programa vacío' }
+  end
+
 end
