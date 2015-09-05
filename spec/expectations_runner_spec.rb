@@ -131,18 +131,30 @@ describe ExpectationsRunner do
 
     context 'when the binding is a procedure' do
       let(:has_binding_procedure_expectation) { {'binding' => 'Dummy', 'inspection' => 'HasBinding' }  }
+      let(:procedure_Dum) { 'procedure Dum() {}' }
+      let(:procedure_DummySarasa) { 'procedure DummySarasa() {}' }
+      let(:procedure_SarasaDummy) { 'procedure SarasaDummy() {}' }
 
       it { expect(program).not_to comply_with has_binding_procedure_expectation }
+      it { expect(procedure_Dum).not_to comply_with has_binding_procedure_expectation }
+      it { expect(procedure_DummySarasa).not_to comply_with has_binding_procedure_expectation }
+      it { expect(procedure_SarasaDummy).not_to comply_with has_binding_procedure_expectation }
       it { expect(procedure).to comply_with has_binding_procedure_expectation }
       it { expect(function).not_to comply_with has_binding_procedure_expectation }
     end
 
     context 'when the binding is a function' do
       let(:has_binding_function_expectation) { {'binding' => 'dummy', 'inspection' => 'HasBinding' }  }
+      let(:function_dum) { 'function dum() { return(Negro) }' }
+      let(:function_dum_sarasa) { 'function dum_sarasa() { return(Negro) }' }
+      let(:function_sarasa_dum) { 'function sarasa_dum() { return(Negro) }' }
 
       it { expect(procedure).not_to comply_with has_binding_function_expectation }
       it { expect(program).not_to comply_with has_binding_function_expectation }
       it { expect(function).to comply_with has_binding_function_expectation }
+      it { expect(function_dum).not_to comply_with has_binding_function_expectation }
+      it { expect(function_dum_sarasa).not_to comply_with has_binding_function_expectation }
+      it { expect(function_sarasa_dum).not_to comply_with has_binding_function_expectation }
     end
   end
 
