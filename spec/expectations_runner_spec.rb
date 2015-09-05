@@ -160,17 +160,25 @@ describe ExpectationsRunner do
 
   context 'HasArity:n expectation' do
     context 'when the binding is a procedure' do
-      let(:procedure) { 'procedure MoverN(n, direccion) { repeat(n) { Mover(direccion) } }' }
+      let(:procedure) { 'procedure MoverN(n, direccion) { repeat(n) { Mover(direccion) } }
+                         procedure MoverNSarasa(direccion) { Mover(direccion) }
+                         procedure SarasaMoverN() { repeat(1) {} }' }
+      let(:has_arity_0) { {'binding' => 'MoverN', 'inspection' => 'HasArity:0' }  }
       let(:has_arity_1) { {'binding' => 'MoverN', 'inspection' => 'HasArity:1' }  }
       let(:has_arity_2) { {'binding' => 'MoverN', 'inspection' => 'HasArity:2' }  }
 
       it { expect(procedure).to comply_with has_arity_2 }
       it { expect(procedure).not_to comply_with has_arity_1 }
+      it { expect(procedure).not_to comply_with has_arity_0 }
     end
 
-    context 'when the binding is a program' do
-      let(:function) { 'function colorDestacado() { return (Rojo) }' }
+    context 'when the binding is a function' do
+      let(:function) { 'function colorDestacado() { return (Rojo) }
+                        function color() { return (Rojo) }
+                        function colorDestacado() { return (Rojo) }' }
+
       let(:has_arity_0) { {'binding' => 'colorDestacado', 'inspection' => 'HasArity:0' }  }
+      let(:has_arity_1) { {'binding' => 'colorDestacado', 'inspection' => 'HasArity:1' }  }
       let(:has_arity_2) { {'binding' => 'colorDestacado', 'inspection' => 'HasArity:2' }  }
 
       it { expect(function).to comply_with has_arity_0 }
