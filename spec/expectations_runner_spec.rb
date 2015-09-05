@@ -32,9 +32,16 @@ describe ExpectationsRunner do
 
     let(:foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Foo'} }
     let(:bar_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Bar'} }
+    let(:foo_bar_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:FooBar'} }
+    let(:bar_foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:BarFoo'} }
+    let(:fo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Fo'} }
 
     it { expect(program).to comply_with foo_expectation }
     it { expect(program).not_to comply_with bar_expectation }
+    it { expect(program).not_to comply_with foo_bar_expectation }
+    it { expect(program).not_to comply_with bar_foo_expectation }
+    it { expect(program).not_to comply_with fo_expectation }
+
   end
 
   context 'HasWhile expectation' do
