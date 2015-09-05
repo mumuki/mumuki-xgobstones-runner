@@ -64,7 +64,7 @@ class Mumukit::Inspection::NegatedInspection
   end
 end
 
-class ExpectationsRunner
+class ExpectationsRunner < Mumukit::Stub
   include Mumukit
   include StonesSpec::WithTempfile
   include WithTestParser
@@ -96,6 +96,6 @@ class ExpectationsRunner
   end
 
   def gobstones_command
-    StonesSpec::Language::Gobstones.gobstones_command
+    @config['gobstones_command']
   end
 end

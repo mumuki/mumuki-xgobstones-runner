@@ -1,5 +1,6 @@
 require_relative './spec_helper'
 require_relative '../lib/expectations_runner'
+require 'yaml'
 
 require 'rspec/expectations'
 
@@ -18,7 +19,8 @@ RSpec::Matchers.define :comply_with do |expectation|
 end
 
 describe ExpectationsRunner do
-  let(:runner) { ExpectationsRunner.new }
+  let (:config) { YAML.load_file('config/development.yml') }
+  let(:runner) { ExpectationsRunner.new(config) }
 
   context 'Unknown expectation' do
     let(:program) { 'program { Foo() } procedure Foo() {}' }
