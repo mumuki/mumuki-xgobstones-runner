@@ -4,7 +4,7 @@ module StonesSpec::Language
       'rb'
     end
 
-    def self.run(source_file, initial_board_file, final_board_file)
+    def self.run(source_file, initial_board_file, final_board_file, gobstones_command)
       "#{stones_command} #{source_file.path} #{initial_board_file.path} #{final_board_file.path}"
     end
 

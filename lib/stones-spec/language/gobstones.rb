@@ -16,12 +16,8 @@ module StonesSpec::Language
       'gbs'
     end
 
-    def self.run(source_file, initial_board_file, final_board_file)
+    def self.run(source_file, initial_board_file, final_board_file, gobstones_command)
       "#{gobstones_command} #{source_file.path} --from #{initial_board_file.path} --to #{final_board_file.path} --no-print-board --silent"
-    end
-
-    def self.gobstones_command
-      'python .heroku/vendor/pygobstones-lang/gbs.py'
     end
 
     def self.parse_error_message(result)

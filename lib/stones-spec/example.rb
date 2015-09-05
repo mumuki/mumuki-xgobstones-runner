@@ -6,13 +6,14 @@ module StonesSpec
     include StonesSpec::WithCommandLine
     include StonesSpec::WithGbbHtmlRendering
 
-    attr_reader :language
+    attr_reader :language, :gobstones_command
 
-    def initialize(language, subject, attributes)
+    def initialize(language, subject, attributes, gobstones_command)
       super attributes
       @title = attributes[:title]
       @language = language
       @subject = subject
+      @gobstones_command = gobstones_command
     end
 
     def start!(source, precondition, postcondition)
@@ -24,7 +25,7 @@ module StonesSpec
 
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
       @initial_board_file = write_tempfile precondition.initial_board_gbb, 'gbb'
-      @result, @status = run_command  "#{language.run @source_file, @initial_board_file, @actual_final_board_file} 2>&1"
+      @result, @status = run_command  "#{language.run(@source_file, @initial_board_file, @actual_final_board_file, gobstones_command)} 2>&1"
     end
 
     def result
@@ -54,7 +55,7 @@ module StonesSpec
 
     def make_error_output(error_message, initial_board_gbb)
       if language.is_runtime_error?(@result)
-        with_title self.title, "#{get_html_board 'Tablero inicial', initial_board_gbb}\n#{error_message}"
+        with_title self.title, "#{get_html_board 'Tablero inicial', initial_board_gbb, gobstones_command}\n#{error_message}"
       else
         error_message
       end

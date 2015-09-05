@@ -12,7 +12,8 @@ describe Runner do
 end
 describe Language::Ruby do
   let(:lang) { Language::Ruby }
-  let(:runner) { Runner.new(lang) }
+  let(:command) { 'python .heroku/vendor/pygobstones-lang/pygobstoneslang.py' }
+  let(:runner) { Runner.new(lang, command) }
   let(:html) { results[0] }
 
 
