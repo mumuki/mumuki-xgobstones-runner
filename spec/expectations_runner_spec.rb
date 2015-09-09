@@ -34,9 +34,16 @@ describe ExpectationsRunner do
 
     let(:foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Foo'} }
     let(:bar_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Bar'} }
+    let(:foo_bar_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:FooBar'} }
+    let(:bar_foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:BarFoo'} }
+    let(:fo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Fo'} }
 
     it { expect(program).to comply_with foo_expectation }
     it { expect(program).not_to comply_with bar_expectation }
+    it { expect(program).not_to comply_with foo_bar_expectation }
+    it { expect(program).not_to comply_with bar_foo_expectation }
+    it { expect(program).not_to comply_with fo_expectation }
+
   end
 
   context 'HasWhile expectation' do
@@ -126,34 +133,54 @@ describe ExpectationsRunner do
 
     context 'when the binding is a procedure' do
       let(:has_binding_procedure_expectation) { {'binding' => 'Dummy', 'inspection' => 'HasBinding' }  }
+      let(:procedure_Dum) { 'procedure Dum() {}' }
+      let(:procedure_DummySarasa) { 'procedure DummySarasa() {}' }
+      let(:procedure_SarasaDummy) { 'procedure SarasaDummy() {}' }
 
       it { expect(program).not_to comply_with has_binding_procedure_expectation }
+      it { expect(procedure_Dum).not_to comply_with has_binding_procedure_expectation }
+      it { expect(procedure_DummySarasa).not_to comply_with has_binding_procedure_expectation }
+      it { expect(procedure_SarasaDummy).not_to comply_with has_binding_procedure_expectation }
       it { expect(procedure).to comply_with has_binding_procedure_expectation }
       it { expect(function).not_to comply_with has_binding_procedure_expectation }
     end
 
     context 'when the binding is a function' do
       let(:has_binding_function_expectation) { {'binding' => 'dummy', 'inspection' => 'HasBinding' }  }
+      let(:function_dum) { 'function dum() { return(Negro) }' }
+      let(:function_dum_sarasa) { 'function dum_sarasa() { return(Negro) }' }
+      let(:function_sarasa_dum) { 'function sarasa_dum() { return(Negro) }' }
 
       it { expect(procedure).not_to comply_with has_binding_function_expectation }
       it { expect(program).not_to comply_with has_binding_function_expectation }
       it { expect(function).to comply_with has_binding_function_expectation }
+      it { expect(function_dum).not_to comply_with has_binding_function_expectation }
+      it { expect(function_dum_sarasa).not_to comply_with has_binding_function_expectation }
+      it { expect(function_sarasa_dum).not_to comply_with has_binding_function_expectation }
     end
   end
 
   context 'HasArity:n expectation' do
     context 'when the binding is a procedure' do
-      let(:procedure) { 'procedure MoverN(n, direccion) { repeat(n) { Mover(direccion) } }' }
+      let(:procedure) { 'procedure MoverN(n, direccion) { repeat(n) { Mover(direccion) } }
+                         procedure MoverNSarasa(direccion) { Mover(direccion) }
+                         procedure SarasaMoverN() { repeat(1) {} }' }
+      let(:has_arity_0) { {'binding' => 'MoverN', 'inspection' => 'HasArity:0' }  }
       let(:has_arity_1) { {'binding' => 'MoverN', 'inspection' => 'HasArity:1' }  }
       let(:has_arity_2) { {'binding' => 'MoverN', 'inspection' => 'HasArity:2' }  }
 
       it { expect(procedure).to comply_with has_arity_2 }
       it { expect(procedure).not_to comply_with has_arity_1 }
+      it { expect(procedure).not_to comply_with has_arity_0 }
     end
 
-    context 'when the binding is a program' do
-      let(:function) { 'function colorDestacado() { return (Rojo) }' }
+    context 'when the binding is a function' do
+      let(:function) { 'function colorDestacado() { return (Rojo) }
+                        function color() { return (Rojo) }
+                        function colorDestacado() { return (Rojo) }' }
+
       let(:has_arity_0) { {'binding' => 'colorDestacado', 'inspection' => 'HasArity:0' }  }
+      let(:has_arity_1) { {'binding' => 'colorDestacado', 'inspection' => 'HasArity:1' }  }
       let(:has_arity_2) { {'binding' => 'colorDestacado', 'inspection' => 'HasArity:2' }  }
 
       it { expect(function).to comply_with has_arity_0 }

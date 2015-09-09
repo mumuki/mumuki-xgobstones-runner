@@ -51,7 +51,7 @@ class Mumukit::Inspection::TargetedInspection
 
   def expectations
     {
-      'HasUsage' => use(/AST\(procCall\s*#{target}/),
+      'HasUsage' => use(/AST\(procCall\s*#{target}$/),
       'HasRepeatOf' => check_repeat_of("AST\\(literal\\s*#{target}\\)"),
       'HasArity' => lambda { |binding| /#{subject_for(binding).ast_regexp}\s*AST\((\s*\w+){#{target}}\)/ }
     }

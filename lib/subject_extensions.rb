@@ -12,7 +12,7 @@ module StonesSpec::Subject
     include WithDefaultExpectations
 
     def ast_regexp
-      /AST\(procedure\s*#{@name}/
+      /AST\(procedure\s*#{@name}$/
     end
   end
 
