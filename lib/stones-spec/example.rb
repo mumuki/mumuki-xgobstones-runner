@@ -33,7 +33,7 @@ module StonesSpec
 
       if @status == :failed
         error_message = language.parse_error_message @result
-        return [make_error_output(error_message, initial_board_gbb), :failed]
+        return [self.title, make_error_output(error_message, initial_board_gbb), :failed]
       end
 
       @postcondition.validate(initial_board_gbb, @actual_final_board_file.read, language.parse_success_output(@result))
@@ -55,7 +55,7 @@ module StonesSpec
 
     def make_error_output(error_message, initial_board_gbb)
       if language.is_runtime_error?(@result)
-        with_title self.title, "#{get_html_board 'Tablero inicial', initial_board_gbb, gobstones_command}\n#{error_message}"
+        "#{get_html_board 'Tablero inicial', initial_board_gbb, gobstones_command}\n#{error_message}"
       else
         error_message
       end

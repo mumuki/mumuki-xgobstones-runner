@@ -15,10 +15,9 @@ module StonesSpec
       check_head_position = test_definition[:check_head_position]
       show_initial_board = test_definition.fetch(:show_initial_board, true)
 
-      results = test_definition[:examples].map do |example_definition|
+      test_definition[:examples].map do |example_definition|
         run_example!(example_definition, check_head_position, show_initial_board, source, subject)
       end
-      aggregate_results(results)
     end
 
     private
@@ -36,10 +35,6 @@ module StonesSpec
       example.result
     ensure
       example.stop!
-    end
-
-    def aggregate_results(results)
-      [results.map { |it| it[0] }.join("\n<hr>\n"), results.all? { |it| it[1] == :passed } ? :passed : :failed]
     end
   end
 end

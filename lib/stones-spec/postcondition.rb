@@ -52,8 +52,8 @@ module StonesSpec
 
     def make_result(gbb_boards, status)
       boards = gbb_boards.map { |gbb_with_caption| get_html_board *gbb_with_caption, example.gobstones_command }.join("\n")
-      output = "<div>#{with_title example.title, boards}</div>"
-      [output, status]
+      output = "<div>#{boards}</div>"
+      [example.title, output, status]
     end
 
     def matches_with_expected_board?(actual_board)
