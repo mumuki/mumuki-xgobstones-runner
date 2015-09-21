@@ -15,8 +15,12 @@ module StonesSpec
       check_head_position = test_definition[:check_head_position]
       show_initial_board = test_definition.fetch(:show_initial_board, true)
 
-      test_definition[:examples].map do |example_definition|
-        run_example!(example_definition, check_head_position, show_initial_board, source, subject)
+      begin
+        test_definition[:examples].map do |example_definition|
+          run_example!(example_definition, check_head_position, show_initial_board, source, subject)
+        end
+      rescue GobstonesSyntaxError => e
+        [e.message, :failed]
       end
     end
 

@@ -20,6 +20,14 @@ module StonesSpec
       end
     end
 
+    def with_header(title)
+      if title
+        "<h3>#{title}</h3>"
+      else
+        ''
+      end
+    end
+
     private
 
     def with_caption(caption, board_html)

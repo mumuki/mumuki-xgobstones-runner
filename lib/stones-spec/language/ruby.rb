@@ -20,6 +20,10 @@ module StonesSpec::Language
       (result.include? 'OutOfBoardError') || !!(result =~ /(red|blue|green|black) Underflow/)
     end
 
+    def self.is_syntax_error?(result)
+      result.include? 'SyntaxError' or result.include? 'NameError'
+    end
+
     def self.parse_success_output(result)
       result
     end

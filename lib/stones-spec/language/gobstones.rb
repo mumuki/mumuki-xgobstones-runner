@@ -28,6 +28,10 @@ module StonesSpec::Language
       result.include? 'Error en tiempo de ejecución'
     end
 
+    def self.is_syntax_error?(result)
+      result.include? 'Error de sintaxis' or result.include? 'Error en el programa'
+    end
+
     def self.parse_success_output(result)
       get_first_return_value result || ''
     end
