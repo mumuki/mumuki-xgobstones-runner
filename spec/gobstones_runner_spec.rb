@@ -175,7 +175,7 @@ Error en tiempo de ejecución:
       context 'when the file is not sintactically ok,' do
         let(:test_file) { 'syntax_error' }
 
-        it { expect(results[1]).to eql :failed }
+        it { expect(results[1]).to eql :errored }
         it do
           expect(results[0]).to eq(
 '<pre>cerca de un identificador con mayúscula "Error"

@@ -54,10 +54,10 @@ module StonesSpec
     end
 
     def make_error_output(error_message, initial_board_gbb)
-      if language.is_syntax_error?(@result)
+      if language.syntax_error?(@result)
         raise GobstonesSyntaxError, error_message
       end
-      if language.is_runtime_error?(error_message)
+      if language.runtime_error?(error_message)
         "#{get_html_board 'Tablero inicial', initial_board_gbb, gobstones_command}\n#{error_message}"
       else
         error_message

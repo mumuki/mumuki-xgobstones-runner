@@ -103,7 +103,7 @@ describe Language::Ruby do
     context 'when the file is not sintactically ok' do
       context 'should return an unstructured output' do
         let(:results) { runner.run!(YAML.load_file 'spec/data/syntax_error_ruby.yml') }
-        it { expect(results[1]).to eql :failed }
+        it { expect(results[1]).to eql :errored }
         it { expect(results[0]).to include 'SyntaxError' }
       end
     end
