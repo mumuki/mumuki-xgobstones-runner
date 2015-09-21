@@ -52,8 +52,8 @@ module StonesSpec
 
     def make_result(gbb_boards, status)
       boards = gbb_boards.map { |gbb_with_caption| get_html_board *gbb_with_caption, example.gobstones_command }.join("\n")
-      output = "<div>#{with_title example.title, boards}</div>"
-      [output, status]
+      output = "<div>#{boards}</div>"
+      [with_header(example.title), output, status]
     end
 
     def matches_with_expected_board?(actual_board)
@@ -80,9 +80,9 @@ module StonesSpec
       normalized_actual_return = actual_return.strip
 
       if normalized_actual_return == return_value
-        ['', :passed]
+        ['', '', :passed]
       else
-        ["Se esperaba <b>#{return_value}</b> pero se obtuvo <b>#{normalized_actual_return}</b>"]
+        ['', "Se esperaba <b>#{return_value}</b> pero se obtuvo <b>#{normalized_actual_return}</b>", :failed]
       end
     end
   end
