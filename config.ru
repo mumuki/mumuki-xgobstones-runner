@@ -1,7 +1,3 @@
-require 'mumukit'
-
-require_relative 'lib/test_compiler'
-require_relative 'lib/test_runner'
-require_relative 'lib/expectations_runner'
+require_relative 'lib/gobstones_server'
 
 run Mumukit::TestServerApp
