@@ -41,8 +41,8 @@ module StonesSpec
         language.test_function(source, @name, arguments)
       end
 
-      def default_title(_language, _source, _arguments)
-        nil
+      def default_title(language, _source, arguments)
+        language.procedure_call(@name, arguments)
       end
     end
   end
