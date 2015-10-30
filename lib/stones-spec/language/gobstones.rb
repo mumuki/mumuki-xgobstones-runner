@@ -63,7 +63,7 @@ module StonesSpec::Language
     private
 
     def self.get_first_return_value(result)
-      result[/#1 -> (\w+)/, 1]
+      result[/#1 -> (.+)/, 1]
     end
   end
 

@@ -3,7 +3,7 @@ module StonesSpec
     def self.from(example, check_head_position, show_initial_board)
       example.final_board ?
           FinalBoardPostcondition.new(example, check_head_position, show_initial_board) :
-          ReturnPostcondition.new(example.return)
+          ReturnPostcondition.new(example)
     end
   end
 
@@ -70,20 +70,32 @@ module StonesSpec
   end
 
   class ReturnPostcondition
-    attr_reader :return_value
+    include StonesSpec::WithGbbHtmlRendering
 
-    def initialize(return_value)
-      @return_value = return_value.to_s
+    attr_reader :example
+
+    def initialize(example)
+      @example = example
     end
 
     def validate(_initial_board_gbb, _actual_final_board_gbb, actual_return)
       normalized_actual_return = actual_return.strip
 
       if normalized_actual_return == return_value
-        ['', '', :passed]
+        make_result(:passed)
       else
-        ['', "Se esperaba <b>#{return_value}</b> pero se obtuvo <b>#{normalized_actual_return}</b>", :failed]
+        make_result(:failed, "Se esperaba <b>#{return_value}</b> pero se obtuvo <b>#{normalized_actual_return}</b>")
       end
+    end
+
+    private
+
+    def make_result(status, output='')
+      [with_header("#{example.title} -> #{return_value}"), output, status]
+    end
+
+    def return_value
+      example.return.to_s
     end
   end
 end
