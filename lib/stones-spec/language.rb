@@ -5,4 +5,3 @@ module StonesSpec
 end
 
 require_relative './language/gobstones'
-require_relative './language/ruby'
