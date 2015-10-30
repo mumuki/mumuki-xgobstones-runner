@@ -18,6 +18,21 @@ describe Runner do
     let(:html) { all_htmls[0] }
     let(:title) { results.map { |it| it[0] } }
 
+    describe 'xgobstones' do
+      describe 'lists' do
+        context 'when passes' do
+          let(:test_file) { 'xgobstones/function/list_reverse_ok' }
+          it { expect(all_examples :passed).to be true }
+        end
+
+        context 'when fails' do
+          let(:test_file) { 'xgobstones/function/list_reverse_fail' }
+          it { expect(all_examples :failed).to be true }
+          it { expect(html).to include 'Se esperaba <b>[4, 3, 2, 1]</b> pero se obtuvo <b>[1, 2, 3, 4]</b>' }
+        end
+      end
+    end
+
     describe 'procedure spec' do
       context 'when passes' do
         let(:test_file) { 'gobstones/procedure/move_to_origin_ok' }
