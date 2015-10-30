@@ -74,10 +74,10 @@ describe Runner do
         it { expect(html).to include 'Se esperaba <b>9</b> pero se obtuvo <b>18</b>' }
       end
 
-      context 'when no title is given, it uses the function name and the arguments' do
+      context 'when no title is given, it uses the function name, the arguments and the return value' do
         let(:test_file) { 'gobstones/function/remaining_cells_ok' }
 
-        it { expect(title).to include '<h3>remainingCells(Este)</h3>' }
+        it { expect(title).to include '<h3>remainingCells(Este) -> 9</h3>' }
       end
     end
 

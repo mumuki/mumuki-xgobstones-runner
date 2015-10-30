@@ -91,7 +91,7 @@ module StonesSpec
     private
 
     def make_result(status, output='')
-      [with_header(example.title), output, status]
+      [with_header("#{example.title} -> #{return_value}"), output, status]
     end
 
     def return_value
