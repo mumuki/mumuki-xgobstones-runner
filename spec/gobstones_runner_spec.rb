@@ -13,10 +13,14 @@ describe Runner do
     let(:command) { 'python .heroku/vendor/pygobstones-lang/pygobstoneslang.py' }
     let(:runner) { Runner.new(lang, command) }
     let(:test_definition) { YAML.load_file "spec/data/#{test_file}.yml" }
-    let(:results) { runner.run! test_definition }
-    let(:all_htmls) { results.map { |it| it[1] } }
-    let(:html) { all_htmls[0] }
+    let(:test_results) { runner.run!(test_definition) }
+
+    let(:results) { test_results[0] }
+    let(:errored_result) { test_results }
     let(:title) { results.map { |it| it[0] } }
+    let(:all_htmls) { results.map { |it| it[2] } }
+    let(:html) { all_htmls[0] }
+
 
     describe 'xgobstones' do
       describe 'lists' do
@@ -112,7 +116,7 @@ describe Runner do
 
         context 'and syntax errors are present' do
           let(:test_file) { 'syntax_error' }
-          it { expect(title).not_to include '<h3>A syntax error</h3>' }
+          it { expect(results).not_to include '<h3>A syntax error</h3>' }
         end
 
         context 'and a runtime error occurs' do
@@ -196,9 +200,9 @@ Error en tiempo de ejecución:
       context 'when the file is not sintactically ok,' do
         let(:test_file) { 'syntax_error' }
 
-        it { expect(results[1]).to eql :errored }
+        it { expect(errored_result[1]).to eql :errored }
         it do
-          expect(results[0]).to eq(
+          expect(errored_result[0]).to eq(
 '<pre>cerca de un identificador con mayúscula "Error"
         |
         V
@@ -215,7 +219,7 @@ Error en el programa:
   end
 
   def all_examples status
-    results.all? {|result| result[2].eql? status}
+    results.all? {|result| result[1].eql? status}
   end
 
 end
