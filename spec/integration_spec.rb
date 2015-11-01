@@ -3,6 +3,7 @@ require 'mumukit/bridge'
 
 describe 'runner' do
   let(:bridge) { Mumukit::Bridge::Bridge.new('http://localhost:4567') }
+  let(:response_result) { response[:test_results][0][:result] }
 
   before(:all) do
     @pid = Process.spawn 'rackup -p 4567', err: '/dev/null'
@@ -51,8 +52,8 @@ examples:
 
     let(:response) { bridge.run_tests! content: content, extra: extra, expectations: expectations, test: test }
 
-    it { expect(response[:status]).to eq 'passed' }
-    it { expect(response[:result]).to include '<div>' }
+    it { expect(response[:status]).to eq :passed }
+    it { expect(response_result).to include '<div>' }
     it { expect(response[:expectation_results]).to include({binding: 'PonerUnaDeCada', inspection: 'HasUsage', result: :passed}) }
   end
 
@@ -76,8 +77,8 @@ examples:
 
     let(:response) { bridge.run_tests! content: content, extra: extra, expectations: expectations, test: test }
 
-    it { expect(response[:status]).to eq 'failed' }
-    it { expect(response[:result]).to include 'No es posible ejecutar un programa vacío' }
+    it { expect(response[:status]).to eq :failed }
+    it { expect(response_result).to include 'No es posible ejecutar un programa vacío' }
   end
 
 end

@@ -1,30 +1,32 @@
 GIT
   remote: git://github.com/mumuki/mumukit-bridge.git
-  revision: 9cfffa438bb57d4e5f26b1c03acfe88cf7a95d2c
+  revision: 4c178dd71c6f38e93f2cfdca0db14226d777b6c3
   branch: master
   specs:
-    mumukit-bridge (0.0.1)
+    mumukit-bridge (0.3.0)
+      activesupport
       rest-client
 
 GIT
   remote: git://github.com/mumuki/mumukit.git
-  revision: 26f6c572de20d66af52b721b91baee7c34176414
-  tag: v0.6.0
+  revision: 2a91d37768038607fbe03aeea95ee0e2841dc9c9
+  tag: v0.7.2
   specs:
-    mumukit (0.6.0)
+    mumukit (0.7.2)
+      activesupport
       i18n (~> 0.7)
       sinatra (~> 1.4)
 
 GIT
   remote: git://github.com/uqbar-project/mumukit-inspection.git
-  revision: 467ea454a85fed1ea4136b1c1d2b4f6d5dc88ad0
+  revision: 11f0a129b18138336a2d2b1c9b72b97b2f34b208
   branch: master
   specs:
     mumukit-inspection (0.0.1)
 
 GIT
   remote: git://github.com/uqbar-project/stones-spec.git
-  revision: 76e9a981ad53ef43352bbf8398fc73c25f02cc19
+  revision: c581cf8d0e051390ac36587b87e98c2750fffb5e
   branch: master
   specs:
     stones-spec (0.3.0)
@@ -43,13 +45,13 @@ GEM
       simplecov (>= 0.7.1, < 1.0.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
-    domain_name (0.5.24)
+    domain_name (0.5.25)
       unf (>= 0.0.5, < 1.0.0)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     i18n (0.7.0)
     json (1.8.2)
-    mime-types (2.5)
+    mime-types (2.6.2)
     minitest (5.5.0)
     netrc (0.10.3)
     rack (1.6.4)
