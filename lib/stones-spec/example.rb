@@ -33,7 +33,7 @@ module StonesSpec
 
       if @status == :failed
         error_message = language.parse_error_message @result
-        return [with_header(self.title), make_error_output(error_message, initial_board_gbb), :failed]
+        return [with_header(self.title), :failed, make_error_output(error_message, initial_board_gbb)]
       end
 
       @postcondition.validate(initial_board_gbb, @actual_final_board_file.read, language.parse_success_output(@result))
