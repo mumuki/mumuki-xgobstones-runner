@@ -70,8 +70,6 @@ module StonesSpec
   end
 
   class ReturnPostcondition
-    include StonesSpec::WithGbbHtmlRendering
-
     attr_reader :example
 
     def initialize(example)
