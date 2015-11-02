@@ -12,22 +12,6 @@ module StonesSpec
       [identity, board, board_html].compact.each(&:unlink)
     end
 
-    def with_title(title, html)
-      if title
-        "<h3>#{title}</h3>#{html}"
-      else
-        html
-      end
-    end
-
-    def with_header(title)
-      if title
-        "<h3>#{title}</h3>"
-      else
-        ''
-      end
-    end
-
     private
 
     def with_caption(caption, board_html)
