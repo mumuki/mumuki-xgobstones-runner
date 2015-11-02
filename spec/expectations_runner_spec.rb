@@ -30,20 +30,37 @@ describe ExpectationsRunner do
   end
 
   context 'HasUsage expectation' do
-    let(:program) { 'program { Foo() } procedure Foo() {}' }
+    describe 'when the parameter is a procedure' do
+      let(:program) { 'program { Foo() } procedure Foo() {}' }
 
-    let(:foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Foo'} }
-    let(:bar_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Bar'} }
-    let(:foo_bar_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:FooBar'} }
-    let(:bar_foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:BarFoo'} }
-    let(:fo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Fo'} }
+      let(:foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Foo'} }
+      let(:bar_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Bar'} }
+      let(:foo_bar_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:FooBar'} }
+      let(:bar_foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:BarFoo'} }
+      let(:fo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Fo'} }
 
-    it { expect(program).to comply_with foo_expectation }
-    it { expect(program).not_to comply_with bar_expectation }
-    it { expect(program).not_to comply_with foo_bar_expectation }
-    it { expect(program).not_to comply_with bar_foo_expectation }
-    it { expect(program).not_to comply_with fo_expectation }
+      it { expect(program).to comply_with foo_expectation }
+      it { expect(program).not_to comply_with bar_expectation }
+      it { expect(program).not_to comply_with foo_bar_expectation }
+      it { expect(program).not_to comply_with bar_foo_expectation }
+      it { expect(program).not_to comply_with fo_expectation }
+    end
 
+    describe 'when the parameter is a function' do
+      let(:program) { 'program { return (foo()) } function foo() { return (2) }' }
+
+      let(:foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:foo'} }
+      let(:bar_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:bar'} }
+      let(:foo_bar_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:fooBar'} }
+      let(:bar_foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:barFoo'} }
+      let(:fo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:fo'} }
+
+      it { expect(program).to comply_with foo_expectation }
+      it { expect(program).not_to comply_with bar_expectation }
+      it { expect(program).not_to comply_with foo_bar_expectation }
+      it { expect(program).not_to comply_with bar_foo_expectation }
+      it { expect(program).not_to comply_with fo_expectation }
+    end
   end
 
   context 'HasForeach expectation' do
