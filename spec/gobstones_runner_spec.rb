@@ -83,6 +83,11 @@ describe Runner do
 
         it { expect(title).to include 'remainingCells(Este) -> 9' }
       end
+
+      context 'when no initial board is given, it uses a default one' do
+        let(:test_file) { 'xgobstones/function/list_reverse_ok_without_initial_board' }
+        it { expect(all_examples :passed).to be true }
+      end
     end
 
     describe 'program spec' do
