@@ -40,6 +40,7 @@ class Mumukit::Inspection::PlainInspection
   def expectations
     {
       'HasWhile' => use(/AST\(while/),
+      'HasForeach' => use(/AST\(foreach/),
       'HasBinding' => lambda { |binding| subject_for(binding).ast_regexp },
       'HasRepeat' => check_repeat_of('.+')
     }
