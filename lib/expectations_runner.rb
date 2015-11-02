@@ -39,10 +39,11 @@ class Mumukit::Inspection::PlainInspection
 
   def expectations
     {
-      'HasWhile' => use(/AST\(while/),
-      'HasForeach' => use(/AST\(foreach/),
       'HasBinding' => lambda { |binding| subject_for(binding).ast_regexp },
-      'HasRepeat' => check_repeat_of('.+')
+      'HasForeach' => use(/AST\(foreach/),
+      'HasRepeat' => check_repeat_of('.+'),
+      'HasVariable' => use(/AST\(assignVarName/),
+      'HasWhile' => use(/AST\(while/)
     }
   end
 end
@@ -52,9 +53,9 @@ class Mumukit::Inspection::TargetedInspection
 
   def expectations
     {
-      'HasUsage' => use(/AST\((proc|func)Call\s*#{target}$/),
+      'HasArity' => lambda { |binding| /#{subject_for(binding).ast_regexp}\s*AST\((\s*\w+){#{target}}\)/ },
       'HasRepeatOf' => check_repeat_of("AST\\(literal\\s*#{target}\\)"),
-      'HasArity' => lambda { |binding| /#{subject_for(binding).ast_regexp}\s*AST\((\s*\w+){#{target}}\)/ }
+      'HasUsage' => use(/AST\((proc|func)Call\s*#{target}$/)
     }
   end
 end
