@@ -60,8 +60,8 @@ describe Runner do
 
       context 'when no title is given, it uses the procedure name and the arguments' do
         let(:test_file) { 'gobstones/procedure/times_move_ok' }
-        it { expect(title).to include '<h3>TimesMove(3, Sur)</h3>' }
-        it { expect(title).to include '<h3>TimesMove(2, Este)</h3>' }
+        it { expect(title).to include 'TimesMove(3, Sur)' }
+        it { expect(title).to include 'TimesMove(2, Este)' }
       end
     end
 
@@ -81,7 +81,7 @@ describe Runner do
       context 'when no title is given, it uses the function name, the arguments and the return value' do
         let(:test_file) { 'gobstones/function/remaining_cells_ok' }
 
-        it { expect(title).to include '<h3>remainingCells(Este) -> 9</h3>' }
+        it { expect(title).to include 'remainingCells(Este) -> 9' }
       end
     end
 
@@ -106,34 +106,34 @@ describe Runner do
       context 'when a title is given' do
         context 'and the test passes' do
           let(:test_file) { 'red_ball_at_origin' }
-          it { expect(title).to include '<h3>A red ball</h3>' }
+          it { expect(title).to include 'A red ball' }
         end
 
         context 'and the test fails' do
           let(:test_file) { 'red_ball_at_origin_wrong' }
-          it { expect(title).to include '<h3>A red ball</h3>' }
+          it { expect(title).to include 'A red ball' }
         end
 
         context 'and syntax errors are present' do
           let(:test_file) { 'syntax_error' }
-          it { expect(results).not_to include '<h3>A syntax error</h3>' }
+          it { expect(results).not_to include 'A syntax error' }
         end
 
         context 'and a runtime error occurs' do
           let(:test_file) { 'runtime_error' }
-          it { expect(title).to include '<h3>A runtime error</h3>' }
+          it { expect(title).to include 'A runtime error' }
         end
       end
 
       context 'when a title is not given' do
         context 'and the test passes' do
           let(:test_file) { 'red_ball_at_origin_without_title' }
-          it { expect(title).not_to include '<h3></h3>' }
+          it { expect(title).not_to include '' }
         end
 
         context 'and a runtime error occurs' do
           let(:test_file) { 'runtime_error_without_title' }
-          it { expect(title).not_to include '<h3></h3>' }
+          it { expect(title).not_to include '' }
         end
       end
 

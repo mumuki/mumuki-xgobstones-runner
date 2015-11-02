@@ -53,7 +53,7 @@ module StonesSpec
     def make_result(gbb_boards, status)
       boards = gbb_boards.map { |gbb_with_caption| get_html_board *gbb_with_caption, example.gobstones_command }.join("\n")
       output = "<div>#{boards}</div>"
-      [with_header(example.title), status, output]
+      [example.title, status, output]
     end
 
     def matches_with_expected_board?(actual_board)
@@ -91,7 +91,7 @@ module StonesSpec
     private
 
     def make_result(status, output='')
-      [with_header("#{example.title} -> #{return_value}"), status, output]
+      ["#{example.title} -> #{return_value}", status, output]
     end
 
     def return_value
