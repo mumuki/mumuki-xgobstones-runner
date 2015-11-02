@@ -46,6 +46,22 @@ describe ExpectationsRunner do
 
   end
 
+  context 'HasForeach expectation' do
+    let(:has_foreach_expectation) { {'binding' => 'program', 'inspection' => 'HasForeach'} }
+
+    it { expect('program {}').not_to comply_with has_foreach_expectation }
+
+    let(:program_with_foreach) { '
+      program {
+        foreach color in [Azul..Verde] {
+          Poner(color)
+        }
+      }
+    ' }
+
+    it { expect(program_with_foreach).to comply_with has_foreach_expectation }
+  end
+
   context 'HasWhile expectation' do
     let(:has_while_expectation) { {'binding' => 'program', 'inspection' => 'HasWhile'} }
 
