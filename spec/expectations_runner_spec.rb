@@ -63,6 +63,20 @@ describe ExpectationsRunner do
     end
   end
 
+  context 'HasVariable expectation' do
+    let(:has_variable_expectation) { {'binding' => 'program', 'inspection' => 'HasVariable'} }
+
+    it { expect('program {}').not_to comply_with has_variable_expectation }
+
+    let(:program_with_variable) { '
+      program {
+        acum := 25
+      }
+    ' }
+
+    it { expect(program_with_variable).to comply_with has_variable_expectation }
+  end  
+  
   context 'HasForeach expectation' do
     let(:has_foreach_expectation) { {'binding' => 'program', 'inspection' => 'HasForeach'} }
 
