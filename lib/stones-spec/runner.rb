@@ -10,7 +10,7 @@ module StonesSpec
     end
 
     def run!(test_definition)
-      subject = Subject.from(test_definition[:subject], language)
+      subject = Subject.from(test_definition[:subject])
       source = test_definition[:source]
       check_head_position = test_definition[:check_head_position]
       show_initial_board = test_definition.fetch(:show_initial_board, true)

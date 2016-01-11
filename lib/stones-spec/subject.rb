@@ -1,11 +1,15 @@
 module StonesSpec
   module Subject
-    def self.from(string, language)
-      if string
-        language.infer_subject_type_for(string).new(string)
+    def self.from(name)
+      if name
+        infer_subject_type_for(name).new(name)
       else
         Program
       end
+    end
+
+    def self.infer_subject_type_for(string)
+      string.start_with_lowercase? ? StonesSpec::Subject::Function : StonesSpec::Subject::Procedure
     end
 
     module Callable

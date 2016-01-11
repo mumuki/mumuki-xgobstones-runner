@@ -22,10 +22,6 @@ module StonesSpec::Language
     def self.runtime_error?(result)
       result.include? 'Error en tiempo de ejecución'
     end
-
-    def self.infer_subject_type_for(string)
-      string.start_with_lowercase? ? StonesSpec::Subject::Function : StonesSpec::Subject::Procedure
-    end
   end
 
   class ErrorMessageParser
