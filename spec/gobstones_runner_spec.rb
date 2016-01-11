@@ -24,15 +24,16 @@ describe Runner do
   let(:all_htmls) { results.map { |it| it[2] } }
   let(:html) { all_htmls[0] }
 
-  describe 'out of board assertion' do
-    describe 'when fails' do
-      let(:test_file) { 'gobstones/error_assertions/out_of_board_error' }
-      it { expect(all_examples :passed).to be true }
-      it { expect(html).to include 'No se puede mover el cabezal en dirección: Este' }
+
+  describe 'error assertions' do
+    context 'when fails with a different expected type' do
+      let(:test_file) { 'gobstones/error_assertions/out_of_board_error_wrong_type' }
+      it { expect(all_examples :failed).to be true }
+      it { expect(html).to include 'Se esperaba que el programa hiciera BOOM por caer fuera del tablero.' }
       it { expect(html).to include File.new('spec/data/runtime_error_initial.html').read }
     end
 
-    describe "when doesn't fail" do
+    context "when doesn't fail" do
       let(:test_file) { 'gobstones/error_assertions/out_of_board_error_no_failure' }
       it { expect(all_examples :failed).to be true }
       it { expect(html).to include 'Se esperaba que el programa hiciera BOOM pero se obtuvo un tablero final.' }
@@ -40,10 +41,17 @@ describe Runner do
       it { expect(html).to include File.new('spec/data/gobstones/error_assertions/out_of_board_error_no_failure_final.html').read }
     end
 
-    describe 'when fails with a different expected type' do
-      let(:test_file) { 'gobstones/error_assertions/out_of_board_error_wrong_type' }
-      it { expect(all_examples :failed).to be true }
-      it { expect(html).to include 'Se esperaba que el programa hiciera BOOM por caer fuera del tablero.' }
+    context 'out of board' do
+      let(:test_file) { 'gobstones/error_assertions/out_of_board_error' }
+      it { expect(all_examples :passed).to be true }
+      it { expect(html).to include 'No se puede mover el cabezal en dirección: Este' }
+      it { expect(html).to include File.new('spec/data/runtime_error_initial.html').read }
+    end
+
+    context 'no stones' do
+      let(:test_file) { 'gobstones/error_assertions/no_stones_error' }
+      it { expect(all_examples :passed).to be true }
+      it { expect(html).to include 'No se puede sacar una bolita de color: Verde' }
       it { expect(html).to include File.new('spec/data/runtime_error_initial.html').read }
     end
   end
