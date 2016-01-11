@@ -12,12 +12,6 @@ module StonesSpec
       string.start_with_lowercase? ? StonesSpec::Subject::Function : StonesSpec::Subject::Procedure
     end
 
-    module Callable
-      def procedure_call(arguments)
-        "#{@name}(#{arguments.join(', ')})"
-      end
-    end
-
     module Program
       def self.test_program(source, _arguments)
         source
@@ -28,43 +22,37 @@ module StonesSpec
       end
     end
 
-    class Procedure
-      include Callable
-
+    class Callable
       def initialize(name)
         @name = name
       end
 
-      def test_program(source, arguments)
-        "program {
-          #{procedure_call arguments}
-        }
-
-        #{source}"
+      def call_string(arguments)
+        "#{@name}(#{arguments.join(', ')})"
       end
 
       def default_title(arguments)
-        procedure_call arguments
+        call_string arguments
       end
     end
 
-    class Function
-      include Callable
-
-      def initialize(name)
-        @name = name
-      end
-
+    class Procedure < Callable
       def test_program(source, arguments)
         "program {
-          return (#{procedure_call arguments})
+          #{call_string arguments}
         }
 
         #{source}"
       end
+    end
 
-      def default_title(arguments)
-        procedure_call arguments
+    class Function < Callable
+      def test_program(source, arguments)
+        "program {
+          return (#{call_string arguments})
+        }
+
+        #{source}"
       end
     end
   end
