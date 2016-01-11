@@ -28,5 +28,12 @@ module StonesSpec
     def self.source_code_extension
       'gbs'
     end
+
+    def self.ensure_no_syntax_error!(error_message)
+      raise SyntaxError, error_message if syntax_error? error_message
+    end
+
+    class SyntaxError < Exception
+    end
   end
 end

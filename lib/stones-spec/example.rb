@@ -27,7 +27,7 @@ module StonesSpec
 
       if @status == :failed
         error_message = Gobstones.parse_error_message @result
-        raise GobstonesSyntaxError, error_message if Gobstones.syntax_error? error_message
+        Gobstones.ensure_no_syntax_error! error_message
       end
 
       @postcondition.validate(initial_board_gbb, @actual_final_board_file.read, @result, @status)
@@ -46,8 +46,5 @@ module StonesSpec
     def default_title
       @subject.default_title @precondition.arguments
     end
-  end
-
-  class GobstonesSyntaxError < Exception
   end
 end

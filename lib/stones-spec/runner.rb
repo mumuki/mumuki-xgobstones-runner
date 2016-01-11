@@ -12,7 +12,7 @@ module StonesSpec
         [test_definition[:examples].map do |example_definition|
           run_example!(example_definition, check_head_position, show_initial_board, source, subject)
         end]
-      rescue GobstonesSyntaxError => e
+      rescue Gobstones::SyntaxError => e
         [e.message, :errored]
       end
     end
