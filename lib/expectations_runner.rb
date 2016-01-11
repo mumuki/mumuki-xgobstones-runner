@@ -25,7 +25,7 @@ module EvalExpectationsOnAST
     if binding == 'program'
       StonesSpec::Subject::Program
     else
-      StonesSpec::Subject.from(binding, StonesSpec::Language::Gobstones)
+      StonesSpec::Subject.from(binding)
     end
   end
 
@@ -86,7 +86,7 @@ class ExpectationsRunner < Mumukit::Stub
   end
 
   def default_expectations_for(test)
-    StonesSpec::Subject.from(test[:subject], StonesSpec::Language::Gobstones).default_expectations
+    StonesSpec::Subject.from(test[:subject]).default_expectations
   end
 
   def run_expectation!(expectation, ast)
