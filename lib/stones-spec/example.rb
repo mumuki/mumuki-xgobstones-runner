@@ -4,15 +4,11 @@ module StonesSpec
   class Example < OpenStruct
     include StonesSpec::WithTempfile
     include StonesSpec::WithCommandLine
-    include StonesSpec::WithGbbHtmlRendering
 
-    attr_reader :gobstones_command
-
-    def initialize(subject, attributes, gobstones_command)
+    def initialize(subject, attributes)
       super attributes
       @title = attributes[:title]
       @subject = subject
-      @gobstones_command = gobstones_command
     end
 
     def start!(source, precondition, postcondition)
@@ -23,7 +19,7 @@ module StonesSpec
 
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
       @initial_board_file = write_tempfile precondition.initial_board_gbb, 'gbb'
-      @result, @status = run_command  "#{Gobstones.run(@source_file, @initial_board_file, @actual_final_board_file, gobstones_command)} 2>&1"
+      @result, @status = run_command "#{Gobstones.run(@source_file, @initial_board_file, @actual_final_board_file)} 2>&1"
     end
 
     def result
@@ -31,10 +27,10 @@ module StonesSpec
 
       if @status == :failed
         error_message = Gobstones.parse_error_message @result
-        return [self.title, :failed, make_error_output(error_message, initial_board_gbb)]
+        Gobstones.ensure_no_syntax_error! error_message
       end
 
-      @postcondition.validate(initial_board_gbb, @actual_final_board_file.read, @result)
+      @postcondition.validate(initial_board_gbb, @actual_final_board_file.read, @result, @status)
     end
 
     def stop!
@@ -50,20 +46,5 @@ module StonesSpec
     def default_title
       @subject.default_title @precondition.arguments
     end
-
-    def make_error_output(error_message, initial_board_gbb)
-      if Gobstones.syntax_error? error_message
-        raise GobstonesSyntaxError, error_message
-      end
-
-      if Gobstones.runtime_error? error_message
-        "#{get_html_board 'Tablero inicial', initial_board_gbb, gobstones_command}\n#{error_message}"
-      else
-        error_message
-      end
-    end
-  end
-
-  class GobstonesSyntaxError < Exception
   end
 end

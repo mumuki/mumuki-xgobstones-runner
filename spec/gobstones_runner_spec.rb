@@ -8,8 +8,13 @@ require_relative '../lib/stones-spec'
 include StonesSpec
 
 describe Runner do
-  let(:command) { 'python .heroku/vendor/pygobstones-lang/pygobstoneslang.py' }
-  let(:runner) { Runner.new(command) }
+  before do
+    Gobstones.configure do |config|
+      config.gbs_command = 'python .heroku/vendor/pygobstones-lang/pygobstoneslang.py'
+    end
+  end
+
+  let(:runner) { Runner.new }
   let(:test_definition) { YAML.load_file "spec/data/#{test_file}.yml" }
   let(:test_results) { runner.run!(test_definition) }
 
@@ -18,6 +23,47 @@ describe Runner do
   let(:title) { results.map { |it| it[0] } }
   let(:all_htmls) { results.map { |it| it[2] } }
   let(:html) { all_htmls[0] }
+
+
+  describe 'error assertions' do
+    context 'when fails with another type' do
+      let(:test_file) { 'gobstones/error_assertions/out_of_board_error_wrong_type' }
+      it { expect(all_examples :failed).to be true }
+      it { expect(html).to include 'Se esperaba que el programa hiciera BOOM por caer fuera del tablero.' }
+      it { expect(html).to include 'No se puede sacar una bolita de color: Azul' }
+      it { expect(html).to include File.new('spec/data/runtime_error_initial.html').read }
+    end
+
+    context "when doesn't fail" do
+      let(:test_file) { 'gobstones/error_assertions/out_of_board_error_no_failure' }
+      it { expect(all_examples :failed).to be true }
+      it { expect(html).to include 'Se esperaba que el programa hiciera BOOM pero se obtuvo un tablero final.' }
+      it { expect(html).to include File.new('spec/data/runtime_error_initial.html').read }
+      it { expect(html).to include File.new('spec/data/gobstones/error_assertions/out_of_board_error_no_failure_final.html').read }
+    end
+
+    context 'when fails with an unhandled error type' do
+      let(:test_file) { 'gobstones/error_assertions/out_of_board_error_unhandled_type' }
+      it { expect(all_examples :failed).to be true }
+      it { expect(html).to include 'Se esperaba que el programa hiciera BOOM por caer fuera del tablero.' }
+      it { expect(html).to include 'El argumento de Sacar debería ser un color' }
+      it { expect(html).to include File.new('spec/data/runtime_error_initial.html').read }
+    end
+
+    context 'out of board' do
+      let(:test_file) { 'gobstones/error_assertions/out_of_board_error' }
+      it { expect(all_examples :passed).to be true }
+      it { expect(html).to include 'No se puede mover el cabezal en dirección: Este' }
+      it { expect(html).to include File.new('spec/data/runtime_error_initial.html').read }
+    end
+
+    context 'no stones' do
+      let(:test_file) { 'gobstones/error_assertions/no_stones_error' }
+      it { expect(all_examples :passed).to be true }
+      it { expect(html).to include 'No se puede sacar una bolita de color: Verde' }
+      it { expect(html).to include File.new('spec/data/runtime_error_initial.html').read }
+    end
+  end
 
   describe 'xgobstones' do
     describe 'lists' do
