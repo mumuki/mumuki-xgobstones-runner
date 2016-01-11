@@ -89,10 +89,10 @@ module StonesSpec
     private
 
     def parse_success_output(result)
-      get_first_return_value result || ''
+      first_return_value result || ''
     end
 
-    def get_first_return_value(result)
+    def first_return_value(result)
       result[/#1 -> (.+)/, 1]
     end
 
