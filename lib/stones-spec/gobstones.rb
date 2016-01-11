@@ -1,7 +1,16 @@
 module StonesSpec
   module Gobstones
-    def self.run(source_file, initial_board_file, final_board_file, gobstones_command)
-      "#{gobstones_command} #{source_file.path} --from #{initial_board_file.path} --to #{final_board_file.path} --no-print-board --silent"
+    def self.configure
+      @config ||= OpenStruct.new
+      yield @config
+    end
+
+    def self.config
+      @config
+    end
+
+    def self.run(source_file, initial_board_file, final_board_file)
+      "#{config.gbs_command} #{source_file.path} --from #{initial_board_file.path} --to #{final_board_file.path} --no-print-board --silent"
     end
 
     def self.parse_error_message(result)

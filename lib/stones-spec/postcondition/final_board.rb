@@ -44,7 +44,7 @@ module StonesSpec
       end
 
       def make_result(gbb_boards, status)
-        boards = gbb_boards.map { |gbb_with_caption| get_html_board *gbb_with_caption, example.gobstones_command }.join("\n")
+        boards = gbb_boards.map { |gbb_with_caption| get_html_board *gbb_with_caption }.join("\n")
         output = "<div>#{boards}</div>"
         [example.title, status, output]
       end

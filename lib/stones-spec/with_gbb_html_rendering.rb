@@ -1,11 +1,11 @@
 module StonesSpec
   module WithGbbHtmlRendering
-    def get_html_board(caption, gbb_representation, gobstones_command)
+    def get_html_board(caption, gbb_representation)
       identity = write_tempfile 'program {}', '.gbs'
       board = write_tempfile gbb_representation, '.gbb'
       board_html = Tempfile.new %w(gobstones.board .html)
 
-      %x"#{Gobstones.run(identity, board, board_html, gobstones_command)}"
+      %x"#{Gobstones.run(identity, board, board_html)}"
 
       with_caption caption, board_html.read
     ensure
