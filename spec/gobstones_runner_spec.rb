@@ -26,10 +26,11 @@ describe Runner do
 
 
   describe 'error assertions' do
-    context 'when fails with a different expected type' do
+    context 'when fails with another type' do
       let(:test_file) { 'gobstones/error_assertions/out_of_board_error_wrong_type' }
       it { expect(all_examples :failed).to be true }
       it { expect(html).to include 'Se esperaba que el programa hiciera BOOM por caer fuera del tablero.' }
+      it { expect(html).to include 'No se puede sacar una bolita de color: Azul' }
       it { expect(html).to include File.new('spec/data/runtime_error_initial.html').read }
     end
 
@@ -39,6 +40,14 @@ describe Runner do
       it { expect(html).to include 'Se esperaba que el programa hiciera BOOM pero se obtuvo un tablero final.' }
       it { expect(html).to include File.new('spec/data/runtime_error_initial.html').read }
       it { expect(html).to include File.new('spec/data/gobstones/error_assertions/out_of_board_error_no_failure_final.html').read }
+    end
+
+    context 'when fails with an unhandled error type' do
+      let(:test_file) { 'gobstones/error_assertions/out_of_board_error_unhandled_type' }
+      it { expect(all_examples :failed).to be true }
+      it { expect(html).to include 'Se esperaba que el programa hiciera BOOM por caer fuera del tablero.' }
+      it { expect(html).to include 'El argumento de Sacar debería ser un color' }
+      it { expect(html).to include File.new('spec/data/runtime_error_initial.html').read }
     end
 
     context 'out of board' do
