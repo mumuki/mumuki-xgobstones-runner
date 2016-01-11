@@ -2,15 +2,15 @@ module StonesSpec
   module Postcondition
     def self.from(example, check_head_position, show_initial_board)
       if example.final_board
-        FinalBoard.new(example, check_head_position, show_initial_board)
+        ExpectedFinalBoard.new(example, check_head_position, show_initial_board)
       elsif example.return
-        Return.new(example)
+        ExpectedReturnValue.new(example)
       else
-        Error.new(example)
+        ExpectedBoom.new(example)
       end
     end
 
-    class Errorable
+    class ExpectedResult
       include StonesSpec::WithGbbHtmlRendering
 
       attr_reader :example
@@ -23,13 +23,13 @@ module StonesSpec
         if status == :failed
           [example.title, :failed, make_error_output(result, initial_board_gbb)]
         else
-          do_validate(initial_board_gbb, actual_final_board_gbb, result)
+          validate_expected_result(initial_board_gbb, actual_final_board_gbb, result)
         end
       end
     end
   end
 end
 
-require_relative './error'
-require_relative './final_board'
-require_relative './return'
+require_relative './expected_boom'
+require_relative './expected_final_board'
+require_relative './expected_return_value'

@@ -1,6 +1,6 @@
 module StonesSpec
   module Postcondition
-    class FinalBoard < Errorable
+    class ExpectedFinalBoard < ExpectedResult
       include StonesSpec::WithTempfile
       include StonesSpec::WithGbbHtmlRendering
 
@@ -12,7 +12,7 @@ module StonesSpec
         @show_initial_board = show_initial_board
       end
 
-      def do_validate(initial_board_gbb, actual_final_board_gbb, _result)
+      def validate_expected_result(initial_board_gbb, actual_final_board_gbb, _result)
         if matches_with_expected_board? Stones::Gbb.read actual_final_board_gbb
           passed_result initial_board_gbb, actual_final_board_gbb
         else

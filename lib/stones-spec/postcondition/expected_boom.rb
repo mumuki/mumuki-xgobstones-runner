@@ -1,6 +1,6 @@
 module StonesSpec
   module Postcondition
-    class Error
+    class ExpectedBoom
       include StonesSpec::WithGbbHtmlRendering
 
       attr_reader :example, :error_type
