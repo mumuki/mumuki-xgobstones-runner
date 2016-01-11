@@ -23,6 +23,15 @@ module StonesSpec
       end
     end
 
+    def make_boards_output(title, gbb_boards, status, extra = nil)
+      boards = gbb_boards.map { |gbb_with_caption| get_html_board *gbb_with_caption }.join("\n")
+      output = "<div>#{boards}</div>"
+
+      output = "<p>#{extra}</p>\n#{output}" if extra
+
+      [title, status, output]
+    end
+
     private
 
     def with_caption(caption, board_html)

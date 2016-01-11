@@ -30,7 +30,7 @@ module StonesSpec
 
         boards.unshift ['Tablero inicial', initial_board_gbb] if show_initial_board
 
-        make_result boards, :failed
+        make_boards_output example.title, boards, :failed
       end
 
       def passed_result(initial_board_gbb, actual_board_gbb)
@@ -40,13 +40,7 @@ module StonesSpec
 
         boards.unshift ['Tablero inicial', initial_board_gbb] if show_initial_board
 
-        make_result boards, :passed
-      end
-
-      def make_result(gbb_boards, status)
-        boards = gbb_boards.map { |gbb_with_caption| get_html_board *gbb_with_caption }.join("\n")
-        output = "<div>#{boards}</div>"
-        [example.title, status, output]
+        make_boards_output example.title, boards, :passed
       end
 
       def matches_with_expected_board?(actual_board)

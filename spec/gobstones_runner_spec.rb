@@ -25,10 +25,20 @@ describe Runner do
   let(:html) { all_htmls[0] }
 
   describe 'out of board assertion' do
-    let(:test_file) { 'gobstones/error_assertions/out_of_board_error' }
-    it { expect(all_examples :passed).to be true }
-    it { expect(html).to include 'No se puede mover el cabezal en dirección: Este' }
-    it { expect(html).to include File.new('spec/data/runtime_error_initial.html').read }
+    describe 'when fails' do
+      let(:test_file) { 'gobstones/error_assertions/out_of_board_error' }
+      it { expect(all_examples :passed).to be true }
+      it { expect(html).to include 'No se puede mover el cabezal en dirección: Este' }
+      it { expect(html).to include File.new('spec/data/runtime_error_initial.html').read }
+    end
+
+    describe "when doesn't fail" do
+      let(:test_file) { 'gobstones/error_assertions/out_of_board_error_no_failure' }
+      it { expect(all_examples :failed).to be true }
+      it { expect(html).to include 'Se esperaba que el programa hiciera BOOM pero se obtuvo un tablero final.' }
+      it { expect(html).to include File.new('spec/data/runtime_error_initial.html').read }
+      it { expect(html).to include File.new('spec/data/gobstones/error_assertions/out_of_board_error_no_failure_final.html').read }
+    end
   end
 
   describe 'xgobstones' do
