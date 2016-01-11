@@ -11,6 +11,14 @@ module StonesSpec
     def self.runtime_error?(result)
       result.include? 'Error en tiempo de ejecución'
     end
+
+    def self.syntax_error?(result)
+      result.include_any? ['Error de sintaxis', 'Error en el programa']
+    end
+
+    def self.source_code_extension
+      'gbs'
+    end
   end
 
   class ErrorMessageParser
