@@ -26,10 +26,6 @@ module StonesSpec
 
     private
 
-    def test_program(source, subject)
-      language.test_program(source, subject)
-    end
-
     def run_example!(example_definition, check_head_position, show_initial_board, source, subject)
       example = StonesSpec::Example.new(language, subject, example_definition, gobstones_command)
       example.start!(
