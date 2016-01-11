@@ -20,7 +20,7 @@ module StonesSpec
       @postcondition = postcondition
       @precondition = precondition
 
-      @source_file = write_tempfile @subject.test_program(language, source, precondition.arguments), source_code_extension
+      @source_file = write_tempfile @subject.test_program(source, precondition.arguments), source_code_extension
 
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
       @initial_board_file = write_tempfile precondition.initial_board_gbb, 'gbb'
@@ -53,7 +53,7 @@ module StonesSpec
     end
 
     def default_title
-      @subject.default_title language, source, @precondition.arguments
+      @subject.default_title @precondition.arguments
     end
 
     def make_error_output(error_message, initial_board_gbb)
