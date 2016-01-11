@@ -1,15 +1,4 @@
-class String
-  def start_with_lowercase?
-    first_letter = self[0]
-    first_letter.downcase == first_letter
-  end
-
-  def include_any?(other_strs)
-    other_strs.any? { |other| include? other }
-  end
-end
-
-module StonesSpec::Language
+module StonesSpec
   module Gobstones
     def self.run(source_file, initial_board_file, final_board_file, gobstones_command)
       "#{gobstones_command} #{source_file.path} --from #{initial_board_file.path} --to #{final_board_file.path} --no-print-board --silent"

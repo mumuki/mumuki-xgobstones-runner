@@ -26,7 +26,7 @@ module StonesSpec
     private
 
     def run_example!(example_definition, check_head_position, show_initial_board, source, subject)
-      example = StonesSpec::Example.new(subject, example_definition, gobstones_command)
+      example = Example.new(subject, example_definition, gobstones_command)
       example.start!(
           source,
           Precondition.from_example(example),

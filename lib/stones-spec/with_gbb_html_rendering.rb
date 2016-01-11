@@ -5,7 +5,7 @@ module StonesSpec
       board = write_tempfile gbb_representation, '.gbb'
       board_html = Tempfile.new %w(gobstones.board .html)
 
-      %x"#{Language::Gobstones.run(identity, board, board_html, gobstones_command)}"
+      %x"#{Gobstones.run(identity, board, board_html, gobstones_command)}"
 
       with_caption caption, board_html.read
     ensure
