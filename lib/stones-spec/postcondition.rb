@@ -19,7 +19,7 @@ module StonesSpec
       @show_initial_board = show_initial_board
     end
 
-    def validate(initial_board_gbb, actual_final_board_gbb, _actual_return)
+    def validate(initial_board_gbb, actual_final_board_gbb, _result)
       if matches_with_expected_board? Stones::Gbb.read actual_final_board_gbb
         passed_result initial_board_gbb, actual_final_board_gbb
       else
@@ -76,8 +76,8 @@ module StonesSpec
       @example = example
     end
 
-    def validate(_initial_board_gbb, _actual_final_board_gbb, actual_return)
-      normalized_actual_return = actual_return.strip
+    def validate(_initial_board_gbb, _actual_final_board_gbb, result)
+      normalized_actual_return = parse_success_output(result).strip
 
       if normalized_actual_return == return_value
         make_result(:passed)
@@ -87,6 +87,14 @@ module StonesSpec
     end
 
     private
+
+    def parse_success_output(result)
+      get_first_return_value result || ''
+    end
+
+    def get_first_return_value(result)
+      result[/#1 -> (.+)/, 1]
+    end
 
     def make_result(status, output='')
       ["#{example.title} -> #{return_value}", status, output]

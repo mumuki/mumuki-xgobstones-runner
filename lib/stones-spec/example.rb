@@ -35,7 +35,7 @@ module StonesSpec
         return [self.title, :failed, make_error_output(error_message, initial_board_gbb)]
       end
 
-      @postcondition.validate(initial_board_gbb, @actual_final_board_file.read, language.parse_success_output(@result))
+      @postcondition.validate(initial_board_gbb, @actual_final_board_file.read, @result)
     end
 
     def stop!

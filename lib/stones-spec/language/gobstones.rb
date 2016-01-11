@@ -23,18 +23,8 @@ module StonesSpec::Language
       result.include? 'Error en tiempo de ejecución'
     end
 
-    def self.parse_success_output(result)
-      get_first_return_value result || ''
-    end
-
     def self.infer_subject_type_for(string)
       string.start_with_lowercase? ? StonesSpec::Subject::Function : StonesSpec::Subject::Procedure
-    end
-
-    private
-
-    def self.get_first_return_value(result)
-      result[/#1 -> (.+)/, 1]
     end
   end
 
