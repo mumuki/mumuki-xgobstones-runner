@@ -11,11 +11,6 @@ end
 
 module StonesSpec::Language
   module Gobstones
-
-    def self.source_code_extension
-      'gbs'
-    end
-
     def self.run(source_file, initial_board_file, final_board_file, gobstones_command)
       "#{gobstones_command} #{source_file.path} --from #{initial_board_file.path} --to #{final_board_file.path} --no-print-board --silent"
     end
@@ -26,10 +21,6 @@ module StonesSpec::Language
 
     def self.runtime_error?(result)
       result.include? 'Error en tiempo de ejecución'
-    end
-
-    def self.syntax_error?(result)
-      result.include_any? ['Error de sintaxis', 'Error en el programa']
     end
 
     def self.parse_success_output(result)

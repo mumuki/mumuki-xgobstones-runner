@@ -20,8 +20,7 @@ module StonesSpec
       @postcondition = postcondition
       @precondition = precondition
 
-      @source_file = write_tempfile @subject.test_program(language, source, precondition.arguments),
-                                    language.source_code_extension
+      @source_file = write_tempfile @subject.test_program(language, source, precondition.arguments), source_code_extension
 
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
       @initial_board_file = write_tempfile precondition.initial_board_gbb, 'gbb'
@@ -49,19 +48,28 @@ module StonesSpec
 
     private
 
+    def source_code_extension
+      'gbs'
+    end
+
     def default_title
       @subject.default_title language, source, @precondition.arguments
     end
 
     def make_error_output(error_message, initial_board_gbb)
-      if language.syntax_error?(@result)
+      if syntax_error?
         raise GobstonesSyntaxError, error_message
       end
+
       if language.runtime_error?(error_message)
         "#{get_html_board 'Tablero inicial', initial_board_gbb, gobstones_command}\n#{error_message}"
       else
         error_message
       end
+    end
+
+    def syntax_error?
+      @result.include_any? ['Error de sintaxis', 'Error en el programa']
     end
   end
 
