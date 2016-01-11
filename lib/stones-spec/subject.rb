@@ -1,48 +1,58 @@
 module StonesSpec
   module Subject
-    def self.from(string, language)
-      if string
-        language.infer_subject_type_for(string).new(string)
+    def self.from(name)
+      if name
+        infer_subject_type_for(name).new(name)
       else
         Program
       end
     end
 
+    def self.infer_subject_type_for(string)
+      string.start_with_lowercase? ? StonesSpec::Subject::Function : StonesSpec::Subject::Procedure
+    end
+
     module Program
-      def self.test_program(_language, source, _arguments)
+      def self.test_program(source, _arguments)
         source
       end
 
-      def self.default_title(_language, _source, _arguments)
+      def self.default_title(_arguments)
         nil
       end
     end
 
-    class Procedure
+    class Callable
       def initialize(name)
         @name = name
       end
 
-      def test_program(language, source, arguments)
-        language.test_procedure(source, @name, arguments)
+      def call_string(arguments)
+        "#{@name}(#{arguments.join(', ')})"
       end
 
-      def default_title(language, _source, arguments)
-        language.procedure_call(@name, arguments)
+      def default_title(arguments)
+        call_string arguments
       end
     end
 
-    class Function
-      def initialize(name)
-        @name = name
-      end
+    class Procedure < Callable
+      def test_program(source, arguments)
+        "program {
+          #{call_string arguments}
+        }
 
-      def test_program(language, source, arguments)
-        language.test_function(source, @name, arguments)
+        #{source}"
       end
+    end
 
-      def default_title(language, _source, arguments)
-        language.procedure_call(@name, arguments)
+    class Function < Callable
+      def test_program(source, arguments)
+        "program {
+          return (#{call_string arguments})
+        }
+
+        #{source}"
       end
     end
   end

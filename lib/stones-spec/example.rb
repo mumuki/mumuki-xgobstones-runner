@@ -6,12 +6,11 @@ module StonesSpec
     include StonesSpec::WithCommandLine
     include StonesSpec::WithGbbHtmlRendering
 
-    attr_reader :language, :gobstones_command
+    attr_reader :gobstones_command
 
-    def initialize(language, subject, attributes, gobstones_command)
+    def initialize(subject, attributes, gobstones_command)
       super attributes
       @title = attributes[:title]
-      @language = language
       @subject = subject
       @gobstones_command = gobstones_command
     end
@@ -20,23 +19,22 @@ module StonesSpec
       @postcondition = postcondition
       @precondition = precondition
 
-      @source_file = write_tempfile @subject.test_program(language, source, precondition.arguments),
-                                    language.source_code_extension
+      @source_file = write_tempfile @subject.test_program(source, precondition.arguments), Gobstones.source_code_extension
 
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
       @initial_board_file = write_tempfile precondition.initial_board_gbb, 'gbb'
-      @result, @status = run_command  "#{language.run(@source_file, @initial_board_file, @actual_final_board_file, gobstones_command)} 2>&1"
+      @result, @status = run_command  "#{Gobstones.run(@source_file, @initial_board_file, @actual_final_board_file, gobstones_command)} 2>&1"
     end
 
     def result
       initial_board_gbb = @initial_board_file.open.read
 
       if @status == :failed
-        error_message = language.parse_error_message @result
+        error_message = Gobstones.parse_error_message @result
         return [self.title, :failed, make_error_output(error_message, initial_board_gbb)]
       end
 
-      @postcondition.validate(initial_board_gbb, @actual_final_board_file.read, language.parse_success_output(@result))
+      @postcondition.validate(initial_board_gbb, @actual_final_board_file.read, @result)
     end
 
     def stop!
@@ -50,14 +48,15 @@ module StonesSpec
     private
 
     def default_title
-      @subject.default_title language, source, @precondition.arguments
+      @subject.default_title @precondition.arguments
     end
 
     def make_error_output(error_message, initial_board_gbb)
-      if language.syntax_error?(@result)
+      if Gobstones.syntax_error? error_message
         raise GobstonesSyntaxError, error_message
       end
-      if language.runtime_error?(error_message)
+
+      if Gobstones.runtime_error? error_message
         "#{get_html_board 'Tablero inicial', initial_board_gbb, gobstones_command}\n#{error_message}"
       else
         error_message
