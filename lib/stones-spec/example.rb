@@ -6,12 +6,11 @@ module StonesSpec
     include StonesSpec::WithCommandLine
     include StonesSpec::WithGbbHtmlRendering
 
-    attr_reader :language, :gobstones_command
+    attr_reader :gobstones_command
 
-    def initialize(language, subject, attributes, gobstones_command)
+    def initialize(subject, attributes, gobstones_command)
       super attributes
       @title = attributes[:title]
-      @language = language
       @subject = subject
       @gobstones_command = gobstones_command
     end
@@ -24,14 +23,14 @@ module StonesSpec
 
       @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
       @initial_board_file = write_tempfile precondition.initial_board_gbb, 'gbb'
-      @result, @status = run_command  "#{language.run(@source_file, @initial_board_file, @actual_final_board_file, gobstones_command)} 2>&1"
+      @result, @status = run_command  "#{Language::Gobstones.run(@source_file, @initial_board_file, @actual_final_board_file, gobstones_command)} 2>&1"
     end
 
     def result
       initial_board_gbb = @initial_board_file.open.read
 
       if @status == :failed
-        error_message = language.parse_error_message @result
+        error_message = Language::Gobstones.parse_error_message @result
         return [self.title, :failed, make_error_output(error_message, initial_board_gbb)]
       end
 
@@ -61,7 +60,7 @@ module StonesSpec
         raise GobstonesSyntaxError, error_message
       end
 
-      if language.runtime_error?(error_message)
+      if Language::Gobstones.runtime_error?(error_message)
         "#{get_html_board 'Tablero inicial', initial_board_gbb, gobstones_command}\n#{error_message}"
       else
         error_message

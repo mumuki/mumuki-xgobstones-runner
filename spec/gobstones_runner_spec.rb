@@ -9,9 +9,8 @@ include StonesSpec
 
 describe Runner do
   describe Language::Gobstones do
-    let(:lang) { Language::Gobstones }
     let(:command) { 'python .heroku/vendor/pygobstones-lang/pygobstoneslang.py' }
-    let(:runner) { Runner.new(lang, command) }
+    let(:runner) { Runner.new(command) }
     let(:test_definition) { YAML.load_file "spec/data/#{test_file}.yml" }
     let(:test_results) { runner.run!(test_definition) }
 

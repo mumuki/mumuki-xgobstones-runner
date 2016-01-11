@@ -2,10 +2,9 @@ module StonesSpec
   class Runner
     include StonesSpec::WithTempfile
 
-    attr_reader :language, :gobstones_command
+    attr_reader :gobstones_command
 
-    def initialize(language, gobstones_command)
-      @language = language
+    def initialize(gobstones_command)
       @gobstones_command = gobstones_command
     end
 
@@ -27,7 +26,7 @@ module StonesSpec
     private
 
     def run_example!(example_definition, check_head_position, show_initial_board, source, subject)
-      example = StonesSpec::Example.new(language, subject, example_definition, gobstones_command)
+      example = StonesSpec::Example.new(subject, example_definition, gobstones_command)
       example.start!(
           source,
           Precondition.from_example(example),
