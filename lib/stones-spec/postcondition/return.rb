@@ -1,13 +1,7 @@
 module StonesSpec
   module Postcondition
-    class Return
-      attr_reader :example
-
-      def initialize(example)
-        @example = example
-      end
-
-      def validate(_initial_board_gbb, _actual_final_board_gbb, result)
+    class Return < Errorable
+      def do_validate(_initial_board_gbb, _actual_final_board_gbb, result)
         normalized_actual_return = parse_success_output(result).strip
 
         if normalized_actual_return == return_value

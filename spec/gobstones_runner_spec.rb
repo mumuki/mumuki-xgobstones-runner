@@ -24,6 +24,13 @@ describe Runner do
   let(:all_htmls) { results.map { |it| it[2] } }
   let(:html) { all_htmls[0] }
 
+  describe 'out of board assertion' do
+    let(:test_file) { 'gobstones/error_assertions/out_of_board_error' }
+    it { expect(all_examples :passed).to be true }
+    it { expect(html).to include 'No se puede mover el cabezal en dirección: Este' }
+    it { expect(html).to include File.new('spec/data/runtime_error_initial.html').read }
+  end
+
   describe 'xgobstones' do
     describe 'lists' do
       context 'when passes' do

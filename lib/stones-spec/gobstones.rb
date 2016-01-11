@@ -14,7 +14,7 @@ module StonesSpec
     end
 
     def self.parse_error_message(result)
-      "<pre>#{ErrorMessageParser.new.parse(result)}</pre>"
+      "<pre>#{ErrorMessageParser.parse result}</pre>"
     end
 
     def self.runtime_error?(result)
@@ -27,20 +27,6 @@ module StonesSpec
 
     def self.source_code_extension
       'gbs'
-    end
-  end
-
-  class ErrorMessageParser
-    def remove_line_specification(x)
-      x.drop_while { |str| !str.include_any? ['cerca de', 'Error de Gobstones'] }
-    end
-
-    def remove_boom_line_specification(x)
-      x.take_while { |str| not str.strip.start_with? 'En:' }
-    end
-
-    def parse(result)
-      remove_boom_line_specification(remove_line_specification(result.lines)).join.strip
     end
   end
 end

@@ -1,18 +1,18 @@
 module StonesSpec
   module Postcondition
-    class FinalBoard
+    class FinalBoard < Errorable
       include StonesSpec::WithTempfile
       include StonesSpec::WithGbbHtmlRendering
 
-      attr_reader :example, :check_head_position, :show_initial_board
+      attr_reader :check_head_position, :show_initial_board
 
       def initialize(example, check_head_position, show_initial_board)
-        @example = example
+        super example
         @check_head_position = check_head_position
         @show_initial_board = show_initial_board
       end
 
-      def validate(initial_board_gbb, actual_final_board_gbb, _result)
+      def do_validate(initial_board_gbb, actual_final_board_gbb, _result)
         if matches_with_expected_board? Stones::Gbb.read actual_final_board_gbb
           passed_result initial_board_gbb, actual_final_board_gbb
         else
