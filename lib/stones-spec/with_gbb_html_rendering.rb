@@ -17,7 +17,7 @@ module StonesSpec
     def make_error_output(result, initial_board_gbb)
       error_message = Gobstones.parse_error_message result
       if Gobstones.runtime_error? error_message
-        "#{get_html_board 'Tablero inicial', initial_board_gbb}\n#{error_message}"
+        "#{get_html_board 'Tablero inicial', initial_board_gbb}\n#{get_boom_board initial_board_gbb}\n#{error_message}"
       else
         error_message
       end
@@ -33,6 +33,33 @@ module StonesSpec
     end
 
     private
+
+    def get_boom_board(initial_board_gbb)
+      gbb = empty_board_gbb_like initial_board_gbb
+
+      boom_css =
+        '<style type="text/css">
+          table.boom {
+            background-image: url(\'boom.png\');
+            background-size: contain;
+          }
+        </style>'
+
+      without_header with_boom_css_class "#{boom_css}\n#{get_html_board '¡Se produjo BOOM!', gbb}"
+    end
+
+    def empty_board_gbb_like(initial_board_gbb)
+      x, y = Stones::Gbb.read(initial_board_gbb).size
+      Stones::Gbb.write Stones::Board.empty(x, y)
+    end
+
+    def with_boom_css_class(html)
+      html.sub('class="gbs_board"', 'class="gbs_board boom"')
+    end
+
+    def without_header(html)
+      html.sub('class="gc gh"', 'class="gc"')
+    end
 
     def with_caption(caption, board_html)
       board_html.sub '<table class="gbs_board">', "<table class=\"gbs_board\">\n<caption>#{caption}</caption>"
