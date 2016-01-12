@@ -38,14 +38,18 @@ module StonesSpec
       gbb = empty_board_gbb_like initial_board_gbb
 
       boom_css =
-        '<style type="text/css">
+        "<style type=\"text/css\">
           table.boom {
-            background-image: url(\'boom.png\');
+            background-image: url('#{boom_image_url}');
             background-size: contain;
           }
-        </style>'
+        </style>"
 
       without_header with_boom_css_class "#{boom_css}\n#{get_html_board '¡Se produjo BOOM!', gbb}"
+    end
+
+    def boom_image_url
+      'https://raw.githubusercontent.com/uqbar-project/stones-spec/master/lib/assets/boom.png'
     end
 
     def empty_board_gbb_like(initial_board_gbb)
