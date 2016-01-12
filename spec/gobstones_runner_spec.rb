@@ -228,6 +228,7 @@ describe Runner do
         it { expect(all_examples :failed).to be true }
 
         it { expect(all_htmls.join("\n")).to include(File.new('spec/data/runtime_error_initial.html').read) }
+        it { expect(html).to include(File.new('spec/data/runtime_error_boom_board.html').read) }
         it do
           expect(all_htmls.join("\n")).to include(
 '<pre>cerca de invocación a procedimiento
