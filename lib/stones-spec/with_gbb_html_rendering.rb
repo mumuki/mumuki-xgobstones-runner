@@ -42,6 +42,8 @@ module StonesSpec
           table.boom {
             background-image: url('#{boom_image_url}');
             background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
           }
         </style>"
 
