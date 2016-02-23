@@ -3,7 +3,7 @@ rvm:
 - 2.0.0
 addons:
   code_climate:
-    repo_token: 368cf539ede8b8e533ca13be7364de2953ed995ec7686b4be659b65a34ebdcef
+    repo_token: 6fd94bfe44da488b1a99b6da3a65b8a07d444f86a161ffe11d10c2a66dbcaa53
 deploy:
   provider: rubygems
   api_key:
@@ -11,4 +11,4 @@ deploy:
   gem: stones-spec
   on:
     tags: true
-    repo: uqbar-project/stones-spec
+    repo: mumuki/stones-spec
