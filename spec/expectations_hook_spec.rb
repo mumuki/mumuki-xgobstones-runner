@@ -1,5 +1,5 @@
 require_relative './spec_helper'
-require_relative '../lib/expectations_runner'
+require_relative '../lib/expectations_hook'
 require 'yaml'
 
 require 'rspec/expectations'
@@ -14,13 +14,13 @@ RSpec::Matchers.define :comply_with do |expectation|
   end
 
   define_method :run_expectation! do |code, expected_result|
-    runner.run_expectations!(expectations: [expectation], content: code, test: 'dummy: true').include?({'expectation' => expectation, 'result' => expected_result})
+    runner.run!(expectations: [expectation], content: code, test: 'dummy: true').include?({'expectation' => expectation, 'result' => expected_result})
   end
 end
 
-describe ExpectationsRunner do
+describe ExpectationsHook do
   let (:config) { YAML.load_file('config/development.yml') }
-  let(:runner) { ExpectationsRunner.new(config) }
+  let(:runner) { ExpectationsHook.new(config) }
 
   context 'Unknown expectation' do
     let(:program) { 'program { Foo() } procedure Foo() {}' }
@@ -240,7 +240,7 @@ describe ExpectationsRunner do
       let(:program) { 'program {}' }
       let(:has_binding_program) { {'binding' => 'program', 'inspection' => 'HasBinding' }  }
 
-      let(:result) { runner.run_expectations! content: program, expectations: [], test: 'dummy: true' }
+      let(:result) { runner.run! content: program, expectations: [], test: 'dummy: true' }
 
       it { expect(result).to eq [{ 'expectation' => has_binding_program, 'result' => true }] }
     end
@@ -250,7 +250,7 @@ describe ExpectationsRunner do
       let(:not_has_binding_program) { {'binding' => 'program', 'inspection' => 'Not:HasBinding' }  }
       let(:has_binding_procedure) { {'binding' => 'Dummy', 'inspection' => 'HasBinding' }  }
 
-      let(:result) { runner.run_expectations! content: procedure, expectations: [], test: 'subject: Dummy' }
+      let(:result) { runner.run! content: procedure, expectations: [], test: 'subject: Dummy' }
 
       it { expect(result).to include({ 'expectation' => not_has_binding_program, 'result' => true }) }
       it { expect(result).to include({ 'expectation' => has_binding_procedure, 'result' => true }) }
@@ -261,7 +261,7 @@ describe ExpectationsRunner do
       let(:not_has_binding_program) { {'binding' => 'program', 'inspection' => 'Not:HasBinding' }  }
       let(:has_binding_function) { {'binding' => 'dummy', 'inspection' => 'HasBinding' }  }
 
-      let(:result) { runner.run_expectations! content: function, expectations: [], test: 'subject: dummy' }
+      let(:result) { runner.run! content: function, expectations: [], test: 'subject: dummy' }
 
       it { expect(result).to include({ 'expectation' => not_has_binding_program, 'result' => true }) }
       it { expect(result).to include({ 'expectation' => has_binding_function, 'result' => true }) }

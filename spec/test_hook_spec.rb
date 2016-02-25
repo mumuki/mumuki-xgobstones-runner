@@ -1,12 +1,12 @@
 require 'spec_helper'
 require 'yaml'
 
-require_relative '../lib/test_compiler'
+require_relative '../lib/test_hook'
 
-describe TestCompiler do
+describe TestHook do
   context '#compile' do
-    let(:compiler) { TestCompiler.new }
-    let(:output) { compiler.create_compilation!({test: test_file, extra: 'extra', content: 'content'}) }
+    let(:compiler) { TestHook.new }
+    let(:output) { compiler.compile({test: test_file, extra: 'extra', content: 'content'}) }
 
     context 'when check_head_position is true' do
       let(:test_file) {

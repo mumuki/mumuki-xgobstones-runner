@@ -66,12 +66,12 @@ class Mumukit::Inspection::NegatedInspection
   end
 end
 
-class ExpectationsRunner < Mumukit::Stub
+class ExpectationsHook < Mumukit::Hook
   include Mumukit
   include StonesSpec::WithTempfile
   include WithTestParser
 
-  def run_expectations!(request)
+  def run!(request)
     content = request[:content]
     expectations = request[:expectations]
 
@@ -84,6 +84,8 @@ class ExpectationsRunner < Mumukit::Stub
 
     all_expectations.map { |exp| {'expectation' => exp, 'result' => run_expectation!(exp, ast)} }
   end
+
+  private
 
   def default_expectations_for(test)
     StonesSpec::Subject.from(test[:subject]).default_expectations
