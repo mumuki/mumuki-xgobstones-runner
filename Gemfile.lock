@@ -26,14 +26,6 @@ GIT
   specs:
     mumukit-inspection (0.0.1)
 
-GIT
-  remote: git://github.com/uqbar-project/stones-spec.git
-  revision: ca7d1a0af90aade90639b9010463e2feb56661d5
-  branch: master
-  specs:
-    stones-spec (0.3.0)
-      ruby-stones (= 0.1.1)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -111,7 +103,7 @@ DEPENDENCIES
   mumukit-inspection!
   rake
   rspec (= 2.13)
-  stones-spec!
+  ruby-stones (= 0.1.1)
 
 BUNDLED WITH
    1.11.2
