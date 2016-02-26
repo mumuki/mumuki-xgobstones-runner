@@ -17,4 +17,4 @@ require_relative 'stones_spec/gobstones'
 require_relative 'stones_spec/example'
 require_relative 'stones_spec/subject'
 require_relative 'stones_spec/runner'
-
+require_relative 'stones_spec/html_board_renderer'
