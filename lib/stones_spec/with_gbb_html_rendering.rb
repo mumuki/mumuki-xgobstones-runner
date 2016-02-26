@@ -51,7 +51,7 @@ module StonesSpec
     end
 
     def boom_image_url
-      'https://raw.githubusercontent.com/uqbar-project/stones-spec/master/lib/assets/boom.png'
+      'https://raw.githubusercontent.com/mumuki/mumuki-gobstones-server/master/lib/assets/boom.png'
     end
 
     def empty_board_gbb_like(initial_board_gbb)

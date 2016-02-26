@@ -2,7 +2,7 @@ require 'mumukit'
 require 'mumukit/inspection'
 require 'yaml'
 
-require_relative 'stones-spec'
+require_relative 'stones_spec'
 require_relative 'subject_extensions'
 require_relative 'with_test_parser'
 
