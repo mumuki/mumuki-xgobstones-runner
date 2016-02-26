@@ -8,6 +8,13 @@ GIT
       rest-client
 
 GIT
+  remote: git://github.com/mumuki/mumukit-inspection.git
+  revision: 11f0a129b18138336a2d2b1c9b72b97b2f34b208
+  branch: master
+  specs:
+    mumukit-inspection (0.0.1)
+
+GIT
   remote: git://github.com/mumuki/mumukit.git
   revision: bfec315ff0287241eea0d4b7958e1697a7a633ba
   tag: v1.0.1
@@ -18,13 +25,6 @@ GIT
       i18n (~> 0.7)
       sinatra (~> 1.4)
       thin
-
-GIT
-  remote: git://github.com/uqbar-project/mumukit-inspection.git
-  revision: 11f0a129b18138336a2d2b1c9b72b97b2f34b208
-  branch: master
-  specs:
-    mumukit-inspection (0.0.1)
 
 GEM
   remote: https://rubygems.org/
