@@ -1,7 +1,7 @@
 require 'mumukit'
 require 'yaml'
-require 'stones-spec'
 
+require_relative 'stones_spec'
 require_relative 'with_test_parser'
 
 class TestHook < Mumukit::Hook

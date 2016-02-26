@@ -1,9 +1,7 @@
 require 'mumukit'
 require 'mumukit/inspection'
-require 'stones-spec'
 require 'yaml'
 
-require_relative 'subject_extensions'
 require_relative 'with_test_parser'
 
 module EvalExpectationsOnAST

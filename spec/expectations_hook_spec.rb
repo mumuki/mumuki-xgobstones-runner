@@ -1,8 +1,9 @@
 require_relative './spec_helper'
 require_relative '../lib/expectations_hook'
 require 'yaml'
-
 require 'rspec/expectations'
+
+require_relative './spec_helper'
 
 RSpec::Matchers.define :comply_with do |expectation|
   match_for_should do |code|
