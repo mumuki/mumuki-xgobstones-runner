@@ -1,0 +1,27 @@
+:check_head_position: true
+:source: |
+  procedure TimesMove(n, dir) {}
+:subject: TimesMove
+:examples:
+ - :initial_board: |
+     GBB/1.0
+     size 10 10
+     head 0 9
+   :arguments:
+    - 3
+    - Sur
+   :final_board: |
+     GBB/1.0
+     size 10 10
+     head 0 6
+ - :initial_board: |
+     GBB/1.0
+     size 10 10
+     head 0 9
+   :arguments:
+    - 2
+    - Este
+   :final_board: |
+     GBB/1.0
+     size 10 10
+     head 2 9
