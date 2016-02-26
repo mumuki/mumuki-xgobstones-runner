@@ -1,7 +1,6 @@
-require 'spec_helper'
 require 'yaml'
 
-require_relative '../lib/test_hook'
+require_relative './spec_helper'
 
 describe TestHook do
   context '#compile' do
