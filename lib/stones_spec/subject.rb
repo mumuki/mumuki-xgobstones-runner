@@ -20,6 +20,14 @@ module StonesSpec
       def self.default_title(_arguments)
         nil
       end
+
+      def self.ast_regexp
+        /AST\(entrypoint\s*program/
+      end
+
+      def self.default_expectations
+        [{ 'binding' => 'program', 'inspection' => 'HasBinding' }]
+      end
     end
 
     class Callable
@@ -34,6 +42,11 @@ module StonesSpec
       def default_title(arguments)
         call_string arguments
       end
+
+      def default_expectations
+        [ { 'binding' => 'program', 'inspection' => 'Not:HasBinding' },
+          { 'binding' => "#{@name}", 'inspection' => 'HasBinding' } ]
+      end
     end
 
     class Procedure < Callable
@@ -44,6 +57,10 @@ module StonesSpec
 
         #{source}"
       end
+
+      def ast_regexp
+        /AST\(procedure\s*#{@name}$/
+      end
     end
 
     class Function < Callable
@@ -53,6 +70,10 @@ module StonesSpec
         }
 
         #{source}"
+      end
+
+      def ast_regexp
+        /AST\(function\s*#{@name}/
       end
     end
   end
