@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rake'
-gem 'ruby-stones', '0.1.1'
+gem 'ruby-stones', '0.2.1'
 gem 'mumukit', github: 'mumuki/mumukit', tag: 'v1.0.1'
 gem 'mumukit-inspection', github: 'mumuki/mumukit-inspection', branch: 'master'
 gem 'activesupport'

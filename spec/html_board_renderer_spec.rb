@@ -3,12 +3,6 @@ require_relative './spec_helper'
 include StonesSpec
 
 describe HtmlBoardRenderer do
-  before do
-    Gobstones.configure do |config|
-      config.gbs_command = 'python .heroku/vendor/pygobstones-lang/pygobstoneslang.py'
-    end
-  end
-
   let (:gbb) {
 'GBB/1.0
 size 4 4
@@ -122,7 +116,6 @@ table.gbs_board {
 }</style>
 
 <table class="gbs_board">
-<caption></caption>
 <tr><td class="lx top_left"></td><td class="lh">0</td><td class="lh">1</td><td class="lh">2</td><td class="lh">3</td><td class="lx top_right"></td></tr>
   <tr>
     <td class="lv">3</td>
