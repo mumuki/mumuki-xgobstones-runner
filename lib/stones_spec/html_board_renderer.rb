@@ -19,8 +19,6 @@ module StonesSpec
       @options[name]
     end
 
-    private
-
     def render_html(board)
       _, size_y = board.size
 
@@ -30,6 +28,12 @@ module StonesSpec
 </table>
 "
     end
+
+    def render_css
+      gobstones_css '9pt', 30
+    end
+
+    private
 
     def table_title
       base = "<table class=\"gbs_board\">"
@@ -68,10 +72,6 @@ module StonesSpec
 
     def html_row_titles(width, caption)
 "<tr><td class=\"lx #{caption}_left\"></td>#{(0...width).map {|x| "<td class=\"lh\">#{x}</td>"}.join}<td class=\"lx #{caption}_right\"></td></tr>"
-    end
-
-    def render_css
-      gobstones_css '9pt', 30
     end
   end
 end

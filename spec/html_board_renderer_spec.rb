@@ -10,10 +10,10 @@ cell 0 0 Rojo 1 Verde 2 Azul 5
 head 3 3'
   }
 
-  context '#render' do
-    let (:expected_html) {
-'<style type="text/css">
-table.gbs_board {
+  let (:options) { {} }
+
+  let (:expected_css) {
+    'table.gbs_board {
   border-style: none;
   border: solid black 0px;
   border-spacing: 0;
@@ -113,9 +113,11 @@ table.gbs_board {
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
-}</style>
+}'
+  }
 
-<table class="gbs_board">
+  let (:expected_html) {
+    '<table class="gbs_board">
 <tr><td class="lx top_left"></td><td class="lh">0</td><td class="lh">1</td><td class="lh">2</td><td class="lh">3</td><td class="lx top_right"></td></tr>
   <tr>
     <td class="lv">3</td>
@@ -232,14 +234,19 @@ table.gbs_board {
 <tr><td class="lx bottom_left"></td><td class="lh">0</td><td class="lh">1</td><td class="lh">2</td><td class="lh">3</td><td class="lx bottom_right"></td></tr>
 </table>
 '
-    }
+  }
 
-    let(:board) { Stones::GbbReader.new.from_string gbb }
+  context '#render_css' do
+    let(:actual_css) { HtmlBoardRenderer.new(options).render_css }
+    it { expect(actual_css).to eq expected_css}
+  end
 
-    let(:actual_html) { HtmlBoardRenderer.new(options).render board }
+  let(:board) { Stones::GbbReader.new.from_string gbb }
+
+  context '#render_html' do
+    let(:actual_html) { HtmlBoardRenderer.new(options).render_html board }
 
     context 'without options' do
-      let (:options) { {} }
       it { expect(actual_html).to eq expected_html }
     end
 
@@ -247,5 +254,10 @@ table.gbs_board {
       let (:options) { {caption: 'Some caption'} }
       it { expect(actual_html).to include "<table class=\"gbs_board\">\n<caption>Some caption</caption>" }
     end
+  end
+
+  context '#render' do
+    let(:actual_result) { HtmlBoardRenderer.new(options).render board }
+    it { expect(actual_result).to eq "<style type=\"text/css\">\n#{expected_css}</style>\n\n#{expected_html}" }
   end
 end
