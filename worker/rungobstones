@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cd $1
+
+for D in `find . -type d`
+do
+  cd $D
+  pygobstones source.gbs --from initial.gbb --to final.gbb --no-print-board --silent >> result 2>&1   	
+done
