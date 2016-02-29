@@ -3,15 +3,7 @@ module StonesSpec
     include StonesSpec::WithTempfile
 
     def get_html_board(caption, gbb_representation)
-      identity = write_tempfile 'program {}', '.gbs'
-      board = write_tempfile gbb_representation, '.gbb'
-      board_html = Tempfile.new %w(gobstones.board .html)
-
-      %x"#{Gobstones.run(identity, board, board_html)}"
-
-      with_caption caption, board_html.read
-    ensure
-      [identity, board, board_html].compact.each(&:unlink)
+      with_caption caption, HtmlBoardRenderer.new.render(Stones::GbbReader.new.from_string gbb_representation)
     end
 
     def make_error_output(result, initial_board_gbb)
