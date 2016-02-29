@@ -22,9 +22,11 @@ module StonesSpec
     private
 
     def render_html(board)
+      _, size_y = board.size
+
 "#{table_title}
-#{html_row_titles board.size[0], 'top'}
-#{(0...board.size[1]).to_a.reverse.map {|y| html_row(board, y)}.join}#{html_row_titles board.size[0], 'bottom'}
+#{html_row_titles size_y, 'top'}
+#{(0...size_y).to_a.reverse.map {|y| html_row(board, y)}.join}#{html_row_titles size_y, 'bottom'}
 </table>
 "
     end
@@ -69,7 +71,7 @@ module StonesSpec
     end
 
     def render_css
-      gobstones_css('9pt', 30)
+      gobstones_css '9pt', 30
     end
   end
 end
