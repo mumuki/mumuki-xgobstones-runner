@@ -1,9 +1,7 @@
 module StonesSpec
   module WithGbbHtmlRendering
-    include StonesSpec::WithTempfile
-
     def get_html_board(caption, gbb_representation)
-      with_caption caption, HtmlBoardRenderer.new.render(Stones::GbbReader.new.from_string gbb_representation)
+      HtmlBoardRenderer.new(caption: caption).render(Stones::GbbReader.new.from_string gbb_representation)
     end
 
     def make_error_output(result, initial_board_gbb)
@@ -57,10 +55,6 @@ module StonesSpec
 
     def without_header(html)
       html.sub('class="gc gh"', 'class="gc"')
-    end
-
-    def with_caption(caption, board_html)
-      board_html.sub '<table class="gbs_board">', "<table class=\"gbs_board\">\n<caption>#{caption}</caption>"
     end
   end
 end

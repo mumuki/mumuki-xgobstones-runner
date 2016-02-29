@@ -236,8 +236,16 @@ table.gbs_board {
 
     let(:board) { Stones::GbbReader.new.from_string gbb }
 
-    let(:actual_html) { HtmlBoardRenderer.new.render board }
+    let(:actual_html) { HtmlBoardRenderer.new(options).render board }
 
-    it { expect(actual_html).to eq expected_html }
+    context 'without options' do
+      let (:options) { {} }
+      it { expect(actual_html).to eq expected_html }
+    end
+
+    context 'with caption' do
+      let (:options) { {caption: 'Some caption'} }
+      it { expect(actual_html).to include "<table class=\"gbs_board\">\n<caption>Some caption</caption>" }
+    end
   end
 end

@@ -4,21 +4,34 @@ module StonesSpec
   class HtmlBoardRenderer
     include StonesSpec::WithGobstonesCSS
 
+    def initialize(options = {})
+      @options = options
+    end
+
     def render(board)
 "<style type=\"text/css\">
 #{render_css}</style>
 
 #{render_html board}"
     end
-    
+
+    def method_missing(name)
+      @options[name]
+    end
+
     private
 
     def render_html(board)
-"<table class=\"gbs_board\">
+"#{table_title}
 #{html_row_titles board.size[0], 'top'}
 #{(0...board.size[1]).to_a.reverse.map {|y| html_row(board, y)}.join}#{html_row_titles board.size[0], 'bottom'}
 </table>
 "
+    end
+
+    def table_title
+      base = "<table class=\"gbs_board\">"
+      caption ? base + "\n<caption>#{caption}</caption>" : base
     end
 
     def html_row(board, y)
