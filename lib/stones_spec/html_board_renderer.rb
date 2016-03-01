@@ -20,11 +20,11 @@ module StonesSpec
     end
 
     def render_html(board)
-      size_x, size_y = board.size
+      width, height = board.size
 
 "#{table_title}
-#{html_row_titles size_x, 'top'}
-#{(0...size_y).to_a.reverse.map {|y| html_row(board, y)}.join}#{html_row_titles size_x, 'bottom'}
+#{html_row_titles width, 'top'}
+#{(0...height).to_a.reverse.map {|y| html_row(board, y)}.join}#{html_row_titles width, 'bottom'}
 </table>
 "
     end
