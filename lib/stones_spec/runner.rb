@@ -22,10 +22,10 @@ module StonesSpec
     def run_example!(example_definition, check_head_position, show_initial_board, source, subject)
       example = Example.new(subject, example_definition)
 
-      files = example.generate_files! source, Precondition.from_example(example)
+      files = example.generate_files! source
+      execution = example.execute! files
 
-      example.start! files
-      example.result files, Postcondition.from(example, check_head_position, show_initial_board)
+      example.result files, execution, Postcondition.from(example, check_head_position, show_initial_board)
     ensure
       files.each_value(&:unlink)
     end
