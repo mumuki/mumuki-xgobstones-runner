@@ -2,13 +2,12 @@ language: ruby
 env: RACK_ENV=development
 rvm:
 - 2.1.0
-deploy:
-  provider: heroku
-  api_key:
-    secure: NWg+0au+RBDQFC8YGkdQg3kbIx+f2e2Wjprl911KJ16H1wDQDJYXGQEt9dvsB4e8xC3vhKLYwNSabbgIuzlTUD6f0utKRzPqO0Qxdr/PebSTNzQuEtNFJDVDY1fK7yk9jeVRH4ldpXQY1B76ett0B2brPpVa7xxPPlJ7PNhzC0o=
-  app: mumuki-gobstones-server
-  on:
-    repo: mumuki/mumuki-gobstones-server
 addons:
   code_climate:
     repo_token: 8548eba8b9cf270d3deee106d407bb9a9fdc3a44df9b2e03d1a68b0e6200117c
+after_success:
+- wget https://raw.githubusercontent.com/mumuki/mumuki-escualo/master/travis_deploy
+  && chmod u+x travis_deploy && ./travis_deploy gobstones runners2.mumuki.io
+before_install:
+- openssl aes-256-cbc -K $encrypted_fb0045c28a64_key -iv $encrypted_fb0045c28a64_iv
+  -in escualo_rsa.enc -out escualo_rsa -d
