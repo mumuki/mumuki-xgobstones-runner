@@ -17,8 +17,8 @@ module StonesSpec
 
       @source_file = write_tempfile @subject.test_program(source, precondition.arguments), Gobstones.source_code_extension
 
-      @actual_final_board_file = Tempfile.new %w(gobstones.output .gbb)
-      @initial_board_file = write_tempfile precondition.initial_board_gbb, 'gbb'
+      @actual_final_board_file = Tempfile.new ['gobstones.output', Gobstones.board_extension]
+      @initial_board_file = write_tempfile precondition.initial_board_gbb, Gobstones.board_extension
       @result, @status = run_command "#{Gobstones.run(@source_file, @initial_board_file, @actual_final_board_file)} 2>&1"
     end
 

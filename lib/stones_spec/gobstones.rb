@@ -29,6 +29,10 @@ module StonesSpec
       'gbs'
     end
 
+    def self.board_extension
+      'gbb'
+    end
+
     def self.ensure_no_syntax_error!(error_message)
       raise SyntaxError, error_message if syntax_error? error_message
     end
