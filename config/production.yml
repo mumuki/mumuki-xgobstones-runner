@@ -1,1 +1,1 @@
-gobstones_command: python .heroku/vendor/pygobstones-lang/pygobstoneslang.py
+gobstones_command: pygobstones
