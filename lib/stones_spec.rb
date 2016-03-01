@@ -4,6 +4,7 @@ end
 require 'stones'
 
 require_relative 'stones_spec/string'
+require_relative 'stones_spec/hash'
 
 require_relative 'stones_spec/with_tempfile'
 require_relative 'stones_spec/with_command_line'

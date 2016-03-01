@@ -22,7 +22,13 @@ module StonesSpec
     def run_example!(example_definition, check_head_position, show_initial_board, source, subject)
       example = Example.new(subject, example_definition)
 
-      files = example.generate_files! source
+      data = example.execution_data source
+      files = {
+        source: Gobstones.source_code_extension,
+        initial_board: Gobstones.board_extension,
+        final_board: Gobstones.board_extension
+      }.map_values { |name, extension| write_tempfile(data[name], extension) }
+
       execution = example.execute! files
 
       example.result files, execution, Postcondition.from(example, check_head_position, show_initial_board)

@@ -2,7 +2,6 @@ require 'ostruct'
 
 module StonesSpec
   class Example < OpenStruct
-    include StonesSpec::WithTempfile
     include StonesSpec::WithCommandLine
 
     def initialize(subject, attributes)
@@ -12,14 +11,13 @@ module StonesSpec
       @precondition = Precondition.from_example(self)
     end
 
-    def generate_files!(source)
-      { source: write_tempfile(@subject.test_program(source, @precondition.arguments), Gobstones.source_code_extension),
-        actual_final_board: Tempfile.new(['gobstones.output', Gobstones.board_extension]),
-        initial_board: write_tempfile(@precondition.initial_board_gbb, Gobstones.board_extension) }
+    def execution_data(source)
+      { source: @subject.test_program(source, @precondition.arguments),
+        initial_board: @precondition.initial_board_gbb }
     end
 
     def execute!(files)
-      result, status = run_command "#{Gobstones.run(files[:source], files[:initial_board], files[:actual_final_board])} 2>&1"
+      result, status = run_command "#{Gobstones.run(files[:source], files[:initial_board], files[:final_board])} 2>&1"
       { result: result, status: status }
     end
 
@@ -29,7 +27,7 @@ module StonesSpec
         Gobstones.ensure_no_syntax_error! error_message
       end
 
-      postcondition.validate(files[:initial_board].open.read, files[:actual_final_board].read, execution[:result], execution[:status])
+      postcondition.validate(files[:initial_board].open.read, files[:final_board].open.read, execution[:result], execution[:status])
     end
 
     def title
