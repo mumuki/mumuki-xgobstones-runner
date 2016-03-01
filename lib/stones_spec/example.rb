@@ -11,30 +11,25 @@ module StonesSpec
       @subject = subject
     end
 
-    def start!(source, precondition, postcondition)
-      @postcondition = postcondition
+    def generate_files!(source, precondition)
       @precondition = precondition
 
-      @source_file = write_tempfile @subject.test_program(source, precondition.arguments), Gobstones.source_code_extension
-
-      @actual_final_board_file = Tempfile.new ['gobstones.output', Gobstones.board_extension]
-      @initial_board_file = write_tempfile precondition.initial_board_gbb, Gobstones.board_extension
-      @result, @status = run_command "#{Gobstones.run(@source_file, @initial_board_file, @actual_final_board_file)} 2>&1"
+      { source: write_tempfile(@subject.test_program(source, precondition.arguments), Gobstones.source_code_extension),
+        actual_final_board: Tempfile.new(['gobstones.output', Gobstones.board_extension]),
+        initial_board: write_tempfile(precondition.initial_board_gbb, Gobstones.board_extension) }
     end
 
-    def result
-      initial_board_gbb = @initial_board_file.open.read
+    def start!(files)
+      @result, @status = run_command "#{Gobstones.run(files[:source], files[:initial_board], files[:actual_final_board])} 2>&1"
+    end
 
+    def result(files, postcondition)
       if @status == :failed
         error_message = Gobstones.parse_error_message @result
         Gobstones.ensure_no_syntax_error! error_message
       end
 
-      @postcondition.validate(initial_board_gbb, @actual_final_board_file.read, @result, @status)
-    end
-
-    def stop!
-      [@actual_final_board_file, @initial_board_file].each { |it| it.unlink }
+      postcondition.validate(files[:initial_board].open.read, files[:actual_final_board].read, @result, @status)
     end
 
     def title
