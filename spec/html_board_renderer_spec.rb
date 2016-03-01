@@ -254,6 +254,41 @@ head 3 3'
       let (:options) { {caption: 'Some caption'} }
       it { expect(actual_html).to include "<table class=\"gbs_board\">\n<caption>Some caption</caption>" }
     end
+
+    context 'non square board' do
+      let (:gbb) {
+'GBB/1.0
+size 2 1
+cell 0 0 Negro 3
+head 0 0'
+      }
+
+      let (:expected_html) {
+'<table class="gbs_board">
+<tr><td class="lx top_left"></td><td class="lh">0</td><td class="lh">1</td><td class="lx top_right"></td></tr>
+  <tr>
+    <td class="lv">0</td>
+    <td class="gc gh">
+      <table>
+        <tr><td><div class="gbs_stone N"><span>3</span></div></td><td><div class="O"></div></td></tr>
+        <tr><td><div class="O"></div></td><td><div class="O"></div></td></tr>
+      </table>
+    </td>
+    <td class="gc">
+      <table>
+        <tr><td><div class="O"></div></td><td><div class="O"></div></td></tr>
+        <tr><td><div class="O"></div></td><td><div class="O"></div></td></tr>
+      </table>
+    </td>
+    <td class="lv">0</td>
+  </tr>
+<tr><td class="lx bottom_left"></td><td class="lh">0</td><td class="lh">1</td><td class="lx bottom_right"></td></tr>
+</table>
+'
+      }
+
+      it { expect(actual_html).to eq expected_html }
+    end
   end
 
   context '#render' do
