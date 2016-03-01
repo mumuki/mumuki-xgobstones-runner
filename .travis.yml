@@ -2,6 +2,8 @@ language: ruby
 env: RACK_ENV=development
 rvm:
 - 2.1.0
+git:
+  depth: 100
 addons:
   code_climate:
     repo_token: 8548eba8b9cf270d3deee106d407bb9a9fdc3a44df9b2e03d1a68b0e6200117c
