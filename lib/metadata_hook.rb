@@ -5,7 +5,8 @@ class MetadataHook < Mumukit::Hook
         icon: {type: 'devicon', name: 'gobstones'},
         version: '1.4.1',
         extension: 'gbs',
-        ace_mode: 'gobstones'
+        ace_mode: 'gobstones',
+        graphic: true
     },
      test_framework: {
          name: 'stones-spec',
