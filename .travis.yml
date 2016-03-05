@@ -1,7 +1,7 @@
 language: ruby
 env: RACK_ENV=development
 rvm:
-- 2.1.0
+- 2.0.0
 git:
   depth: 100
 addons:
