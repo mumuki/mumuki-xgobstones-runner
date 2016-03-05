@@ -107,6 +107,11 @@ describe Runner do
   end
 
   describe 'function spec' do
+    context 'shows the initial board' do
+      let(:test_file) { 'gobstones/function/remaining_cells_ok' }
+      it { expect(html).to include File.new('spec/data/gobstones/function/remaining_cells_ok_initial.html').read }
+    end
+
     context 'when passes with args' do
       let(:test_file) { 'gobstones/function/remaining_cells_ok' }
       it {expect(all_examples :passed).to be true }
@@ -116,13 +121,13 @@ describe Runner do
       let(:test_file) { 'gobstones/function/remaining_cells_fail' }
 
       it { expect(all_examples :failed).to be true }
-      it { expect(html).to include 'Se esperaba <b>9</b> pero se obtuvo <b>18</b>' }
+      it { expect(html).to include 'Se esperaba <b>2</b> pero se obtuvo <b>4</b>' }
     end
 
     context 'when no title is given, it uses the function name, the arguments and the return value' do
       let(:test_file) { 'gobstones/function/remaining_cells_ok' }
 
-      it { expect(title).to include 'remainingCells(Este) -> 9' }
+      it { expect(title).to include 'remainingCells(Este) -> 2' }
     end
 
     context 'when no initial board is given, it uses a default one' do

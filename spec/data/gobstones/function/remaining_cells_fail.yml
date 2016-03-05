@@ -12,8 +12,8 @@
 :examples:
  - :initial_board: |
      GBB/1.0
-     size 10 10
+     size 3 3
      head 0 0
    :arguments:
      - Este
-   :return: 9
+   :return: 2

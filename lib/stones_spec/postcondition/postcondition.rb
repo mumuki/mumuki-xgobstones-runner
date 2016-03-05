@@ -4,7 +4,7 @@ module StonesSpec
       if example.final_board
         ExpectedFinalBoard.new(example, check_head_position, show_initial_board)
       elsif example.return
-        ExpectedReturnValue.new(example)
+        ExpectedReturnValue.new(example, show_initial_board)
       else
         ExpectedBoom.new(example)
       end

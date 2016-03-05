@@ -1,9 +1,6 @@
 module StonesSpec
   module Postcondition
     class ExpectedFinalBoard < ExpectedResult
-      include StonesSpec::WithTempfile
-      include StonesSpec::WithGbbHtmlRendering
-
       attr_reader :check_head_position, :show_initial_board
 
       def initialize(example, check_head_position, show_initial_board)
