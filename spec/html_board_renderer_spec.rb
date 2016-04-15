@@ -6,7 +6,7 @@ describe HtmlBoardRenderer do
   let (:gbb) {
 'GBB/1.0
 size 4 4
-cell 0 0 Rojo 1 Verde 2 Azul 5
+cell 0 0 Rojo 1 Verde 2 Azul 5 Negro 3
 head 3 3'
   }
 
@@ -207,7 +207,7 @@ head 3 3'
     <td class="lv">0</td>
     <td class="gc">
       <table>
-        <tr><td><div class="O"></div></td><td><div class="gbs_stone A"><span>5</span></div></td></tr>
+        <tr><td><div class="gbs_stone A"><span>5</span></div></td><td><div class="gbs_stone N"><span>3</span></div></td></tr>
         <tr><td><div class="gbs_stone R"><span>1</span></div></td><td><div class="gbs_stone V"><span>2</span></div></td></tr>
       </table>
     </td>
@@ -270,7 +270,7 @@ head 0 0'
     <td class="lv">0</td>
     <td class="gc gh">
       <table>
-        <tr><td><div class="gbs_stone N"><span>3</span></div></td><td><div class="O"></div></td></tr>
+        <tr><td><div class="O"></div></td><td><div class="gbs_stone N"><span>3</span></div></td></tr>
         <tr><td><div class="O"></div></td><td><div class="O"></div></td></tr>
       </table>
     </td>
