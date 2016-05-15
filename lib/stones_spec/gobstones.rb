@@ -39,5 +39,8 @@ module StonesSpec
 
     class SyntaxError < Exception
     end
+
+    class AbortedError < Exception
+    end
   end
 end

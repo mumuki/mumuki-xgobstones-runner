@@ -2,7 +2,7 @@ require 'ostruct'
 
 module StonesSpec
   class Example < OpenStruct
-    include StonesSpec::WithCommandLine
+    include Mumukit::WithCommandLine
 
     def initialize(subject, attributes)
       super attributes
@@ -22,6 +22,10 @@ module StonesSpec
     end
 
     def result(files, execution, postcondition)
+      if execution[:status] == :aborted
+        raise Gobstones::AbortedError, execution[:result]
+      end
+
       if execution[:status] == :failed
         error_message = Gobstones.parse_error_message execution[:result]
         Gobstones.ensure_no_syntax_error! error_message

@@ -14,6 +14,8 @@ module StonesSpec
         end]
       rescue Gobstones::SyntaxError => e
         [e.message, :errored]
+      rescue Gobstones::AbortedError => e
+        [e.message, :aborted]
       end
     end
 

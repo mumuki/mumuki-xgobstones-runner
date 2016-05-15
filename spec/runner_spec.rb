@@ -78,6 +78,14 @@ describe Runner do
     end
   end
 
+  describe 'limits' do
+    context 'when program does not finish' do
+      let(:test_file) { 'while_true' }
+      it { expect(test_results[0]).to include 'time limit' }
+      it { expect(test_results[1]).to eq :aborted }
+    end
+  end
+
   describe 'procedure spec' do
     context 'when passes' do
       let(:test_file) { 'gobstones/procedure/move_to_origin_ok' }
