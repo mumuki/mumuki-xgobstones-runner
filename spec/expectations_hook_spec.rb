@@ -76,8 +76,8 @@ describe ExpectationsHook do
     ' }
 
     it { expect(program_with_variable).to comply_with has_variable_expectation }
-  end  
-  
+  end
+
   context 'HasForeach expectation' do
     let(:has_foreach_expectation) { {'binding' => 'program', 'inspection' => 'HasForeach'} }
 
@@ -224,11 +224,9 @@ describe ExpectationsHook do
 
     context 'when the binding is a function' do
       let(:function) { 'function colorDestacado() { return (Rojo) }
-                        function color() { return (Rojo) }
-                        function colorDestacado() { return (Rojo) }' }
+                        function otraCosa(x, y) { return (Verde) }' }
 
       let(:has_arity_0) { {'binding' => 'colorDestacado', 'inspection' => 'HasArity:0' }  }
-      let(:has_arity_1) { {'binding' => 'colorDestacado', 'inspection' => 'HasArity:1' }  }
       let(:has_arity_2) { {'binding' => 'colorDestacado', 'inspection' => 'HasArity:2' }  }
 
       it { expect(function).to comply_with has_arity_0 }
