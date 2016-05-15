@@ -37,10 +37,19 @@ module StonesSpec
       raise SyntaxError, error_message if syntax_error? error_message
     end
 
-    class SyntaxError < Exception
+    class Error < Exception
     end
 
-    class AbortedError < Exception
+    class SyntaxError < Error
+      def status
+        :errored
+      end
+    end
+
+    class AbortedError < Error
+      def status
+        :aborted
+      end
     end
   end
 end

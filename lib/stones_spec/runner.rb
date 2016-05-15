@@ -12,10 +12,8 @@ module StonesSpec
         [test_definition[:examples].map do |example_definition|
           run_example!(example_definition, check_head_position, show_initial_board, source, subject)
         end]
-      rescue Gobstones::SyntaxError => e
-        [e.message, :errored]
-      rescue Gobstones::AbortedError => e
-        [e.message, :aborted]
+      rescue Gobstones::Error => e
+        [e.message, e.status]
       end
     end
 
