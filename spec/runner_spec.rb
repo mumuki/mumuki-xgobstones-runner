@@ -22,6 +22,11 @@ describe Runner do
   let(:all_htmls) { results.map { |it| it[2] } }
   let(:html) { all_htmls[0] }
 
+  describe 'endless while assertion' do
+    let(:test_file) { 'gobstones/error_assertions/endless_while' }
+    it { expect(test_results[0]).to include 'time limit' }
+    it { expect(test_results[1]).to eq :passed }
+  end
 
   describe 'error assertions' do
     context 'when fails with another type' do
