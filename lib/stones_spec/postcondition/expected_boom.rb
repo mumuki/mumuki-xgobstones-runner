@@ -36,7 +36,8 @@ module StonesSpec
       def known_error_types
         {
           out_of_board: { message: 'La posición cae afuera del tablero', friendly_message: 'caer fuera del tablero' },
-          no_stones: { message: 'No hay bolitas de ese color', friendly_message: 'no haber bolitas' }
+          no_stones: { message: 'No hay bolitas de ese color', friendly_message: 'no haber bolitas' },
+          unassigned_variable: { message: 'podría no tener asignado ningún valor', friendly_message: 'tener una variable sin asignar' }
         }
       end
 

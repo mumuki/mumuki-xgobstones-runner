@@ -66,6 +66,12 @@ describe Runner do
       it { expect(html).to include 'No se puede sacar una bolita de color: Verde' }
       it { expect(html).to include File.new('spec/data/runtime_error_initial.html').read }
     end
+
+    context 'unassigned variable' do
+      let(:test_file) { 'gobstones/error_assertions/unassigned_variable_error' }
+      it { expect(all_examples :passed).to be true }
+      it { expect(html).to include 'La variable "unexistentVariable" podría no tener asignado ningún valor' }
+    end
   end
 
   describe 'xgobstones' do
