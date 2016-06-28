@@ -3,7 +3,7 @@ env:
   matrix:
   - RACK_ENV=development
   global:
-    secure: MI/geriaGB90tJmPReYzdnH1dtmrw4JI9ZKeL+IiGvcjL838g6EIoqK+3jWqxerzT9zKbdTr8+MMa3nRbCH/gh6Ti+NSW98zcrPbawdF71Bnyl/JbZevhCRVzounRRNthGaQ8Hos/bwa/uHak10JY8yJ7+VvSBtnmfqRtnQRODk=
+    secure: YeGMmchP7zZ2jU5d4owiY/18fSUUR69ZPp+jnTpjaEVcwulDc/fj8dGV/tdIJBXE5JB3ZdJo/OLHhWqNWjqSHoKpMxmBMDE4qO31MOLGlXklhelHXvC3dcYKwFb+CHT2bJxMRbgMUwcjSlCOk/hD32Re5TUtuzoTI/9l5NPhLgY=
 rvm:
 - 2.0.0
 git:
@@ -16,5 +16,5 @@ after_success:
   && chmod u+x travis_deploy
 - ./travis_deploy gobstones
 before_install:
-- openssl aes-256-cbc -K $encrypted_db1b845b800d_key -iv $encrypted_db1b845b800d_iv
+- openssl aes-256-cbc -K $encrypted_680c264973b1_key -iv $encrypted_680c264973b1_iv
   -in escualo_rsa.enc -out escualo_rsa -d
