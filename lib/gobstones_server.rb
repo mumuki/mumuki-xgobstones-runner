@@ -1,7 +1,7 @@
 require 'mumukit'
 
+Mumukit.runner_name = 'gobstones'
 Mumukit.configure do |config|
-  config.runner_name = 'gobstones-server'
   config.structured = true
   config.content_type = 'html'
 end

@@ -2,19 +2,8 @@ language: ruby
 env:
   matrix:
   - RACK_ENV=development
-  global:
-    secure: YeGMmchP7zZ2jU5d4owiY/18fSUUR69ZPp+jnTpjaEVcwulDc/fj8dGV/tdIJBXE5JB3ZdJo/OLHhWqNWjqSHoKpMxmBMDE4qO31MOLGlXklhelHXvC3dcYKwFb+CHT2bJxMRbgMUwcjSlCOk/hD32Re5TUtuzoTI/9l5NPhLgY=
 rvm:
 - 2.0.0
-git:
-  depth: 100
 addons:
   code_climate:
     repo_token: 8548eba8b9cf270d3deee106d407bb9a9fdc3a44df9b2e03d1a68b0e6200117c
-after_success:
-- wget https://raw.githubusercontent.com/mumuki/mumuki-escualo-deploy/master/travis_deploy
-  && chmod u+x travis_deploy
-- ./travis_deploy gobstones
-before_install:
-- openssl aes-256-cbc -K $encrypted_680c264973b1_key -iv $encrypted_680c264973b1_iv
-  -in escualo_rsa.enc -out escualo_rsa -d

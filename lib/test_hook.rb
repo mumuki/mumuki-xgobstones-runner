@@ -4,7 +4,7 @@ require 'yaml'
 require_relative 'stones_spec'
 require_relative 'with_test_parser'
 
-class TestHook < Mumukit::Hook
+class GobstonesTestHook < Mumukit::Hook
   include WithTestParser
 
   def compile(request)

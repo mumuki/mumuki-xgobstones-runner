@@ -4,7 +4,7 @@ require 'mumukit/bridge'
 require_relative './spec_helper'
 
 describe 'runner' do
-  let(:bridge) { Mumukit::Bridge::Bridge.new('http://localhost:4567') }
+  let(:bridge) { Mumukit::Bridge::Runner.new('http://localhost:4567') }
   let(:response_result) { response[:test_results][0][:result] }
 
   before(:all) do
