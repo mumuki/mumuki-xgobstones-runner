@@ -2,9 +2,9 @@ require 'yaml'
 
 require_relative './spec_helper'
 
-describe TestHook do
+describe GobstonesTestHook do
   context '#compile' do
-    let(:compiler) { TestHook.new }
+    let(:compiler) { GobstonesTestHook.new }
     let(:output) { compiler.compile({test: test_file, extra: 'extra', content: 'content'}) }
 
     context 'when check_head_position is true' do

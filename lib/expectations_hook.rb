@@ -64,8 +64,7 @@ class Mumukit::Inspection::NegatedInspection
   end
 end
 
-class ExpectationsHook < Mumukit::Hook
-  include Mumukit
+class GobstonesExpectationsHook < Mumukit::Defaults::ExpectationsHook
   include StonesSpec::WithTempfile
   include WithTestParser
 

@@ -1,4 +1,4 @@
-class MetadataHook < Mumukit::Hook
+class GobstonesMetadataHook < Mumukit::Hook
   def metadata
     {language: {
         name: 'gobstones',

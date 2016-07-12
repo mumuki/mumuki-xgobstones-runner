@@ -19,9 +19,9 @@ RSpec::Matchers.define :comply_with do |expectation|
   end
 end
 
-describe ExpectationsHook do
+describe GobstonesExpectationsHook do
   let (:config) { YAML.load_file('config/development.yml') }
-  let(:runner) { ExpectationsHook.new(config) }
+  let(:runner) { GobstonesExpectationsHook.new(config) }
 
   context 'Unknown expectation' do
     let(:program) { 'program { Foo() } procedure Foo() {}' }

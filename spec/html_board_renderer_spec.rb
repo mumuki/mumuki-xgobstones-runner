@@ -1,8 +1,6 @@
 require_relative './spec_helper'
 
-include StonesSpec
-
-describe HtmlBoardRenderer do
+describe StonesSpec::HtmlBoardRenderer do
   let (:gbb) {
 'GBB/1.0
 size 4 4
@@ -237,14 +235,14 @@ head 3 3'
   }
 
   context '#render_css' do
-    let(:actual_css) { HtmlBoardRenderer.new(options).render_css }
+    let(:actual_css) { StonesSpec::HtmlBoardRenderer.new(options).render_css }
     it { expect(actual_css).to eq expected_css}
   end
 
   let(:board) { Stones::GbbReader.new.from_string gbb }
 
   context '#render_html' do
-    let(:actual_html) { HtmlBoardRenderer.new(options).render_html board }
+    let(:actual_html) { StonesSpec::HtmlBoardRenderer.new(options).render_html board }
 
     context 'without options' do
       it { expect(actual_html).to eq expected_html }
@@ -292,7 +290,7 @@ head 0 0'
   end
 
   context '#render' do
-    let(:actual_result) { HtmlBoardRenderer.new(options).render board }
+    let(:actual_result) { StonesSpec::HtmlBoardRenderer.new(options).render board }
     it { expect(actual_result).to eq "<style type=\"text/css\">\n#{expected_css}</style>\n\n#{expected_html}" }
   end
 end
