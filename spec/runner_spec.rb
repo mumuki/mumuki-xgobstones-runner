@@ -72,6 +72,12 @@ describe Runner do
       it { expect(all_examples :passed).to be true }
       it { expect(html).to include 'La variable "unexistentVariable" podría no tener asignado ningún valor' }
     end
+
+    context 'wrong argument type' do
+      let(:test_file) { 'gobstones/error_assertions/wrong_argument_type_error' }
+      it { expect(all_examples :passed).to be true }
+      it { expect(html).to include 'El argumento de Poner debería ser un color' }
+    end
   end
 
   describe 'xgobstones' do

@@ -37,7 +37,8 @@ module StonesSpec
         {
           out_of_board: { message: 'La posición cae afuera del tablero', friendly_message: 'caer fuera del tablero' },
           no_stones: { message: 'No hay bolitas de ese color', friendly_message: 'no haber bolitas' },
-          unassigned_variable: { message: 'podría no tener asignado ningún valor', friendly_message: 'tener una variable sin asignar' }
+          unassigned_variable: { message: 'podría no tener asignado ningún valor', friendly_message: 'tener una variable sin asignar' },
+          wrong_argument_type: { message: 'El argumento de', friendly_message: 'tipo erróneo de un argumento' }
         }
       end
 
