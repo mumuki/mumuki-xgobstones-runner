@@ -30,15 +30,16 @@ module StonesSpec
       end
 
       def error_type_matches?(result)
-        result.include? error_type[:message]
+         error_type[:matcher] =~ result
       end
 
       def known_error_types
         {
-          out_of_board: { message: 'La posición cae afuera del tablero', friendly_message: 'caer fuera del tablero' },
-          no_stones: { message: 'No hay bolitas de ese color', friendly_message: 'no haber bolitas' },
-          unassigned_variable: { message: 'podría no tener asignado ningún valor', friendly_message: 'tener una variable sin asignar' },
-          wrong_argument_type: { message: 'El argumento de', friendly_message: 'tipo erróneo de un argumento' }
+          out_of_board: { matcher: /La posición cae afuera del tablero/, friendly_message: 'caer fuera del tablero' },
+          no_stones: { matcher: /No hay bolitas de ese color/, friendly_message: 'no haber bolitas' },
+          unassigned_variable: { matcher: /podría no tener asignado ningún valor/, friendly_message: 'tener una variable sin asignar' },
+          wrong_argument_type: { matcher: /El argumento de .+ debería ser/, friendly_message: 'tipo erróneo de un argumento' },
+          wrong_arguments_quantity: { matcher: /Esperaba \d+ argumentos (.|\n)* Recibió \d+/, friendly_message: 'cantidad inválida de argumentos' }
         }
       end
 

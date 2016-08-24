@@ -78,6 +78,20 @@ describe Runner do
       it { expect(all_examples :passed).to be true }
       it { expect(html).to include 'El argumento de Poner debería ser un color' }
     end
+
+    context 'wrong arguments quantity, more than expected' do
+      let(:test_file) { 'gobstones/error_assertions/more_arguments_error' }
+      it { expect(all_examples :passed).to be true }
+      it { expect(html).to include 'Esperaba 1 argumentos' }
+      it { expect(html).to include 'Recibió 2' }
+    end
+
+    context 'wrong arguments quantity, less than expected' do
+      let(:test_file) { 'gobstones/error_assertions/less_arguments_error' }
+      it { expect(all_examples :passed).to be true }
+      it { expect(html).to include 'Esperaba 2 argumentos' }
+      it { expect(html).to include 'Recibió 1' }
+    end
   end
 
   describe 'xgobstones' do
@@ -280,16 +294,17 @@ Error en tiempo de ejecución:
       it { expect(errored_result[1]).to eql :errored }
       it do
         expect(errored_result[0]).to eq(
-'<pre>cerca de un identificador con mayúscula "Error"
-        |
-        V
-  Poner(Error)
+'<pre>cerca de "("
+       |
+       V
+  Poner(Rojo
 
 --
 
-Error en el programa:
+Error de sintaxis:
 
-    El tipo Error no está definido</pre>')
+    Se encontró un paréntesis "(" pero nunca se cierra
+    Quizás sobra un "}" en línea 3, columna 1</pre>')
       end
     end
   end
