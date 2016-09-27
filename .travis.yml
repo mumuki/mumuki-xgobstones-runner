@@ -7,3 +7,11 @@ rvm:
 addons:
   code_climate:
     repo_token: 8548eba8b9cf270d3deee106d407bb9a9fdc3a44df9b2e03d1a68b0e6200117c
+deploy:
+  provider: rubygems
+  api_key:
+    secure: OOnaWnTiT5tA4tiAx7f6C/p+lS76iNCSMi3GHzYhIEYk1uvXEZJEvNkBWiMJa6vlLFEJsNOo5ryuJUhAxUo6AVpv+XkqgtHcsY3bojzsAIv9MPMYu43qaAJb42SoJQbSa+c9yfLAF0DINq3aTQriNFAQKyfKeCuOWGSfbvOhPXo=
+  gem: mumuki-gobstones-runner
+  on:
+    tags: true
+    repo: mumuki/mumuki-gobstones-runner
