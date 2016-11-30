@@ -1,11 +1,11 @@
 
-[![Stories in Ready](https://badge.waffle.io/mumuki/mumuki-xgobstones-server.png?label=ready&title=Ready)](https://waffle.io/mumuki/mumuki-xgobstones-server)
-[![Build Status](https://travis-ci.org/mumuki/mumuki-xgobstones-server.svg?branch=master)](https://travis-ci.org/mumuki/mumuki-xgobstones-server)
-[![Code Climate](https://codeclimate.com/github/mumuki/mumuki-xgobstones-server/badges/gpa.svg)](https://codeclimate.com/github/mumuki/mumuki-xgobstones-server)
-[![Test Coverage](https://codeclimate.com/github/mumuki/mumuki-xgobstones-server/badges/coverage.svg)](https://codeclimate.com/github/mumuki/mumuki-xgobstones-server/coverage)
+[![Stories in Ready](https://badge.waffle.io/mumuki/mumuki-xgobstones-runner.png?label=ready&title=Ready)](https://waffle.io/mumuki/mumuki-xgobstones-runner)
+[![Build Status](https://travis-ci.org/mumuki/mumuki-xgobstones-runner.svg?branch=master)](https://travis-ci.org/mumuki/mumuki-xgobstones-runner)
+[![Code Climate](https://codeclimate.com/github/mumuki/mumuki-xgobstones-runner/badges/gpa.svg)](https://codeclimate.com/github/mumuki/mumuki-xgobstones-runner)
+[![Test Coverage](https://codeclimate.com/github/mumuki/mumuki-xgobstones-runner/badges/coverage.svg)](https://codeclimate.com/github/mumuki/mumuki-xgobstones-runner/coverage)
 
-# mumuki-xgobstones-server
-> Sinatra server for validating xGobstones tests within [Mumuki](http://github.com/mumuki)
+# mumuki-xgobstones-runner
+> Sinatra runner for validating xGobstones tests within [Mumuki](http://github.com/mumuki)
 
 #Prerequisites
   Install rbenv:
@@ -43,7 +43,7 @@ Also you can all the tests running the following command:
 
     bundle exec rake 
 
-If you want to run the test using rubymine just look for the "spec"     folder inside mumuki-xgobstones-server project, right click on the       prevously mention folder and click on "Run all Specs..." option.
+If you want to run the test using rubymine just look for the "spec"     folder inside mumuki-xgobstones-runner project, right click on the       prevously mention folder and click on "Run all Specs..." option.
   
 If you have done the steps correctly both ways of running test should do it successfully.
     
