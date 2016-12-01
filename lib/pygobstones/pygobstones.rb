@@ -17,7 +17,7 @@ module StonesSpec
 
         detailed_status =
           if runtime_error? detailed_error
-            :runtime_error
+            :failed
           elsif syntax_error? detailed_error
             :syntax_error
           else
