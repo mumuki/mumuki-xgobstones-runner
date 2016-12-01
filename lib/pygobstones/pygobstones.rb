@@ -12,17 +12,20 @@ module StonesSpec
     def run(source_file, initial_board_file, final_board_file)
       result, status = run_command "#{@gbs_command} #{source_file.path} --from #{initial_board_file.path} --to #{final_board_file.path} --no-print-board --silent 2>&1"
 
-      if status == :failed
+     if status == :failed
         detailed_error = parse_error_message(result)
 
         detailed_status =
-          if compilation_error? result
-            :compilation_error
-          elsif runtime_error? result
+          if runtime_error? detailed_error
             :runtime_error
+          elsif syntax_error? detailed_error
+            :syntax_error
           else
-            :failed
+            :unknown_error
           end
+
+        puts detailed_error
+        puts detailed_status
 
         { result: detailed_error, status: detailed_status }
       else
@@ -32,12 +35,12 @@ module StonesSpec
 
     private
 
-    def compilation_error?(result)
-      result.include_any? ['Error de sintaxis', 'Error de Gobstones']
+    def syntax_error?(result)
+      result.include_any? ['Error de sintaxis']
     end
 
     def runtime_error?(result)
-      result.include_any? ['Error en tiempo de ejecución', 'Error en el programa']
+      result.include_any? ['Error en tiempo de ejecución']
     end
 
     def parse_error_message(result)
