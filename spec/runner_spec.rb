@@ -6,13 +6,9 @@ require_relative './spec_helper'
 include StonesSpec
 
 describe Runner do
-  before do
-    Gobstones.configure do |config|
-      config.gbs_command = 'python .heroku/vendor/pygobstones-lang/pygobstoneslang.py'
-    end
-  end
+  let(:parser) { StonesSpec::PyGobstonesParser.new('python .heroku/vendor/pygobstones-lang/pygobstoneslang.py') }
 
-  let(:runner) { Runner.new }
+  let(:runner) { Runner.new(parser) }
   let(:test_definition) { YAML.load_file "spec/data/#{test_file}.yml" }
   let(:test_results) { runner.run!(test_definition) }
 
