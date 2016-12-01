@@ -1,5 +1,5 @@
-require 'codeclimate-test-reporter'
+#require 'codeclimate-test-reporter'
 
 require_relative '../lib/gobstones_runner'
 
-CodeClimate::TestReporter.start
+#CodeClimate::TestReporter.start
