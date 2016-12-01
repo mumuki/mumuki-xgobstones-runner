@@ -16,8 +16,8 @@ module StonesSpec
         detailed_error = parse_error_message(result)
 
         detailed_status =
-          if syntax_error? result
-            :syntax_error
+          if compilation_error? result
+            :compilation_error
           elsif runtime_error? result
             :runtime_error
           else
@@ -32,8 +32,8 @@ module StonesSpec
 
     private
 
-    def syntax_error?(result)
-      result.include? 'Error de sintaxis'
+    def compilation_error?(result)
+      result.include_any? ['Error de sintaxis', 'Error de Gobstones']
     end
 
     def runtime_error?(result)
