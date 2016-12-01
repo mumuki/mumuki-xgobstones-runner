@@ -1,7 +1,8 @@
 require 'mumukit'
+require 'stones-spec'
 require 'yaml'
 
-require_relative 'stones_spec'
+require_relative 'pygobstones/pygobstones'
 require_relative 'with_test_parser'
 
 class GobstonesTestHook < Mumukit::Hook
@@ -15,10 +16,7 @@ class GobstonesTestHook < Mumukit::Hook
   end
 
   def run!(test_definition)
-    StonesSpec::Gobstones.configure do |config|
-      config.gbs_command = gobstones_command
-    end
-
-    StonesSpec::Runner.new.run!(test_definition)
+    parser = StonesSpec::PyGobstonesParser.new(gobstones_command)
+    StonesSpec::Runner.new(parser).run!(test_definition)
   end
 end

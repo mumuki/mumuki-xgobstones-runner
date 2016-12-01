@@ -7,7 +7,7 @@ Mumukit.configure do |config|
 end
 
 require 'active_support/all'
-require_relative './stones_spec'
+require 'stones-spec'
 require_relative './test_hook'
 require_relative './metadata_hook'
 require_relative './expectations_hook'
