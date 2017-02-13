@@ -1,0 +1,2 @@
+es:
+  non_ascii_character: "¡Usaste un carácter no soportado! En Gobstones no podés usar tildes, eñes, etc. Revisá esta parte del código: %{near}"

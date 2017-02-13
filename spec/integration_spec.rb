@@ -59,6 +59,34 @@ examples:
     it { expect(response[:expectation_results]).to include({binding: 'PonerUnaDeCada', inspection: 'HasUsage', result: :passed}) }
   end
 
+  context 'when submission has non-ascii characters' do
+    let(:content) { 'procedure Ñoño() { }' }
+
+    let(:test) { '
+subject: Ñoño
+examples:
+ - initial_board: |
+     GBB/1.0
+     size 4 4
+     head 0 0
+   final_board: |
+     GBB/1.0
+     size 4 4
+     head 0 0' }
+
+    let(:expectations) { [] }
+    let(:extra) { '' }
+
+    let(:response) { bridge.run_tests! content: content, extra: extra, expectations: expectations, test: test }
+
+    it { expect(response).to eq expectation_results: [],
+                                feedback: '',
+                                response_type: :unstructured,
+                                result: 'Unsupported non-ascii character in content near ...ocedure Ñoño() { ...',
+                                status: :aborted,
+                                test_results: [] }
+  end
+
   context 'when submission is empty and no extra code is given' do
     let(:content) { '' }
 

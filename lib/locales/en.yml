@@ -1,0 +1,2 @@
+en:
+  non_ascii_character: "Unsupported non-ascii character in %{key} near %{near}"
