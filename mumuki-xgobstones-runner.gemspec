@@ -3,12 +3,12 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
-  spec.name          = 'mumuki-gobstones-runner'
+  spec.name          = 'mumuki-xgobstones-runner'
   spec.version       = '1.0.2'
   spec.authors       = ['Franco Leonardo Bulgarelli']
   spec.email         = ['franco@mumuki.org']
-  spec.summary       = 'Gobstones Runner for Mumuki'
-  spec.homepage      = 'http://github.com/mumuki/mumuki-gobstones-server'
+  spec.summary       = 'XGobstones Runner for Mumuki'
+  spec.homepage      = 'http://github.com/mumuki/mumuki-xgobstones-server'
   spec.license       = 'MIT'
 
   spec.files         = Dir['lib/**/**']
