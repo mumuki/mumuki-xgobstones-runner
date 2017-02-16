@@ -11,7 +11,7 @@ deploy:
   provider: rubygems
   api_key:
     secure: OOnaWnTiT5tA4tiAx7f6C/p+lS76iNCSMi3GHzYhIEYk1uvXEZJEvNkBWiMJa6vlLFEJsNOo5ryuJUhAxUo6AVpv+XkqgtHcsY3bojzsAIv9MPMYu43qaAJb42SoJQbSa+c9yfLAF0DINq3aTQriNFAQKyfKeCuOWGSfbvOhPXo=
-  gem: mumuki-gobstones-runner
+  gem: mumuki-xgobstones-runner
   on:
     tags: true
-    repo: mumuki/mumuki-gobstones-runner
+    repo: mumuki/mumuki-xgobstones-runner
