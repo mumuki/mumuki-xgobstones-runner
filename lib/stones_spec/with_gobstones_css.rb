@@ -26,7 +26,7 @@ module StonesSpec
 .gbs_board td.gh { /* position of the header in the board */
   margin: 0;
   padding: 2px;
-  border: dotted #440 3px;
+  border: solid #CC0000 3px;
   background: #dd8;
   width: #{full_size};
   height: #{full_size};
@@ -88,15 +88,15 @@ module StonesSpec
   width: #{half_size};
   height: #{half_size};
   text-align: center;
-  color: black;
+  color: #F3F3E9;
 }
 .gbs_board .gc td div {
   line-height: 2;
 }
-.gbs_board div.A { background: #88f; border: solid 1px #008; }
-.gbs_board div.N { background: #aaa; border: solid 1px #222; }
-.gbs_board div.R { background: #f88; border: solid 1px #800; }
-.gbs_board div.V { background: #8f8; border: solid 1px #080; }
+.gbs_board div.A { background: #0A37D0; border: solid 1px #008; }
+.gbs_board div.N { background: #040928; border: solid 1px #222; }
+.gbs_board div.R { background: #A60000; border: solid 1px #800; }
+.gbs_board div.V { background: #0B6600; border: solid 1px #080; }
 .gbs_board div.O { width: 20px; height: 20px; background: none; } /* empty */
 .gbs_stone {
   font-weight: bold;

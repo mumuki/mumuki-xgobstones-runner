@@ -54,7 +54,7 @@ module StonesSpec
 
 "    <td class=\"gc#{board.head_position == position ? ' gh' : ''}\">
       <table>
-        <tr>#{html_stone cell, :black}#{html_stone cell, :blue}</tr>
+        <tr>#{html_stone cell, :blue}#{html_stone cell, :black}</tr>
         <tr>#{html_stone cell, :red}#{html_stone cell, :green}</tr>
       </table>
     </td>"

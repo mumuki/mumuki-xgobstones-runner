@@ -4,7 +4,7 @@ describe StonesSpec::HtmlBoardRenderer do
   let (:gbb) {
 'GBB/1.0
 size 4 4
-cell 0 0 Rojo 1 Verde 2 Azul 5
+cell 0 0 Rojo 1 Verde 2 Azul 5 Negro 3
 head 3 3'
   }
 
@@ -31,7 +31,7 @@ head 3 3'
 .gbs_board td.gh { /* position of the header in the board */
   margin: 0;
   padding: 2px;
-  border: dotted #440 3px;
+  border: solid #CC0000 3px;
   background: #dd8;
   width: 30px;
   height: 30px;
@@ -93,15 +93,15 @@ head 3 3'
   width: 15px;
   height: 15px;
   text-align: center;
-  color: black;
+  color: #F3F3E9;
 }
 .gbs_board .gc td div {
   line-height: 2;
 }
-.gbs_board div.A { background: #88f; border: solid 1px #008; }
-.gbs_board div.N { background: #aaa; border: solid 1px #222; }
-.gbs_board div.R { background: #f88; border: solid 1px #800; }
-.gbs_board div.V { background: #8f8; border: solid 1px #080; }
+.gbs_board div.A { background: #0A37D0; border: solid 1px #008; }
+.gbs_board div.N { background: #040928; border: solid 1px #222; }
+.gbs_board div.R { background: #A60000; border: solid 1px #800; }
+.gbs_board div.V { background: #0B6600; border: solid 1px #080; }
 .gbs_board div.O { width: 20px; height: 20px; background: none; } /* empty */
 .gbs_stone {
   font-weight: bold;
@@ -205,7 +205,7 @@ head 3 3'
     <td class="lv">0</td>
     <td class="gc">
       <table>
-        <tr><td><div class="O"></div></td><td><div class="gbs_stone A"><span>5</span></div></td></tr>
+        <tr><td><div class="gbs_stone A"><span>5</span></div></td><td><div class="gbs_stone N"><span>3</span></div></td></tr>
         <tr><td><div class="gbs_stone R"><span>1</span></div></td><td><div class="gbs_stone V"><span>2</span></div></td></tr>
       </table>
     </td>
@@ -268,7 +268,7 @@ head 0 0'
     <td class="lv">0</td>
     <td class="gc gh">
       <table>
-        <tr><td><div class="gbs_stone N"><span>3</span></div></td><td><div class="O"></div></td></tr>
+        <tr><td><div class="O"></div></td><td><div class="gbs_stone N"><span>3</span></div></td></tr>
         <tr><td><div class="O"></div></td><td><div class="O"></div></td></tr>
       </table>
     </td>
