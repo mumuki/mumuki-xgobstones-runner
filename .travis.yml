@@ -1,9 +1,12 @@
 language: ruby
-env:
-  matrix:
-  - RACK_ENV=development
+env: RACK_ENV=development
+sudo: false
 rvm:
 - 2.3.1
+before_install:
+- wget https://github.com/mumuki/mulang/releases/download/v2.0.0/mulang
+- mv mulang bin/
+- chmod +x bin/mulang
 addons:
   code_climate:
     repo_token: 8548eba8b9cf270d3deee106d407bb9a9fdc3a44df9b2e03d1a68b0e6200117c
