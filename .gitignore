@@ -87,3 +87,5 @@ crashlytics.properties
 crashlytics-build.properties
 
 Gemfile.lock
+
+bin/mulang
