@@ -1,1 +1,2 @@
 gobstones_command: python .heroku/vendor/pygobstones-lang/pygobstoneslang.py
+mulang_path: ./bin/mulang
