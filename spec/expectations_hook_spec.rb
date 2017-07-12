@@ -1,26 +1,98 @@
-require_relative './spec_helper'
-require_relative '../lib/expectations_hook'
-require 'yaml'
-require 'rspec/expectations'
-
-require_relative './spec_helper'
-
-RSpec::Matchers.define :comply_with do |expectation|
-  match_for_should do |code|
-    run_expectation! code, true
-  end
-
-  match_for_should_not do |code|
-    run_expectation! code, false
-  end
-
-  define_method :run_expectation! do |code, expected_result|
-    runner.run!(expectations: [expectation], content: code, test: 'dummy: true').include?({'expectation' => expectation, 'result' => expected_result})
-  end
-end
+require_relative 'spec_helper'
 
 describe GobstonesExpectationsHook do
-  let (:config) { YAML.load_file('config/development.yml') }
+  def req(expectations, content)
+    struct expectations: expectations, content: content
+  end
+
+  def compile_and_run(request)
+    runner.run!(runner.compile(request))
+  end
+
+  let(:runner) { GobstonesExpectationsHook.new(mulang_path: './bin/mulang') }
+  let(:result) { compile_and_run(req(expectations, code)) }
+
+  describe 'HasTooShortBindings' do
+    let(:code) { "function f(x) { retun(g(x)) }" }
+    let(:expectations) { [] }
+
+    it { expect(result).to eq [{expectation: {binding: 'f', inspection: 'HasTooShortBindings'}, result: false}] }
+  end
+
+  describe 'HasWrongCaseBindings' do
+    let(:code) { "function a_function_with_bad_case() { return (3) }" }
+    let(:expectations) { [] }
+
+    it { expect(result).to eq [{expectation: {binding: 'a_function_with_bad_case', inspection: 'HasWrongCaseBindings'}, result: false}] }
+  end
+
+  describe 'HasRedundantIf' do
+    let(:code) { "function foo(x) { if (x) { return true; } else { return false; } }" }
+    let(:expectations) { [] }
+
+    it { expect(result).to eq [{expectation: {binding: 'foo', inspection: 'HasRedundantIf'}, result: false}] }
+  end
+
+  describe 'DeclaresProcedure' do
+    let(:code) { "procedure Foo(x, y) { }\nprogram { bar := 4 }" }
+    let(:expectations) { [
+      {binding: '', inspection: 'DeclaresProcedure:Foo'},
+      {binding: '', inspection: 'DeclaresProcedure:bar'},
+      {binding: '', inspection: 'DeclaresProcedure:baz'}] }
+
+    it { expect(result).to eq [
+        {expectation: expectations[0], result: true},
+        {expectation: expectations[1], result: false},
+        {expectation: expectations[2], result: false}] }
+  end
+
+
+  describe 'DeclaresFunction' do
+    let(:code) { "function foo(x, y) { return (x + y); }\nprogram { bar := 4 }" }
+    let(:expectations) { [
+      {binding: '', inspection: 'DeclaresFunction:foo'},
+      {binding: '', inspection: 'DeclaresFunction:bar'},
+      {binding: '', inspection: 'DeclaresFunction:baz'}] }
+
+    it { expect(result).to eq [
+        {expectation: expectations[0], result: true},
+        {expectation: expectations[1], result: false},
+        {expectation: expectations[2], result: false}] }
+  end
+
+  describe 'DeclaresVariable' do
+    let(:code) { "procedure Foo(x, y) { }\nprogram { bar := 4 }" }
+    let(:expectations) { [
+      {binding: '', inspection: 'DeclaresVariable:Foo'},
+      {binding: '', inspection: 'DeclaresVariable:bar'},
+      {binding: '', inspection: 'DeclaresVariable:baz'}] }
+
+    it { expect(result).to eq [
+        {expectation: expectations[0], result: false},
+        {expectation: expectations[1], result: true},
+        {expectation: expectations[2], result: false}] }
+  end
+
+  describe 'Declares' do
+    let(:code) { "function foo(x, y) { return(x) }\nprocedure Bar(x) { }" }
+    let(:expectations) { [
+      {binding: '', inspection: 'Declares:foo'},
+      {binding: '', inspection: 'Declares:bar'},
+      {binding: '', inspection: 'Declares:baz'}] }
+
+    it { expect(result).to eq [
+        {expectation: expectations[0], result: true},
+        {expectation: expectations[1], result: true},
+        {expectation: expectations[2], result: false}] }
+  end
+
+end
+
+
+=begin
+
+
+describe GobstonesExpectationsHook do
   let(:runner) { GobstonesExpectationsHook.new(config) }
 
   context 'Unknown expectation' do
@@ -286,3 +358,5 @@ describe GobstonesExpectationsHook do
     it { expect('').not_to comply_with has_usage_expectation }
   end
 end
+
+=end
