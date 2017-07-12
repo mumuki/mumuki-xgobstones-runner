@@ -113,55 +113,78 @@ describe GobstonesExpectationsHook do
         {expectation: expectations[2], result: false}] }
   end
 
+  context 'HasWhile expectation' do
+    let(:code) { %q{
+      program {
+        i := 3
+        while(i > 0) {
+          Mover(Oeste)
+          i := i - 1
+        }
+      } } }
+
+    let(:expectations) { [{'binding' => 'program', 'inspection' => 'HasWhile'}] }
+
+    it { expect(result).to eq [{expectation: {'binding' => '', 'inspection' => 'UsesWhile'}, result: true}] }
+  end
+
+  describe 'HasUsage expectation' do
+    context 'when the parameter is a procedure' do
+      let(:code) { 'program { Foo() } procedure Foo() {}' }
+
+      let(:expectations) { [
+        {'binding' => 'program', 'inspection' => 'HasUsage:Foo'},
+        {'binding' => 'program', 'inspection' => 'HasUsage:Bar'},
+        {'binding' => 'program', 'inspection' => 'HasUsage:FooBar'},
+        {'binding' => 'program', 'inspection' => 'HasUsage:BarFoo'},
+        {'binding' => 'program', 'inspection' => 'HasUsage:Fo'} ] }
+
+      it { expect(result).to eq [
+          {expectation: {inspection: 'Uses:=Foo', binding: ''}, result: true},
+          {expectation: {inspection: 'Uses:=Bar', binding: ''}, result: false},
+          {expectation: {inspection: 'Uses:=FooBar', binding: ''}, result: false},
+          {expectation: {inspection: 'Uses:=BarFoo', binding: ''}, result: false},
+          {expectation: {inspection: 'Uses:=Fo', binding: ''}, result: false}] }
+    end
+
+    context 'when the parameter is a function' do
+      let(:code) { 'program { return (foo()) } function foo() { return (2) }' }
+
+      let(:expectations) { [
+        {'binding' => 'program', 'inspection' => 'HasUsage:foo'},
+        {'binding' => 'program', 'inspection' => 'HasUsage:bar'},
+        {'binding' => 'program', 'inspection' => 'HasUsage:fooBar'},
+        {'binding' => 'program', 'inspection' => 'HasUsage:barFoo'},
+        {'binding' => 'program', 'inspection' => 'HasUsage:fo'} ] }
+
+      it { expect(result).to eq [
+          {expectation: {inspection: 'Uses:=foo', binding: ''}, result: true},
+          {expectation: {inspection: 'Uses:=bar', binding: ''}, result: false},
+          {expectation: {inspection: 'Uses:=fooBar', binding: ''}, result: false},
+          {expectation: {inspection: 'Uses:=barFoo', binding: ''}, result: false},
+          {expectation: {inspection: 'Uses:=fo', binding: ''}, result: false}] }
+    end
+
+    context 'when the program is empty' do
+      let(:code) { '' }
+
+      let(:expectations) { [{'binding' => 'program', 'inspection' => 'HasUsage:Sacar' }]  }
+
+      it { expect { result }.to raise_error Mumukit::CompilationError }
+    end
+  end
 end
 
 
 =begin
 
 
+
+
+
 describe GobstonesExpectationsHook do
-  let(:runner) { GobstonesExpectationsHook.new(config) }
 
-  context 'Unknown expectation' do
-    let(:program) { 'program { Foo() } procedure Foo() {}' }
-    let(:unknown_expectation) { {'binding' => 'program', 'inspection' => 'HasSarasa'} }
 
-    it { expect(program).to comply_with unknown_expectation }
-  end
-
-  context 'HasUsage expectation' do
-    describe 'when the parameter is a procedure' do
-      let(:program) { 'program { Foo() } procedure Foo() {}' }
-
-      let(:foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Foo'} }
-      let(:bar_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Bar'} }
-      let(:foo_bar_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:FooBar'} }
-      let(:bar_foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:BarFoo'} }
-      let(:fo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Fo'} }
-
-      it { expect(program).to comply_with foo_expectation }
-      it { expect(program).not_to comply_with bar_expectation }
-      it { expect(program).not_to comply_with foo_bar_expectation }
-      it { expect(program).not_to comply_with bar_foo_expectation }
-      it { expect(program).not_to comply_with fo_expectation }
-    end
-
-    describe 'when the parameter is a function' do
-      let(:program) { 'program { return (foo()) } function foo() { return (2) }' }
-
-      let(:foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:foo'} }
-      let(:bar_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:bar'} }
-      let(:foo_bar_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:fooBar'} }
-      let(:bar_foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:barFoo'} }
-      let(:fo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:fo'} }
-
-      it { expect(program).to comply_with foo_expectation }
-      it { expect(program).not_to comply_with bar_expectation }
-      it { expect(program).not_to comply_with foo_bar_expectation }
-      it { expect(program).not_to comply_with bar_foo_expectation }
-      it { expect(program).not_to comply_with fo_expectation }
-    end
-  end
 
   context 'HasVariable expectation' do
     let(:has_variable_expectation) { {'binding' => 'program', 'inspection' => 'HasVariable'} }
@@ -193,23 +216,6 @@ describe GobstonesExpectationsHook do
     it { expect(program_with_foreach).to comply_with has_foreach_expectation }
   end
 
-  context 'HasWhile expectation' do
-    let(:has_while_expectation) { {'binding' => 'program', 'inspection' => 'HasWhile'} }
-
-    it { expect('program {}').not_to comply_with has_while_expectation }
-
-    let(:program_with_while) { '
-      program {
-        i := 3
-        while(i > 0) {
-          Mover(Oeste)
-          i := i - 1
-        }
-      }
-    ' }
-
-    it { expect(program_with_while).to comply_with has_while_expectation }
-  end
 
   context 'HasRepedatOf:n expectation' do
     let(:has_repeat_of_1_expectation) { {'binding' => 'program', 'inspection' => 'HasRepeatOf:1'} }
@@ -366,24 +372,7 @@ describe GobstonesExpectationsHook do
     end
   end
 
-  context 'when procedure definitions are missing' do
-    let(:program_with_extra_code) { 'procedure DibujarJardin() { DibujarMacetero(Rojo) }' }
-    let(:has_usage_expectation) { {'binding' => 'DibujarJardin', 'inspection' => 'HasUsage:DibujarMacetero' }  }
 
-    it { expect(program_with_extra_code).to comply_with has_usage_expectation }
-  end
-
-  context 'when the code would produce a runtime error' do
-    let(:has_usage_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Sacar' }  }
-
-    it { expect('program { Sacar(Rojo) }').to comply_with has_usage_expectation }
-  end
-
-  context 'when the program is empty' do
-    let(:has_usage_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Sacar' }  }
-
-    it { expect('').not_to comply_with has_usage_expectation }
-  end
 end
 
 =end
