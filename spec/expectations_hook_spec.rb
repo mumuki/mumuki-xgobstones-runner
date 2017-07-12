@@ -13,7 +13,10 @@ describe GobstonesExpectationsHook do
   let(:result) { compile_and_run(req(expectations, code)) }
 
   describe 'HasTooShortBindings' do
-    let(:code) { "function f(x) { retun(g(x)) }" }
+    let(:code) { %q{
+      function f(x) {
+        return (g(x))
+      }} }
     let(:expectations) { [] }
 
     it { expect(result).to eq [{expectation: {binding: 'f', inspection: 'HasTooShortBindings'}, result: false}] }
@@ -27,11 +30,35 @@ describe GobstonesExpectationsHook do
   end
 
   describe 'HasRedundantIf' do
-    let(:code) { "function foo(x) { if (x) { return true; } else { return false; } }" }
+    let(:code) { %q{
+      function foo(x) {
+        y := x
+        if (x) {
+          y := True
+        } else {
+          y := False
+        }
+        return (y)
+      } } }
     let(:expectations) { [] }
 
-    it { expect(result).to eq [{expectation: {binding: 'foo', inspection: 'HasRedundantIf'}, result: false}] }
+    it do
+      pending "not ready until mulang 2.2"
+      expect(result).to eq [{expectation: {binding: 'foo', inspection: 'HasRedundantIf'}, result: false}]
+    end
   end
+
+  describe 'HasRedundantLocalVariableReturn' do
+    let(:code) { %q{
+      function foo(x) {
+        y := x + 3
+        return (y)
+      } } }
+    let(:expectations) { [] }
+
+    it { expect(result).to eq [{expectation: {binding: 'foo', inspection: 'HasRedundantLocalVariableReturn'}, result: false}] }
+  end
+
 
   describe 'DeclaresProcedure' do
     let(:code) { "procedure Foo(x, y) { }\nprogram { bar := 4 }" }
@@ -77,7 +104,7 @@ describe GobstonesExpectationsHook do
     let(:code) { "function foo(x, y) { return(x) }\nprocedure Bar(x) { }" }
     let(:expectations) { [
       {binding: '', inspection: 'Declares:foo'},
-      {binding: '', inspection: 'Declares:bar'},
+      {binding: '', inspection: 'Declares:Bar'},
       {binding: '', inspection: 'Declares:baz'}] }
 
     it { expect(result).to eq [
@@ -184,7 +211,7 @@ describe GobstonesExpectationsHook do
     it { expect(program_with_while).to comply_with has_while_expectation }
   end
 
-  context 'HasRepeatOf:n expectation' do
+  context 'HasRepedatOf:n expectation' do
     let(:has_repeat_of_1_expectation) { {'binding' => 'program', 'inspection' => 'HasRepeatOf:1'} }
 
     let(:program_with_repeat_1) { '
