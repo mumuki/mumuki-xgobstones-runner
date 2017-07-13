@@ -123,10 +123,48 @@ describe GobstonesExpectationsHook do
         }
       } } }
 
-    let(:expectations) { [{'binding' => 'program', 'inspection' => 'HasWhile'}] }
+    let(:expectations) { [{binding: 'program', inspection: 'HasWhile'}] }
 
-    it { expect(result).to eq [{expectation: {'binding' => '', 'inspection' => 'UsesWhile'}, result: true}] }
+    it { expect(result).to eq [{expectation: {binding: 'program', inspection: 'UsesWhile'}, result: true}] }
   end
+
+  context 'HasVariable expectation' do
+    let(:code) { %q{
+      program {
+        acum := 25
+    }} }
+
+    let(:expectations) { [
+      {'binding' => 'program', 'inspection' => 'HasVariable'},
+      {'binding' => 'foo', 'inspection' => 'HasVariable'}] }
+
+    it { expect(result).to eq [
+          {expectation: {inspection: 'DeclaresVariable:*', binding: 'program'}, result: true},
+          {expectation: {inspection: 'DeclaresVariable:*', binding: 'foo'}, result: false}] }
+  end
+
+  context 'HasForeach expectation' do
+    let(:expectations) { [
+      {'binding' => 'program', 'inspection' => 'HasForeach'},
+      {'binding' => 'foo', 'inspection' => 'HasForeach'}] }
+
+    let(:code) { %q{
+      program {
+        foreach color in [Azul..Verde] {
+          Poner(color)
+        }
+      }
+      function foo(){
+        return (1)
+      }}}
+
+    it {
+      pending "foreach is not yet supported by gobstones web"
+      expect(result).to eq [
+          {expectation: {inspection: 'UsesForeach', binding: 'program'}, result: true},
+          {expectation: {inspection: 'UsesForeach', binding: 'foo'}, result: false}] }
+  end
+
 
   describe 'HasUsage expectation' do
     context 'when the parameter is a procedure' do
@@ -140,11 +178,11 @@ describe GobstonesExpectationsHook do
         {'binding' => 'program', 'inspection' => 'HasUsage:Fo'} ] }
 
       it { expect(result).to eq [
-          {expectation: {inspection: 'Uses:=Foo', binding: ''}, result: true},
-          {expectation: {inspection: 'Uses:=Bar', binding: ''}, result: false},
-          {expectation: {inspection: 'Uses:=FooBar', binding: ''}, result: false},
-          {expectation: {inspection: 'Uses:=BarFoo', binding: ''}, result: false},
-          {expectation: {inspection: 'Uses:=Fo', binding: ''}, result: false}] }
+          {expectation: {inspection: 'Uses:=Foo', binding: 'program'}, result: true},
+          {expectation: {inspection: 'Uses:=Bar', binding: 'program'}, result: false},
+          {expectation: {inspection: 'Uses:=FooBar', binding: 'program'}, result: false},
+          {expectation: {inspection: 'Uses:=BarFoo', binding: 'program'}, result: false},
+          {expectation: {inspection: 'Uses:=Fo', binding: 'program'}, result: false}] }
     end
 
     context 'when the parameter is a function' do
@@ -183,39 +221,6 @@ end
 
 
 describe GobstonesExpectationsHook do
-
-
-
-  context 'HasVariable expectation' do
-    let(:has_variable_expectation) { {'binding' => 'program', 'inspection' => 'HasVariable'} }
-
-    it { expect('program {}').not_to comply_with has_variable_expectation }
-
-    let(:program_with_variable) { '
-      program {
-        acum := 25
-      }
-    ' }
-
-    it { expect(program_with_variable).to comply_with has_variable_expectation }
-  end
-
-  context 'HasForeach expectation' do
-    let(:has_foreach_expectation) { {'binding' => 'program', 'inspection' => 'HasForeach'} }
-
-    it { expect('program {}').not_to comply_with has_foreach_expectation }
-
-    let(:program_with_foreach) { '
-      program {
-        foreach color in [Azul..Verde] {
-          Poner(color)
-        }
-      }
-    ' }
-
-    it { expect(program_with_foreach).to comply_with has_foreach_expectation }
-  end
-
 
   context 'HasRepedatOf:n expectation' do
     let(:has_repeat_of_1_expectation) { {'binding' => 'program', 'inspection' => 'HasRepeatOf:1'} }
