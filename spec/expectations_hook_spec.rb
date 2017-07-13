@@ -135,12 +135,12 @@ describe GobstonesExpectationsHook do
     }} }
 
     let(:expectations) { [
-      {'binding' => 'program', 'inspection' => 'HasVariable'},
-      {'binding' => 'foo', 'inspection' => 'HasVariable'}] }
+      {'binding' => 'program', 'inspection' => 'DeclaresVariable'},
+      {'binding' => 'foo', 'inspection' => 'DeclaresVariable'}] }
 
     it { expect(result).to eq [
-          {expectation: {inspection: 'DeclaresVariable:*', binding: 'program'}, result: true},
-          {expectation: {inspection: 'DeclaresVariable:*', binding: 'foo'}, result: false}] }
+          {expectation: {inspection: 'DeclaresVariable', binding: 'program'}, result: true},
+          {expectation: {inspection: 'DeclaresVariable', binding: 'foo'}, result: false}] }
   end
 
   context 'HasForeach expectation' do
