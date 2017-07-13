@@ -165,6 +165,91 @@ describe GobstonesExpectationsHook do
           {expectation: {inspection: 'UsesForeach', binding: 'foo'}, result: false}] }
   end
 
+  context 'HasArity:n expectation' do
+    context 'when the binding is a procedure' do
+      let(:code) { 'procedure MoverN(n, direccion) { repeat(n) { Mover(direccion) } }
+                    procedure MoverNSarasa(direccion) { Mover(direccion) }
+                    procedure SarasaMoverN() { repeat(1) {} }' }
+      let(:expectations) { [
+        {'binding' => 'MoverN', 'inspection' => 'HasArity:0' },
+        {'binding' => 'MoverN', 'inspection' => 'HasArity:1' },
+        {'binding' => 'MoverN', 'inspection' => 'HasArity:2' } ] }
+
+      it { expect(result).to eq [
+            {expectation: {inspection: 'DeclaresComputationWithArity0:=MoverN', binding: ''}, result: false},
+            {expectation: {inspection: 'DeclaresComputationWithArity1:=MoverN', binding: ''}, result: false},
+            {expectation: {inspection: 'DeclaresComputationWithArity2:=MoverN', binding: ''}, result: true}] }
+    end
+
+    context 'when the binding is a function' do
+      let(:code) { 'function colorDestacado() { return (Rojo) }
+                    function otraCosa(x, y) { return (Verde) }' }
+
+      let(:expectations) { [
+        {'binding' => 'colorDestacado', 'inspection' => 'HasArity:0' },
+        {'binding' => 'colorDestacado', 'inspection' => 'HasArity:2' }] }
+
+      it { expect(result).to eq [
+          {expectation: {inspection: 'DeclaresComputationWithArity0:=colorDestacado', binding: ''}, result: true},
+          {expectation: {inspection: 'DeclaresComputationWithArity2:=colorDestacado', binding: ''}, result: false} ] }
+    end
+  end
+
+  describe 'HasRepeat expectation' do
+    let(:expectations) { [{'binding' => 'program', 'inspection' => 'HasRepeat'}] }
+
+    context 'program has repeat' do
+      let(:code) { %q{
+        program {
+          repeat(6) {
+            Mover(Oeste)
+          }
+        } } }
+      it { expect(result).to eq [{expectation: {inspection: 'UsesRepeat', binding: 'program'}, result: true}] }
+    end
+
+    context 'program has no repeat' do
+      let(:code) { %q{
+        program {
+          Mover(Oeste)
+        }
+      } }
+      it { expect(result).to eq [{expectation: {inspection: 'UsesRepeat', binding: 'program'}, result: false}] }
+    end
+
+    context 'program has repeat with expression' do
+      let(:code) { %q{
+        program {
+          repeat(10 * 2) {
+            Mover(Oeste)
+          }
+        }
+      } }
+      it { expect(result).to eq [{expectation: {inspection: 'UsesRepeat', binding: 'program'}, result: true}] }
+    end
+  end
+
+  context 'HasBinding expectation' do
+    context 'when the binding is program' do
+      let(:code) { %q{
+      program {}
+      function dummy() { return(Negro) }
+      procedure Dummy() {}} }
+
+      let(:expectations) { [
+        {'binding' => 'program', 'inspection' => 'HasBinding' },
+        {'binding' => 'dummy', 'inspection' => 'HasBinding' },
+        {'binding' => 'Dummy', 'inspection' => 'HasBinding' },
+        {'binding' => 'foo', 'inspection' => 'HasBinding' }] }
+
+      it { expect(result).to eq [
+          {expectation: {inspection: 'Declares:=program', binding: ''}, result: true},
+          {expectation: {inspection: 'Declares:=dummy',   binding: ''}, result: true},
+          {expectation: {inspection: 'Declares:=Dummy',   binding: ''}, result: true},
+          {expectation: {inspection: 'Declares:=foo',     binding: ''}, result: false}
+        ] }
+    end
+  end
 
   describe 'HasUsage expectation' do
     context 'when the parameter is a procedure' do
@@ -216,133 +301,7 @@ end
 
 =begin
 
-
-
-
-
 describe GobstonesExpectationsHook do
-
-  context 'HasRepedatOf:n expectation' do
-    let(:has_repeat_of_1_expectation) { {'binding' => 'program', 'inspection' => 'HasRepeatOf:1'} }
-
-    let(:program_with_repeat_1) { '
-      program {
-        repeat(1) {
-          Mover(Oeste)
-        }
-      }
-    ' }
-
-    let(:program_with_repeat_8) { '
-      program {
-        repeat(8) {
-          Mover(Oeste)
-        }
-      }
-    ' }
-
-    it { expect(program_with_repeat_1).to comply_with has_repeat_of_1_expectation }
-    it { expect(program_with_repeat_8).not_to comply_with has_repeat_of_1_expectation }
-    it { expect('program { Mover(Oeste) }').not_to comply_with has_repeat_of_1_expectation }
-  end
-
-  context 'HasRepeat expectation' do
-    let(:has_repeat_expectation) { {'binding' => 'program', 'inspection' => 'HasRepeat'} }
-
-    let(:program_with_repeat) { '
-      program {
-        repeat(6) {
-          Mover(Oeste)
-        }
-      }
-    ' }
-
-    let(:program_without_repeat) { '
-      program {
-        Mover(Oeste)
-      }
-    ' }
-
-    let(:program_with_repeat_using_an_expression) { '
-      program {
-        repeat(10 * 2) {
-          Mover(Oeste)
-        }
-      }
-    ' }
-
-    it { expect(program_with_repeat).to comply_with has_repeat_expectation }
-    it { expect(program_without_repeat).not_to comply_with has_repeat_expectation }
-    it { expect(program_with_repeat_using_an_expression).to comply_with has_repeat_expectation }
-  end
-
-  context 'HasBinding expectation' do
-    let(:program) { 'program {}' }
-    let(:procedure) { 'procedure Dummy() {}' }
-    let(:function) { 'function dummy() { return(Negro) }' }
-
-    context 'when the binding is program' do
-      let(:has_binding_program_expectation) { {'binding' => 'program', 'inspection' => 'HasBinding' }  }
-
-      it { expect(program).to comply_with has_binding_program_expectation }
-      it { expect(procedure).not_to comply_with has_binding_program_expectation }
-      it { expect(function).not_to comply_with has_binding_program_expectation }
-    end
-
-    context 'when the binding is a procedure' do
-      let(:has_binding_procedure_expectation) { {'binding' => 'Dummy', 'inspection' => 'HasBinding' }  }
-      let(:procedure_Dum) { 'procedure Dum() {}' }
-      let(:procedure_DummySarasa) { 'procedure DummySarasa() {}' }
-      let(:procedure_SarasaDummy) { 'procedure SarasaDummy() {}' }
-
-      it { expect(program).not_to comply_with has_binding_procedure_expectation }
-      it { expect(procedure_Dum).not_to comply_with has_binding_procedure_expectation }
-      it { expect(procedure_DummySarasa).not_to comply_with has_binding_procedure_expectation }
-      it { expect(procedure_SarasaDummy).not_to comply_with has_binding_procedure_expectation }
-      it { expect(procedure).to comply_with has_binding_procedure_expectation }
-      it { expect(function).not_to comply_with has_binding_procedure_expectation }
-    end
-
-    context 'when the binding is a function' do
-      let(:has_binding_function_expectation) { {'binding' => 'dummy', 'inspection' => 'HasBinding' }  }
-      let(:function_dum) { 'function dum() { return(Negro) }' }
-      let(:function_dum_sarasa) { 'function dum_sarasa() { return(Negro) }' }
-      let(:function_sarasa_dum) { 'function sarasa_dum() { return(Negro) }' }
-
-      it { expect(procedure).not_to comply_with has_binding_function_expectation }
-      it { expect(program).not_to comply_with has_binding_function_expectation }
-      it { expect(function).to comply_with has_binding_function_expectation }
-      it { expect(function_dum).not_to comply_with has_binding_function_expectation }
-      it { expect(function_dum_sarasa).not_to comply_with has_binding_function_expectation }
-      it { expect(function_sarasa_dum).not_to comply_with has_binding_function_expectation }
-    end
-  end
-
-  context 'HasArity:n expectation' do
-    context 'when the binding is a procedure' do
-      let(:procedure) { 'procedure MoverN(n, direccion) { repeat(n) { Mover(direccion) } }
-                         procedure MoverNSarasa(direccion) { Mover(direccion) }
-                         procedure SarasaMoverN() { repeat(1) {} }' }
-      let(:has_arity_0) { {'binding' => 'MoverN', 'inspection' => 'HasArity:0' }  }
-      let(:has_arity_1) { {'binding' => 'MoverN', 'inspection' => 'HasArity:1' }  }
-      let(:has_arity_2) { {'binding' => 'MoverN', 'inspection' => 'HasArity:2' }  }
-
-      it { expect(procedure).to comply_with has_arity_2 }
-      it { expect(procedure).not_to comply_with has_arity_1 }
-      it { expect(procedure).not_to comply_with has_arity_0 }
-    end
-
-    context 'when the binding is a function' do
-      let(:function) { 'function colorDestacado() { return (Rojo) }
-                        function otraCosa(x, y) { return (Verde) }' }
-
-      let(:has_arity_0) { {'binding' => 'colorDestacado', 'inspection' => 'HasArity:0' }  }
-      let(:has_arity_2) { {'binding' => 'colorDestacado', 'inspection' => 'HasArity:2' }  }
-
-      it { expect(function).to comply_with has_arity_0 }
-      it { expect(function).not_to comply_with has_arity_2 }
-    end
-  end
 
   describe 'automatic expectations' do
     context 'when the subject is program' do
