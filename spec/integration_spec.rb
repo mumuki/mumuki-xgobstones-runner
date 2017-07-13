@@ -56,7 +56,7 @@ examples:
 
     it { expect(response[:status]).to eq :passed }
     it { expect(response_result).to include '<div>' }
-    it { expect(response[:expectation_results]).to include({binding: 'PonerUnaDeCada', inspection: 'HasUsage:Poner', result: :passed}) }
+    it { expect(response[:expectation_results]).to include({binding: 'PonerUnaDeCada', inspection: 'Uses:=Poner', result: :passed}) }
   end
 
   context 'when submission has non-ascii characters' do

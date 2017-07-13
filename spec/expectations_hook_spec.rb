@@ -281,11 +281,11 @@ describe GobstonesExpectationsHook do
         {'binding' => 'program', 'inspection' => 'HasUsage:fo'} ] }
 
       it { expect(result).to eq [
-          {expectation: {inspection: 'Uses:=foo', binding: ''}, result: true},
-          {expectation: {inspection: 'Uses:=bar', binding: ''}, result: false},
-          {expectation: {inspection: 'Uses:=fooBar', binding: ''}, result: false},
-          {expectation: {inspection: 'Uses:=barFoo', binding: ''}, result: false},
-          {expectation: {inspection: 'Uses:=fo', binding: ''}, result: false}] }
+          {expectation: {inspection: 'Uses:=foo', binding: 'program'}, result: true},
+          {expectation: {inspection: 'Uses:=bar', binding: 'program'}, result: false},
+          {expectation: {inspection: 'Uses:=fooBar', binding: 'program'}, result: false},
+          {expectation: {inspection: 'Uses:=barFoo', binding: 'program'}, result: false},
+          {expectation: {inspection: 'Uses:=fo', binding: 'program'}, result: false}] }
     end
 
     context 'when the program is empty' do
