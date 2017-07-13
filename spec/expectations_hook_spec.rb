@@ -42,10 +42,7 @@ describe GobstonesExpectationsHook do
       } } }
     let(:expectations) { [] }
 
-    it do
-      pending "not ready until mulang 2.2"
-      expect(result).to eq [{expectation: {binding: 'foo', inspection: 'HasRedundantIf'}, result: false}]
-    end
+    it { expect(result).to eq [{expectation: {binding: 'foo', inspection: 'HasRedundantIf'}, result: false}] }
   end
 
   describe 'HasRedundantLocalVariableReturn' do
