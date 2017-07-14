@@ -4,6 +4,14 @@ sudo: false
 rvm:
 - 2.3.1
 before_install:
+# Create .local/bin
+- mkdir -p ~/.local/bin
+- export PATH=$HOME/.local/bin:$PATH
+# Install rungs
+- wget https://github.com/gobstones/gs-weblang-cli/releases/download/v1.3.3/rungs-ubuntu64 -O rungs
+- chmod u+x rungs
+- mv rungs ~/.local/bin/rungs
+# Install mulang
 - wget https://github.com/mumuki/mulang/releases/download/v2.2.0/mulang
 - mv mulang bin/
 - chmod +x bin/mulang
