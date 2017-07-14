@@ -46,14 +46,27 @@ describe GobstonesExpectationsHook do
   end
 
   describe 'HasRedundantLocalVariableReturn' do
-    let(:code) { %q{
-      function foo(x) {
-        y := x + 3
-        return (y)
-      } } }
-    let(:expectations) { [] }
+    context 'in function' do
+       let(:code) { %q{
+        function foo(x) {
+          y := x + 3
+          return (y)
+        } } }
+      let(:expectations) { [] }
 
-    it { expect(result).to eq [{expectation: {binding: 'foo', inspection: 'HasRedundantLocalVariableReturn'}, result: false}] }
+      it { expect(result).to eq [{expectation: {binding: 'foo', inspection: 'HasRedundantLocalVariableReturn'}, result: false}] }
+    end
+
+    context 'in program' do
+       let(:code) { %q{
+        program {
+          aVariable := 3
+          return (aVariable)
+        } } }
+      let(:expectations) { [] }
+
+      it { expect(result).to eq [{expectation: {binding: 'program', inspection: 'HasRedundantLocalVariableReturn'}, result: false}] }
+    end
   end
 
 
@@ -268,18 +281,24 @@ describe GobstonesExpectationsHook do
     end
 
     context 'when the parameter is a function' do
-      let(:code) { 'program { return (foo()) } function foo() { return (2) }' }
+      let(:code) { 'program { return (foo()) } function foo() { return (bar(2)) }' }
 
       let(:expectations) { [
+        {'binding' => '', 'inspection' => 'Uses:foo'},
+        {'binding' => 'foo', 'inspection' => 'Uses:bar'},
         {'binding' => 'program', 'inspection' => 'HasUsage:foo'},
         {'binding' => 'program', 'inspection' => 'HasUsage:bar'},
+        {'binding' => 'Intransitive:program', 'inspection' => 'Uses:bar'},
         {'binding' => 'program', 'inspection' => 'HasUsage:fooBar'},
         {'binding' => 'program', 'inspection' => 'HasUsage:barFoo'},
         {'binding' => 'program', 'inspection' => 'HasUsage:fo'} ] }
 
       it { expect(result).to eq [
+          {expectation: {inspection: 'Uses:foo', binding: ''}, result: true},
+          {expectation: {inspection: 'Uses:bar', binding: 'foo'}, result: true},
           {expectation: {inspection: 'Uses:=foo', binding: 'program'}, result: true},
-          {expectation: {inspection: 'Uses:=bar', binding: 'program'}, result: false},
+          {expectation: {inspection: 'Uses:=bar', binding: 'program'}, result: true},
+          {expectation: {inspection: 'Uses:bar', binding: 'Intransitive:program'}, result: false},
           {expectation: {inspection: 'Uses:=fooBar', binding: 'program'}, result: false},
           {expectation: {inspection: 'Uses:=barFoo', binding: 'program'}, result: false},
           {expectation: {inspection: 'Uses:=fo', binding: 'program'}, result: false}] }
