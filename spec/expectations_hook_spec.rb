@@ -1,238 +1,323 @@
-require_relative './spec_helper'
-require_relative '../lib/expectations_hook'
-require 'yaml'
-require 'rspec/expectations'
-
-require_relative './spec_helper'
-
-RSpec::Matchers.define :comply_with do |expectation|
-  match_for_should do |code|
-    run_expectation! code, true
-  end
-
-  match_for_should_not do |code|
-    run_expectation! code, false
-  end
-
-  define_method :run_expectation! do |code, expected_result|
-    runner.run!(expectations: [expectation], content: code, test: 'dummy: true').include?({'expectation' => expectation, 'result' => expected_result})
-  end
-end
+require_relative 'spec_helper'
 
 describe GobstonesExpectationsHook do
-  let (:config) { YAML.load_file('config/development.yml') }
-  let(:runner) { GobstonesExpectationsHook.new(config) }
-
-  context 'Unknown expectation' do
-    let(:program) { 'program { Foo() } procedure Foo() {}' }
-    let(:unknown_expectation) { {'binding' => 'program', 'inspection' => 'HasSarasa'} }
-
-    it { expect(program).to comply_with unknown_expectation }
+  def req(expectations, content)
+    struct expectations: expectations, content: content
   end
 
-  context 'HasUsage expectation' do
-    describe 'when the parameter is a procedure' do
-      let(:program) { 'program { Foo() } procedure Foo() {}' }
-
-      let(:foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Foo'} }
-      let(:bar_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Bar'} }
-      let(:foo_bar_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:FooBar'} }
-      let(:bar_foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:BarFoo'} }
-      let(:fo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Fo'} }
-
-      it { expect(program).to comply_with foo_expectation }
-      it { expect(program).not_to comply_with bar_expectation }
-      it { expect(program).not_to comply_with foo_bar_expectation }
-      it { expect(program).not_to comply_with bar_foo_expectation }
-      it { expect(program).not_to comply_with fo_expectation }
-    end
-
-    describe 'when the parameter is a function' do
-      let(:program) { 'program { return (foo()) } function foo() { return (2) }' }
-
-      let(:foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:foo'} }
-      let(:bar_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:bar'} }
-      let(:foo_bar_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:fooBar'} }
-      let(:bar_foo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:barFoo'} }
-      let(:fo_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:fo'} }
-
-      it { expect(program).to comply_with foo_expectation }
-      it { expect(program).not_to comply_with bar_expectation }
-      it { expect(program).not_to comply_with foo_bar_expectation }
-      it { expect(program).not_to comply_with bar_foo_expectation }
-      it { expect(program).not_to comply_with fo_expectation }
-    end
+  def compile_and_run(request)
+    runner.run!(runner.compile(request))
   end
 
-  context 'HasVariable expectation' do
-    let(:has_variable_expectation) { {'binding' => 'program', 'inspection' => 'HasVariable'} }
+  let(:runner) { GobstonesExpectationsHook.new(mulang_path: './bin/mulang') }
+  let(:result) { compile_and_run(req(expectations, code)) }
 
-    it { expect('program {}').not_to comply_with has_variable_expectation }
+  describe 'HasTooShortBindings' do
+    let(:code) { %q{
+      function f(x) {
+        return (g(x))
+      }} }
+    let(:expectations) { [] }
 
-    let(:program_with_variable) { '
-      program {
-        acum := 25
-      }
-    ' }
-
-    it { expect(program_with_variable).to comply_with has_variable_expectation }
+    it { expect(result).to eq [{expectation: {binding: 'f', inspection: 'HasTooShortBindings'}, result: false}] }
   end
 
-  context 'HasForeach expectation' do
-    let(:has_foreach_expectation) { {'binding' => 'program', 'inspection' => 'HasForeach'} }
+  describe 'HasWrongCaseBindings' do
+    let(:code) { "function a_function_with_bad_case() { return (3) }" }
+    let(:expectations) { [] }
 
-    it { expect('program {}').not_to comply_with has_foreach_expectation }
+    it { expect(result).to eq [{expectation: {binding: 'a_function_with_bad_case', inspection: 'HasWrongCaseBindings'}, result: false}] }
+  end
 
-    let(:program_with_foreach) { '
-      program {
-        foreach color in [Azul..Verde] {
-          Poner(color)
+  describe 'HasRedundantIf' do
+    let(:code) { %q{
+      function foo(x) {
+        y := x
+        if (x) {
+          y := True
+        } else {
+          y := False
         }
-      }
-    ' }
+        return (y)
+      } } }
+    let(:expectations) { [] }
 
-    it { expect(program_with_foreach).to comply_with has_foreach_expectation }
+    it { expect(result).to eq [{expectation: {binding: 'foo', inspection: 'HasRedundantIf'}, result: false}] }
+  end
+
+  describe 'HasRedundantLocalVariableReturn' do
+    context 'in function' do
+       let(:code) { %q{
+        function foo(x) {
+          y := x + 3
+          return (y)
+        } } }
+      let(:expectations) { [] }
+
+      it { expect(result).to eq [{expectation: {binding: 'foo', inspection: 'HasRedundantLocalVariableReturn'}, result: false}] }
+    end
+
+    context 'in program' do
+       let(:code) { %q{
+        program {
+          aVariable := 3
+          return (aVariable)
+        } } }
+      let(:expectations) { [] }
+
+      it { expect(result).to eq [{expectation: {binding: 'program', inspection: 'HasRedundantLocalVariableReturn'}, result: false}] }
+    end
+  end
+
+
+  describe 'DeclaresProcedure' do
+    let(:code) { "procedure Foo(x, y) { }\nprogram { bar := 4 }" }
+    let(:expectations) { [
+      {binding: '', inspection: 'DeclaresProcedure:Foo'},
+      {binding: '', inspection: 'DeclaresProcedure:bar'},
+      {binding: '', inspection: 'DeclaresProcedure:baz'}] }
+
+    it { expect(result).to eq [
+        {expectation: expectations[0], result: true},
+        {expectation: expectations[1], result: false},
+        {expectation: expectations[2], result: false}] }
+  end
+
+
+  describe 'DeclaresFunction' do
+    let(:code) { "function foo(x, y) { return (x + y); }\nprogram { bar := 4 }" }
+    let(:expectations) { [
+      {binding: '', inspection: 'DeclaresFunction:foo'},
+      {binding: '', inspection: 'DeclaresFunction:bar'},
+      {binding: '', inspection: 'DeclaresFunction:baz'}] }
+
+    it { expect(result).to eq [
+        {expectation: expectations[0], result: true},
+        {expectation: expectations[1], result: false},
+        {expectation: expectations[2], result: false}] }
+  end
+
+  describe 'DeclaresVariable' do
+    let(:code) { "procedure Foo(x, y) { }\nprogram { bar := 4 }" }
+    let(:expectations) { [
+      {binding: '', inspection: 'DeclaresVariable:Foo'},
+      {binding: '', inspection: 'DeclaresVariable:bar'},
+      {binding: '', inspection: 'DeclaresVariable:baz'}] }
+
+    it { expect(result).to eq [
+        {expectation: expectations[0], result: false},
+        {expectation: expectations[1], result: true},
+        {expectation: expectations[2], result: false}] }
+  end
+
+  describe 'Declares' do
+    let(:code) { "function foo(x, y) { return(x) }\nprocedure Bar(x) { }" }
+    let(:expectations) { [
+      {binding: '', inspection: 'Declares:foo'},
+      {binding: '', inspection: 'Declares:Bar'},
+      {binding: '', inspection: 'Declares:baz'}] }
+
+    it { expect(result).to eq [
+        {expectation: expectations[0], result: true},
+        {expectation: expectations[1], result: true},
+        {expectation: expectations[2], result: false}] }
   end
 
   context 'HasWhile expectation' do
-    let(:has_while_expectation) { {'binding' => 'program', 'inspection' => 'HasWhile'} }
-
-    it { expect('program {}').not_to comply_with has_while_expectation }
-
-    let(:program_with_while) { '
+    let(:code) { %q{
       program {
         i := 3
         while(i > 0) {
           Mover(Oeste)
           i := i - 1
         }
-      }
-    ' }
+      } } }
 
-    it { expect(program_with_while).to comply_with has_while_expectation }
+    let(:expectations) { [{binding: 'program', inspection: 'HasWhile'}] }
+
+    it { expect(result).to eq [{expectation: {binding: 'program', inspection: 'UsesWhile'}, result: true}] }
   end
 
-  context 'HasRepeatOf:n expectation' do
-    let(:has_repeat_of_1_expectation) { {'binding' => 'program', 'inspection' => 'HasRepeatOf:1'} }
-
-    let(:program_with_repeat_1) { '
+  context 'HasVariable expectation' do
+    let(:code) { %q{
       program {
-        repeat(1) {
-          Mover(Oeste)
-        }
-      }
-    ' }
+        acum := 25
+    }} }
 
-    let(:program_with_repeat_8) { '
-      program {
-        repeat(8) {
-          Mover(Oeste)
-        }
-      }
-    ' }
+    let(:expectations) { [
+      {'binding' => 'program', 'inspection' => 'DeclaresVariable'},
+      {'binding' => 'foo', 'inspection' => 'DeclaresVariable'}] }
 
-    it { expect(program_with_repeat_1).to comply_with has_repeat_of_1_expectation }
-    it { expect(program_with_repeat_8).not_to comply_with has_repeat_of_1_expectation }
-    it { expect('program { Mover(Oeste) }').not_to comply_with has_repeat_of_1_expectation }
+    it { expect(result).to eq [
+          {expectation: {inspection: 'DeclaresVariable', binding: 'program'}, result: true},
+          {expectation: {inspection: 'DeclaresVariable', binding: 'foo'}, result: false}] }
   end
 
-  context 'HasRepeat expectation' do
-    let(:has_repeat_expectation) { {'binding' => 'program', 'inspection' => 'HasRepeat'} }
+  context 'HasForeach expectation' do
+    let(:expectations) { [
+      {'binding' => 'program', 'inspection' => 'HasForeach'},
+      {'binding' => 'foo', 'inspection' => 'HasForeach'}] }
 
-    let(:program_with_repeat) { '
+    let(:code) { %q{
       program {
-        repeat(6) {
-          Mover(Oeste)
+        foreach color in [Azul..Verde] {
+          Poner(color)
         }
       }
-    ' }
+      function foo(){
+        return (1)
+      }}}
 
-    let(:program_without_repeat) { '
-      program {
-        Mover(Oeste)
-      }
-    ' }
-
-    let(:program_with_repeat_using_an_expression) { '
-      program {
-        repeat(10 * 2) {
-          Mover(Oeste)
-        }
-      }
-    ' }
-
-    it { expect(program_with_repeat).to comply_with has_repeat_expectation }
-    it { expect(program_without_repeat).not_to comply_with has_repeat_expectation }
-    it { expect(program_with_repeat_using_an_expression).to comply_with has_repeat_expectation }
-  end
-
-  context 'HasBinding expectation' do
-    let(:program) { 'program {}' }
-    let(:procedure) { 'procedure Dummy() {}' }
-    let(:function) { 'function dummy() { return(Negro) }' }
-
-    context 'when the binding is program' do
-      let(:has_binding_program_expectation) { {'binding' => 'program', 'inspection' => 'HasBinding' }  }
-
-      it { expect(program).to comply_with has_binding_program_expectation }
-      it { expect(procedure).not_to comply_with has_binding_program_expectation }
-      it { expect(function).not_to comply_with has_binding_program_expectation }
-    end
-
-    context 'when the binding is a procedure' do
-      let(:has_binding_procedure_expectation) { {'binding' => 'Dummy', 'inspection' => 'HasBinding' }  }
-      let(:procedure_Dum) { 'procedure Dum() {}' }
-      let(:procedure_DummySarasa) { 'procedure DummySarasa() {}' }
-      let(:procedure_SarasaDummy) { 'procedure SarasaDummy() {}' }
-
-      it { expect(program).not_to comply_with has_binding_procedure_expectation }
-      it { expect(procedure_Dum).not_to comply_with has_binding_procedure_expectation }
-      it { expect(procedure_DummySarasa).not_to comply_with has_binding_procedure_expectation }
-      it { expect(procedure_SarasaDummy).not_to comply_with has_binding_procedure_expectation }
-      it { expect(procedure).to comply_with has_binding_procedure_expectation }
-      it { expect(function).not_to comply_with has_binding_procedure_expectation }
-    end
-
-    context 'when the binding is a function' do
-      let(:has_binding_function_expectation) { {'binding' => 'dummy', 'inspection' => 'HasBinding' }  }
-      let(:function_dum) { 'function dum() { return(Negro) }' }
-      let(:function_dum_sarasa) { 'function dum_sarasa() { return(Negro) }' }
-      let(:function_sarasa_dum) { 'function sarasa_dum() { return(Negro) }' }
-
-      it { expect(procedure).not_to comply_with has_binding_function_expectation }
-      it { expect(program).not_to comply_with has_binding_function_expectation }
-      it { expect(function).to comply_with has_binding_function_expectation }
-      it { expect(function_dum).not_to comply_with has_binding_function_expectation }
-      it { expect(function_dum_sarasa).not_to comply_with has_binding_function_expectation }
-      it { expect(function_sarasa_dum).not_to comply_with has_binding_function_expectation }
-    end
+    it {
+      pending "foreach is not yet supported by gobstones web"
+      expect(result).to eq [
+          {expectation: {inspection: 'UsesForeach', binding: 'program'}, result: true},
+          {expectation: {inspection: 'UsesForeach', binding: 'foo'}, result: false}] }
   end
 
   context 'HasArity:n expectation' do
     context 'when the binding is a procedure' do
-      let(:procedure) { 'procedure MoverN(n, direccion) { repeat(n) { Mover(direccion) } }
-                         procedure MoverNSarasa(direccion) { Mover(direccion) }
-                         procedure SarasaMoverN() { repeat(1) {} }' }
-      let(:has_arity_0) { {'binding' => 'MoverN', 'inspection' => 'HasArity:0' }  }
-      let(:has_arity_1) { {'binding' => 'MoverN', 'inspection' => 'HasArity:1' }  }
-      let(:has_arity_2) { {'binding' => 'MoverN', 'inspection' => 'HasArity:2' }  }
+      let(:code) { 'procedure MoverN(n, direccion) { repeat(n) { Mover(direccion) } }
+                    procedure MoverNSarasa(direccion) { Mover(direccion) }
+                    procedure SarasaMoverN() { repeat(1) {} }' }
+      let(:expectations) { [
+        {'binding' => 'MoverN', 'inspection' => 'HasArity:0' },
+        {'binding' => 'MoverN', 'inspection' => 'HasArity:1' },
+        {'binding' => 'MoverN', 'inspection' => 'HasArity:2' } ] }
 
-      it { expect(procedure).to comply_with has_arity_2 }
-      it { expect(procedure).not_to comply_with has_arity_1 }
-      it { expect(procedure).not_to comply_with has_arity_0 }
+      it { expect(result).to eq [
+            {expectation: {inspection: 'DeclaresComputationWithArity0:=MoverN', binding: ''}, result: false},
+            {expectation: {inspection: 'DeclaresComputationWithArity1:=MoverN', binding: ''}, result: false},
+            {expectation: {inspection: 'DeclaresComputationWithArity2:=MoverN', binding: ''}, result: true}] }
     end
 
     context 'when the binding is a function' do
-      let(:function) { 'function colorDestacado() { return (Rojo) }
-                        function otraCosa(x, y) { return (Verde) }' }
+      let(:code) { 'function colorDestacado() { return (Rojo) }
+                    function otraCosa(x, y) { return (Verde) }' }
 
-      let(:has_arity_0) { {'binding' => 'colorDestacado', 'inspection' => 'HasArity:0' }  }
-      let(:has_arity_2) { {'binding' => 'colorDestacado', 'inspection' => 'HasArity:2' }  }
+      let(:expectations) { [
+        {'binding' => 'colorDestacado', 'inspection' => 'HasArity:0' },
+        {'binding' => 'colorDestacado', 'inspection' => 'HasArity:2' }] }
 
-      it { expect(function).to comply_with has_arity_0 }
-      it { expect(function).not_to comply_with has_arity_2 }
+      it { expect(result).to eq [
+          {expectation: {inspection: 'DeclaresComputationWithArity0:=colorDestacado', binding: ''}, result: true},
+          {expectation: {inspection: 'DeclaresComputationWithArity2:=colorDestacado', binding: ''}, result: false} ] }
     end
   end
+
+  describe 'HasRepeat expectation' do
+    let(:expectations) { [{'binding' => 'program', 'inspection' => 'HasRepeat'}] }
+
+    context 'program has repeat' do
+      let(:code) { %q{
+        program {
+          repeat(6) {
+            Mover(Oeste)
+          }
+        } } }
+      it { expect(result).to eq [{expectation: {inspection: 'UsesRepeat', binding: 'program'}, result: true}] }
+    end
+
+    context 'program has no repeat' do
+      let(:code) { %q{
+        program {
+          Mover(Oeste)
+        }
+      } }
+      it { expect(result).to eq [{expectation: {inspection: 'UsesRepeat', binding: 'program'}, result: false}] }
+    end
+
+    context 'program has repeat with expression' do
+      let(:code) { %q{
+        program {
+          repeat(10 * 2) {
+            Mover(Oeste)
+          }
+        }
+      } }
+      it { expect(result).to eq [{expectation: {inspection: 'UsesRepeat', binding: 'program'}, result: true}] }
+    end
+  end
+
+  context 'HasBinding expectation' do
+    context 'when the binding is program' do
+      let(:code) { %q{
+      program {}
+      function dummy() { return(Negro) }
+      procedure Dummy() {}} }
+
+      let(:expectations) { [
+        {'binding' => 'program', 'inspection' => 'HasBinding' },
+        {'binding' => 'dummy', 'inspection' => 'HasBinding' },
+        {'binding' => 'Dummy', 'inspection' => 'HasBinding' },
+        {'binding' => 'foo', 'inspection' => 'HasBinding' }] }
+
+      it { expect(result).to eq [
+          {expectation: {inspection: 'Declares:=program', binding: ''}, result: true},
+          {expectation: {inspection: 'Declares:=dummy',   binding: ''}, result: true},
+          {expectation: {inspection: 'Declares:=Dummy',   binding: ''}, result: true},
+          {expectation: {inspection: 'Declares:=foo',     binding: ''}, result: false}
+        ] }
+    end
+  end
+
+  describe 'HasUsage expectation' do
+    context 'when the parameter is a procedure' do
+      let(:code) { 'program { Foo() } procedure Foo() {}' }
+
+      let(:expectations) { [
+        {'binding' => 'program', 'inspection' => 'HasUsage:Foo'},
+        {'binding' => 'program', 'inspection' => 'HasUsage:Bar'},
+        {'binding' => 'program', 'inspection' => 'HasUsage:FooBar'},
+        {'binding' => 'program', 'inspection' => 'HasUsage:BarFoo'},
+        {'binding' => 'program', 'inspection' => 'HasUsage:Fo'} ] }
+
+      it { expect(result).to eq [
+          {expectation: {inspection: 'Uses:=Foo', binding: 'program'}, result: true},
+          {expectation: {inspection: 'Uses:=Bar', binding: 'program'}, result: false},
+          {expectation: {inspection: 'Uses:=FooBar', binding: 'program'}, result: false},
+          {expectation: {inspection: 'Uses:=BarFoo', binding: 'program'}, result: false},
+          {expectation: {inspection: 'Uses:=Fo', binding: 'program'}, result: false}] }
+    end
+
+    context 'when the parameter is a function' do
+      let(:code) { 'program { return (foo()) } function foo() { return (bar(2)) }' }
+
+      let(:expectations) { [
+        {'binding' => '', 'inspection' => 'Uses:foo'},
+        {'binding' => 'foo', 'inspection' => 'Uses:bar'},
+        {'binding' => 'program', 'inspection' => 'HasUsage:foo'},
+        {'binding' => 'program', 'inspection' => 'HasUsage:bar'},
+        {'binding' => 'Intransitive:program', 'inspection' => 'Uses:bar'},
+        {'binding' => 'program', 'inspection' => 'HasUsage:fooBar'},
+        {'binding' => 'program', 'inspection' => 'HasUsage:barFoo'},
+        {'binding' => 'program', 'inspection' => 'HasUsage:fo'} ] }
+
+      it { expect(result).to eq [
+          {expectation: {inspection: 'Uses:foo', binding: ''}, result: true},
+          {expectation: {inspection: 'Uses:bar', binding: 'foo'}, result: true},
+          {expectation: {inspection: 'Uses:=foo', binding: 'program'}, result: true},
+          {expectation: {inspection: 'Uses:=bar', binding: 'program'}, result: true},
+          {expectation: {inspection: 'Uses:bar', binding: 'Intransitive:program'}, result: false},
+          {expectation: {inspection: 'Uses:=fooBar', binding: 'program'}, result: false},
+          {expectation: {inspection: 'Uses:=barFoo', binding: 'program'}, result: false},
+          {expectation: {inspection: 'Uses:=fo', binding: 'program'}, result: false}] }
+    end
+
+    context 'when the program is empty' do
+      let(:code) { '' }
+
+      let(:expectations) { [{'binding' => 'program', 'inspection' => 'HasUsage:Sacar' }]  }
+
+      it { expect { result }.to raise_error Mumukit::CompilationError }
+    end
+  end
+end
+
+
+=begin
+
+describe GobstonesExpectationsHook do
 
   describe 'automatic expectations' do
     context 'when the subject is program' do
@@ -267,22 +352,7 @@ describe GobstonesExpectationsHook do
     end
   end
 
-  context 'when procedure definitions are missing' do
-    let(:program_with_extra_code) { 'procedure DibujarJardin() { DibujarMacetero(Rojo) }' }
-    let(:has_usage_expectation) { {'binding' => 'DibujarJardin', 'inspection' => 'HasUsage:DibujarMacetero' }  }
 
-    it { expect(program_with_extra_code).to comply_with has_usage_expectation }
-  end
-
-  context 'when the code would produce a runtime error' do
-    let(:has_usage_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Sacar' }  }
-
-    it { expect('program { Sacar(Rojo) }').to comply_with has_usage_expectation }
-  end
-
-  context 'when the program is empty' do
-    let(:has_usage_expectation) { {'binding' => 'program', 'inspection' => 'HasUsage:Sacar' }  }
-
-    it { expect('').not_to comply_with has_usage_expectation }
-  end
 end
+
+=end

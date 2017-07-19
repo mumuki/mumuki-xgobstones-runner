@@ -49,14 +49,14 @@ examples:
      cell 3 3 Azul 1 Rojo 1 Verde 1 Negro 1
      head 3 3' }
 
-    let(:expectations) { [{binding: 'PonerUnaDeCada', inspection: 'HasUsage'}] }
+    let(:expectations) { [{binding: 'PonerUnaDeCada', inspection: 'Uses:=Poner'}] }
     let(:extra) { '' }
 
     let(:response) { bridge.run_tests! content: content, extra: extra, expectations: expectations, test: test }
 
     it { expect(response[:status]).to eq :passed }
     it { expect(response_result).to include '<div>' }
-    it { expect(response[:expectation_results]).to include({binding: 'PonerUnaDeCada', inspection: 'HasUsage', result: :passed}) }
+    it { expect(response[:expectation_results]).to include({binding: 'PonerUnaDeCada', inspection: 'Uses:=Poner', result: :passed}) }
   end
 
   context 'when submission has non-ascii characters' do
