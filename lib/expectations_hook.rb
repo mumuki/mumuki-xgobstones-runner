@@ -8,11 +8,9 @@ module EvalExpectationsOnAST
   def eval_in_gobstones(binding, ast)
     pattern_generator = expectations[type]
 
-    if pattern_generator
-      !!(ast =~ pattern_generator[binding])
-    else
-      true
-    end
+    result = pattern_generator ? !!(ast =~ pattern_generator[binding]) : true
+
+    negated ? !result : result
   end
 
   def use(regexp)
@@ -30,10 +28,6 @@ module EvalExpectationsOnAST
   def check_repeat_of(target)
     use(/AST\(repeat\s*#{target}/)
   end
-end
-
-class Mumukit::Inspection::PlainInspection
-  include EvalExpectationsOnAST
 
   def expectations
     {
@@ -41,16 +35,7 @@ class Mumukit::Inspection::PlainInspection
       'HasForeach' => use(/AST\(foreach/),
       'HasRepeat' => check_repeat_of('.+'),
       'HasVariable' => use(/AST\(assignVarName/),
-      'HasWhile' => use(/AST\(while/)
-    }
-  end
-end
-
-class Mumukit::Inspection::TargetedInspection
-  include EvalExpectationsOnAST
-
-  def expectations
-    {
+      'HasWhile' => use(/AST\(while/),
       'HasArity' => lambda { |binding| /#{subject_for(binding).ast_regexp}\s*AST\((\s*\w+){#{target}}\)/ },
       'HasRepeatOf' => check_repeat_of("AST\\(literal\\s*#{target}\\)"),
       'HasUsage' => use(/AST\((proc|func)Call\s*#{target}$/)
@@ -58,10 +43,8 @@ class Mumukit::Inspection::TargetedInspection
   end
 end
 
-class Mumukit::Inspection::NegatedInspection
-  def eval_in_gobstones(binding, ast)
-    !@inspection.eval_in_gobstones(binding, ast)
-  end
+class Mumukit::Inspection
+  include EvalExpectationsOnAST
 end
 
 class GobstonesExpectationsHook < Mumukit::Defaults::ExpectationsHook
